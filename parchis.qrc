@@ -1,0 +1,13 @@
+<RCC>
+  <qresource prefix="tablero">
+    <file>tablero.png</file>
+  </qresource>
+  <qresource prefix="dados">
+    <file>dado1.png</file>
+    <file>dado2.png</file>
+    <file>dado3.png</file>
+    <file>dado4.png</file>
+    <file>dado5.png</file>
+    <file>dado6.png</file>
+  </qresource>
+</RCC>

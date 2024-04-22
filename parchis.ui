@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>VentanaJuego</class>
+ <widget class="QMainWindow" name="VentanaJuego">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1086</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Juego de Parchís</string>
+  </property>
+  <widget class="QWidget" name="cajaPrincipal">
+   <layout class="QHBoxLayout" name="layoutPrincipal">
+    <property name="spacing">
+     <number>10</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QWidget" name="cajaTablero" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>700</width>
+        <height>700</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-image: url(:/tablero/tablero.png) 0 0 0 0 stretch stretch;</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="cajaOpciones" native="true">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QGroupBox" name="cajaPartida">
+         <property name="title">
+          <string>Opciones</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QComboBox" name="numJugadores">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="currentIndex">
+             <number>2</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>Dos jugadores</string>
+             </property>
+             <property name="icon">
+              <iconset resource="parchis.qrc">
+               <normaloff>:/dados/dado2.png</normaloff>:/dados/dado2.png</iconset>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Tres jugadores</string>
+             </property>
+             <property name="icon">
+              <iconset resource="parchis.qrc">
+               <normaloff>:/dados/dado3.png</normaloff>:/dados/dado3.png</iconset>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Cuatro jugadores</string>
+             </property>
+             <property name="icon">
+              <iconset resource="parchis.qrc">
+               <normaloff>:/dados/dado4.png</normaloff>:/dados/dado4.png</iconset>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnNuevaPartida">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Nueva partida</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="cajaJugar">
+         <property name="title">
+          <string>Jugar</string>
+         </property>
+         <layout class="QVBoxLayout" name="layoutJugar">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QWidget" name="widgetDados" native="true">
+            <layout class="QHBoxLayout" name="layoutDados">
+             <property name="spacing">
+              <number>10</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QWidget" name="dado1" native="true">
+               <property name="minimumSize">
+                <size>
+                 <width>160</width>
+                 <height>160</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">border-image: url(:/dados/dado6.png) 0 0 0 0 stretch stretch;</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="dado2" native="true">
+               <property name="minimumSize">
+                <size>
+                 <width>160</width>
+                 <height>160</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">border-image: url(:/dados/dado6.png) 0 0 0 0 stretch stretch;</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="cajaTirar" native="true">
+            <layout class="QGridLayout" name="layoutTirar">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <property name="horizontalSpacing">
+              <number>0</number>
+             </property>
+             <item row="1" column="2">
+              <widget class="QLabel" name="space2">
+               <property name="minimumSize">
+                <size>
+                 <width>1</width>
+                 <height>1</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="space3">
+               <property name="minimumSize">
+                <size>
+                 <width>1</width>
+                 <height>1</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QPushButton" name="btnTirar">
+               <property name="text">
+                <string>Tirar</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="space1">
+               <property name="minimumSize">
+                <size>
+                 <width>1</width>
+                 <height>1</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QLabel" name="space4">
+               <property name="minimumSize">
+                <size>
+                 <width>1</width>
+                 <height>1</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="cajaHistorial">
+         <property name="title">
+          <string>Historial</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QListWidget" name="listWidget"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <action name="actionNuevaPartida">
+   <property name="text">
+    <string>Nueva partida</string>
+   </property>
+  </action>
+  <action name="actionDosJugadores">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Dos jugadores</string>
+   </property>
+  </action>
+  <action name="actionTresJugadores">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Tres jugadores</string>
+   </property>
+  </action>
+  <action name="actionCuatroJugadores">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Cuatro jugadores</string>
+   </property>
+  </action>
+  <action name="actionSalir">
+   <property name="text">
+    <string>Salir</string>
+   </property>
+  </action>
+  <action name="actionAcerca">
+   <property name="text">
+    <string>Acerca del juego</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="parchis.qrc"/>
+ </resources>
+ <connections/>
+</ui>
