@@ -32,10 +32,34 @@ class Ventana(QMainWindow):
         self.ui.btnTirar.clicked.connect(self.tirarDados)
         self.__dado1 = 6
         self.__dado2 = 6
+        self.__fichas = [self.ui.ficha00, self.ui.ficha01, self.ui.ficha02, self.ui.ficha03]
+        self.__casas = [
+            [self.ui.ficha00, self.ui.ficha01, self.ui.ficha02, self.ui.ficha03]
+        ]
     
     def resizeEvent(self, e: QResizeEvent) -> None:
         super().resizeEvent(e)
-        self.ui.cajaTablero.setFixedWidth(self.ui.cajaTablero.height())
+        self.resizeAll()
+        self.relocateAll()
+
+    def resizeAll(self):
+        h = self.ui.cajaTablero.height()
+        self.ui.cajaTablero.setFixedWidth(h)
+        fH = 34 * h // 1000
+        for f in self.__fichas:
+            f.setFixedWidth(fH)
+            f.setFixedHeight(fH)
+        
+    def relocateAll(self):
+        # Porcentaje de escala.
+        hP = self.ui.cajaTablero.height() // 10
+        # Escala del ancho de las casas.
+        cE = 275 * hP // 100
+        i = 0 # for i in range(4):
+        self.__casas[i][0].move(cE // 2 - 2 * (34 * hP // 100), cE // 2 - 2 * (34 * hP // 100))
+        self.__casas[i][1].move(cE // 2 - 2 * (34 * hP // 100), cE // 2 + (34 * hP // 100))
+        self.__casas[i][2].move(cE // 2 + (34 * hP // 100), cE // 2 + (34 * hP // 100))
+        self.__casas[i][3].move(cE // 2 + (34 * hP // 100), cE // 2 - 2 * (34 * hP // 100))
 
     def tirarDados(self):
         self.ui.btnTirar.setEnabled(False)

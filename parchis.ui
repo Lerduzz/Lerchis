@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1186</width>
+    <width>1166</width>
     <height>700</height>
    </rect>
   </property>
@@ -39,8 +39,98 @@
        </size>
       </property>
       <property name="styleSheet">
-       <string notr="true">border-image: url(:/tablero/tablero.png) 0 0 0 0 stretch stretch;</string>
+       <string notr="true">#cajaTablero {
+	border-image: url(:/tablero/tablero.png) 0 0 0 0 stretch stretch;
+}</string>
       </property>
+      <widget class="QToolButton" name="ficha00">
+       <property name="geometry">
+        <rect>
+         <x>52</x>
+         <y>52</y>
+         <width>22</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/fichas/ficha0.png) 0 0 0 0 stretch stretch;</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="ficha03">
+       <property name="geometry">
+        <rect>
+         <x>118</x>
+         <y>52</y>
+         <width>22</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/fichas/ficha0.png) 0 0 0 0 stretch stretch;</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="ficha01">
+       <property name="geometry">
+        <rect>
+         <x>52</x>
+         <y>118</y>
+         <width>22</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/fichas/ficha0.png) 0 0 0 0 stretch stretch;</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="ficha02">
+       <property name="geometry">
+        <rect>
+         <x>118</x>
+         <y>118</y>
+         <width>22</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/fichas/ficha0.png) 0 0 0 0 stretch stretch;</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
      </widget>
     </item>
     <item>
