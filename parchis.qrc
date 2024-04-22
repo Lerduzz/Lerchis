@@ -10,4 +10,10 @@
     <file>dado5.png</file>
     <file>dado6.png</file>
   </qresource>
+  <qresource prefix="fichas">
+    <file>ficha0.png</file>
+    <file>ficha1.png</file>
+    <file>ficha2.png</file>
+    <file>ficha3.png</file>
+  </qresource>
 </RCC>
