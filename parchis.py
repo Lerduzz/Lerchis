@@ -12,7 +12,6 @@ class Ventana(QMainWindow):
     def resizeEvent(self, e: QResizeEvent) -> None:
         super().resizeEvent(e)
         self.ui.cajaTablero.setFixedWidth(self.ui.cajaTablero.height())
-        self.ui.dado1.setFixedHeight(self.ui.dado1.width())
 
 
 app = QApplication([])
