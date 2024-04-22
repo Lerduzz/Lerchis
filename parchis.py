@@ -1,4 +1,4 @@
-import sys, time, random
+import sys, time, random, qdarkstyle
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 from PyQt5.QtGui import QResizeEvent
 from PyQt5.QtWidgets import QMainWindow, QApplication
@@ -61,6 +61,7 @@ class Ventana(QMainWindow):
 
 
 app = QApplication([])
+app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt5'))
 application = Ventana()
 application.show()
 sys.exit(app.exec())
