@@ -304,13 +304,7 @@ class Ventana(QMainWindow):
                                 # TODO: Desactivar bonus utilizados.
                                 if s1 != None and not self.esMia(s1) and not posI + total in self.__excluir:
                                     self.matarFicha(s1) # TODO: Activar el bonus en caso de haber matado.
-                                movio = True
-                if movio:
-                    print('La ficha se movio.')
-                else:
-                    print('¡La ficha no se movio!')
-        else:
-            print('¡La ficha no es mia!')
+                                # movio = True
         if not self.puedeJugar():
             self.cambioDeTurno()
 
@@ -365,7 +359,6 @@ class Ventana(QMainWindow):
         while index >= 4:
             index -= 4
             owner += 1
-        print(f'MATANDO FICHA: OWNER: {owner}, INDEX: {index}.')
         if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__casas, owner, index):
             self.relocateAll()
             return True
@@ -394,7 +387,6 @@ class Ventana(QMainWindow):
         self.__turno = 0
         self.__jugando = True
         self.prepararDados()
-        self.showInfo('Nueva partida', 'Ha comenzado una nueva partida, el color de los dados indica a que jugador le toca el turno.\n\nSugerencias:\n- Al inicio de cada turno hay que tirar los dados.')
 
     def moverFicha(self, desde, iD, jD, hasta, iH, jH):
         if desde[iD][jD] == None or hasta[iH][jH] != None:
@@ -419,3 +411,4 @@ app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt5'))
 application = Ventana()
 application.show()
 sys.exit(app.exec())
+# TODO: El bomus al matar no se debe poder caminar con la misma ficha que ha matado.
