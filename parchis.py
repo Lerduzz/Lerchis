@@ -183,11 +183,40 @@ class Ventana(QMainWindow):
                         continue
                     return True
             else:
-                pass
-        #         dist = self.cuantoCamina(ficha)
-        #         if (self.ui.checkDado1.isEnabled() and self.__dado1 <= dist) or (self.ui.checkDado2.isEnabled() and self.__dado2 <= dist):
-        #             # TODO: Verificar los bonus.
-        #             return True
+                if self.ui.checkDado1.isEnabled():
+                    if self.puedeMover(ficha, self.__dado1):
+                        return True
+                if self.ui.checkDado2.isEnabled():
+                    if self.puedeMover(ficha, self.__dado2):
+                        return True
+                if self.ui.checkDado1.isEnabled() and self.ui.checkDado2.isEnabled():
+                    if self.puedeMover(ficha, self.__dado1 + self.__dado2):
+                        return True
+                # TODO: Verificar bonus.
+        return False
+
+    def puedeMover(self, ficha, pasos):
+        if pasos <= 0:
+            return False
+        # - Encontrar posicion de origen de la ficha.
+        posI = 0
+        posJ = 0
+        for i in range(len(self.__rutas[self.__turno])):
+            if self.__rutas[self.__turno][i][0] == ficha:
+                posI = i
+                posJ = 0
+                break
+            if self.__rutas[self.__turno][i][1] == ficha:
+                posI = i
+                posJ = 1
+                break
+        # - Verificar final de ruta para evitar descarrilamiento.
+        if posI + pasos >= len(self.__rutas[self.__turno]):
+            return False
+        s1 = self.__rutas[self.__turno][posI + pasos][0]
+        s2 = self.__rutas[self.__turno][posI + pasos][1]
+        if s1 == None or s2 == None:
+            return True
         return False
 
     def estaEnCasa(self, ficha):
@@ -241,12 +270,13 @@ class Ventana(QMainWindow):
                         if self.__rutas[self.__turno][i][0] == self.sender():
                             posI = i
                             posJ = 0
+                            break
                         if self.__rutas[self.__turno][i][1] == self.sender():
                             posI = i
                             posJ = 1
+                            break
                     # - Verificar final de ruta para evitar descarrilamiento.
                     if posI + total < len(self.__rutas[self.__turno]):
-                        dest = self.__rutas[self.__turno][posI + total]
                         s1 = self.__rutas[self.__turno][posI + total][0]
                         s2 = self.__rutas[self.__turno][posI + total][1]
                         if s1 == None:
