@@ -42,44 +42,7 @@ class Ventana(QMainWindow):
         self.__caminos = [[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None]]
         self.__posCaminos = [(250,0,0),(250,50,0),(250,100,0),(250,150,0),(250,200,0),(250,250,2),(250,250,3),(250,250,4),(200,250,1),(150,250,1),(100,250,1),(50,250,1),(0,250,1),(0,400,1),(0,550,1),(50,550,1),(100,550,1),(150,550,1),(200,550,1),(250,700,5),(250,700,6),(250,700,7),(250,700,0),(250,750,0),(250,800,0),(250,850,0),(250,900,0),(400,900,0),(550,900,0),(550,850,0),(550,800,0),(550,750,0),(550,700,0),(700,700,8),(700,700,9),(700,700,10),(700,550,1),(750,550,1),(800,550,1),(850,550,1),(900,550,1),(900,400,1),(900,250,1),(850,250,1),(800,250,1),(750,250,1),(700,250,1),(700,250,11),(700,250,12),(700,250,13),(550,200,0),(550,150,0),(550,100,0),(550,50,0),(550,0,0),(400,0,0)]
         self.__metas = [[[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None,None,None]],[[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None,None,None]],[[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None,None,None]],[[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None,None,None]]]
-        self.__posMetas = [
-            [
-                (400, 50, 0),
-                (400, 100, 0),
-                (400, 150, 0),
-                (400, 200, 0),
-                (400, 250, 0),
-                (400, 300, 0),
-                (475, 350, -1)
-            ],
-            [
-                (50, 400, 1),
-                (100, 400, 1),
-                (150, 400, 1),
-                (200, 400, 1),
-                (250, 400, 1),
-                (300, 400, 1),
-                (350, 475, -1)
-            ],
-            [
-                (400, 850, 0),
-                (400, 800, 0),
-                (400, 750, 0),
-                (400, 700, 0),
-                (400, 650, 0),
-                (400, 600, 0),
-                (475, 475, -1)
-            ],
-            [
-                (850, 400, 1),
-                (800, 400, 1),
-                (750, 400, 1),
-                (700, 400, 1),
-                (650, 400, 1),
-                (600, 400, 1),
-                (475, 475, -1)
-            ]
-        ]
+        self.__posMetas = [[(400,50,0),(400,100,0),(400,150,0),(400,200,0),(400,250,0),(400,300,0),(475,400,14)],[(50,400,1),(100,400,1),(150,400,1),(200,400,1),(250,400,1),(300,400,1),(400,475,15)],[(400,850,0),(400,800,0),(400,750,0),(400,700,0),(400,650,0),(400,600,0),(475,550,16)],[(850,400,1),(800,400,1),(750,400,1),(700,400,1),(650,400,1),(600,400,1),(550,475,17)]]
         self.__rutas = [[],[],[],[]]
         for i in range(3, 56):
             self.__rutas[0].append(self.__caminos[i])
@@ -190,6 +153,42 @@ class Ventana(QMainWindow):
         elif o == 13:
             xR = dX - hF - hC // 2 + hF // 4 if i == 0 else dX - hF - hC // 2 - hF // 2 - hF // 10
             yR = dY if i == 0 else dY + hF // 2
+        elif o == 14:
+            xR = dX - hF if i == 0 or i == 1 else dX
+            yR = dY - hF if i == 0 or i == 3 else dY
+            if i == 0:
+                xR -= hF * 3 // 4
+            if i == 3:
+                xR += hF * 3 // 4
+            if i == 1 or i == 2:
+                yR -= hF // 3
+        elif o == 15:
+            xR = dX - hF if i == 0 or i == 1 else dX
+            yR = dY - hF if i == 0 or i == 3 else dY
+            if i == 0:
+                yR -= hF * 3 // 4
+            if i == 1:
+                yR += hF * 3 // 4
+            if i == 2 or i == 3:
+                xR -= hF // 3
+        elif o == 16:
+            xR = dX - hF if i == 0 or i == 1 else dX
+            yR = dY - hF if i == 0 or i == 3 else dY
+            if i == 1:
+                xR -= hF * 3 // 4
+            if i == 2:
+                xR += hF * 3 // 4
+            if i == 0 or i == 3:
+                yR += hF // 3
+        elif o == 17:
+            xR = dX - hF if i == 0 or i == 1 else dX
+            yR = dY - hF if i == 0 or i == 3 else dY
+            if i == 3:
+                yR -= hF * 3 // 4
+            if i == 2:
+                yR += hF * 3 // 4
+            if i == 0 or i == 1:
+                xR += hF // 3
         return (xR, yR)
 
     def tirarDados(self):
@@ -446,4 +445,4 @@ sys.exit(app.exec())
 # TODO: **(La ficha que mata no puede volver a ser movida a menos que otra camine su bonus)**
 # TODO: Detectar puentes de inicio para que no puedan ser cruzados.
 # TODO: **(Animar el movimiento de las fichas por el tablero)**
-# TODO: Terminar de mapear las lineas de meta.
+# TODO: Si te cae DOBLE vuelves a tirar los dados (Tres dobles seguidos viran la ficha mas avanzada).
