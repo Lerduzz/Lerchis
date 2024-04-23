@@ -264,7 +264,10 @@ class Ventana(QMainWindow):
                     total += self.__dado1
                 if self.ui.checkDado2.isChecked():
                     total += self.__dado2
-                # TODO: Sumar bonus seleccionados.
+                if self.ui.checkMeta.isChecked():
+                    total += 10
+                if self.ui.checkMata.isChecked():
+                    total += 20
                 if total > 0:
                     # - Encontrar posicion de origen de la ficha.
                     posI = 0
@@ -291,9 +294,15 @@ class Ventana(QMainWindow):
                                 if self.ui.checkDado2.isChecked():
                                     self.ui.checkDado2.setChecked(False)
                                     self.ui.checkDado2.setEnabled(False)
-                                # TODO: Desactivar bonus utilizados.
+                                if self.ui.checkMeta.isChecked():
+                                    self.ui.checkMeta.setChecked(False)
+                                    self.ui.checkMeta.setEnabled(False)
+                                if self.ui.checkMata.isChecked():
+                                    self.ui.checkMata.setChecked(False)
+                                    self.ui.checkMata.setEnabled(False)
                                 if s2 != None and not self.esMia(s2) and not posI + total in self.__excluir:
-                                    self.matarFicha(s2) # TODO: Activar el bonus en caso de haber matado.
+                                    if self.matarFicha(s2):
+                                        self.ui.checkMata.setEnabled(True)
                                 movio = True
                         if not movio and s2 == None:
                             if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, 1):
@@ -304,10 +313,15 @@ class Ventana(QMainWindow):
                                 if self.ui.checkDado2.isChecked():
                                     self.ui.checkDado2.setChecked(False)
                                     self.ui.checkDado2.setEnabled(False)
-                                # TODO: Desactivar bonus utilizados.
+                                if self.ui.checkMeta.isChecked():
+                                    self.ui.checkMeta.setChecked(False)
+                                    self.ui.checkMeta.setEnabled(False)
+                                if self.ui.checkMata.isChecked():
+                                    self.ui.checkMata.setChecked(False)
+                                    self.ui.checkMata.setEnabled(False)
                                 if s1 != None and not self.esMia(s1) and not posI + total in self.__excluir:
-                                    self.matarFicha(s1) # TODO: Activar el bonus en caso de haber matado.
-                                # movio = True
+                                    if self.matarFicha(s1):
+                                        self.ui.checkMata.setEnabled(True)
         if not self.puedeJugar():
             self.cambioDeTurno()
 
@@ -324,9 +338,11 @@ class Ventana(QMainWindow):
         if s1 != None and s2 != None:
             # - Matar las que no sean mias.
             if s1 != None and not self.esMia(s1):
-                self.matarFicha(s1) # TODO: Activar el bonus en caso de haber matado.
+                if self.matarFicha(s1):
+                    self.ui.checkMata.setEnabled(True)
             if s2 != None and not self.esMia(s2):
-                self.matarFicha(s2) # TODO: Activar el bonus en caso de haber matado.
+                if self.matarFicha(s2):
+                    self.ui.checkMata.setEnabled(True)
         s1 = self.__rutas[self.__turno][0][0]
         s2 = self.__rutas[self.__turno][0][1]
         if s1 == None:
@@ -414,4 +430,3 @@ app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt5'))
 application = Ventana()
 application.show()
 sys.exit(app.exec())
-# TODO: El bomus al matar no se debe poder caminar con la misma ficha que ha matado.
