@@ -55,7 +55,8 @@ class Ventana(QMainWindow):
         for i in range(45, 56):
             self.__rutas[3].append(self.__caminos[i])
         for i in range(0, 42):
-            self.__rutas[3].append(self.__caminos[i])        
+            self.__rutas[3].append(self.__caminos[i])
+        self.__excluir = [0, 6, 10, 14, 20, 24, 28, 34, 38, 42, 48, 52]
 
     def resizeEvent(self, e: QResizeEvent) -> None:
         super().resizeEvent(e)
@@ -266,7 +267,7 @@ class Ventana(QMainWindow):
                                     self.ui.checkDado2.setChecked(False)
                                     self.ui.checkDado2.setEnabled(False)
                                 # TODO: Desactivar bonus utilizados.
-                                if s2 != None and not self.esMia(s2): # TODO: Excluir casillas seguras.
+                                if s2 != None and not self.esMia(s2) and not posI + total in self.__excluir:
                                     self.matarFicha(s2) # TODO: Activar el bonus en caso de haber matado.
                                 movio = True
                         if not movio and s2 == None:
@@ -279,7 +280,7 @@ class Ventana(QMainWindow):
                                     self.ui.checkDado2.setChecked(False)
                                     self.ui.checkDado2.setEnabled(False)
                                 # TODO: Desactivar bonus utilizados.
-                                if s1 != None and not self.esMia(s1): # TODO: Excluir casillas seguras.
+                                if s1 != None and not self.esMia(s1) and not posI + total in self.__excluir:
                                     self.matarFicha(s1) # TODO: Activar el bonus en caso de haber matado.
                                 movio = True
                 if movio:
