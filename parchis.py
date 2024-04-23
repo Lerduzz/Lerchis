@@ -251,6 +251,15 @@ class Ventana(QMainWindow):
     def puedeMover(self, ficha, pasos):
         if pasos <= 0:
             return False
+        posI, posJ = self.obtenerPosRuta(ficha)
+        if posI + pasos >= len(self.__rutas[self.__turno]):
+            return False
+        for j in range(len(self.__rutas[self.__turno][posI + pasos])):
+            if self.__rutas[self.__turno][posI + pasos][j] == None:
+                return True
+        return False
+
+    def obtenerPosRuta(self, ficha):
         posI = 0
         posJ = 0
         for i in range(len(self.__rutas[self.__turno])):
@@ -259,12 +268,7 @@ class Ventana(QMainWindow):
                     posI = i
                     posJ = j
                     break
-        if posI + pasos >= len(self.__rutas[self.__turno]):
-            return False
-        for j in range(len(self.__rutas[self.__turno][posI + pasos])):
-            if self.__rutas[self.__turno][posI + pasos][j] == None:
-                return True
-        return False
+        return (posI, posJ)
 
     def estaEnCasa(self, ficha):
         for fC in self.__casas[self.__turno]:
@@ -313,20 +317,7 @@ class Ventana(QMainWindow):
                 if self.ui.checkMata.isChecked():
                     total += 20
                 if total > 0:
-                    if self.puedeMover(self.sender(), total):
-                        print('Se puede mover!')
-                    # - Encontrar posicion de origen de la ficha.
-                    posI = 0
-                    posJ = 0
-                    for i in range(len(self.__rutas[self.__turno])):
-                        if self.__rutas[self.__turno][i][0] == self.sender():
-                            posI = i
-                            posJ = 0
-                            break
-                        if self.__rutas[self.__turno][i][1] == self.sender():
-                            posI = i
-                            posJ = 1
-                            break
+                    posI, posJ = self.obtenerPosRuta(self.sender())
                     # - Verificar final de ruta para evitar descarrilamiento.
                     if posI + total < len(self.__rutas[self.__turno]):
                         s1 = self.__rutas[self.__turno][posI + total][0]
