@@ -61,6 +61,7 @@ class Ventana(QMainWindow):
         for i in range(4):
             self.__rutas[i] += self.__metas[i]
         self.__excluir = [0, 6, 10, 14, 20, 24, 28, 34, 38, 42, 48, 52, 53, 54, 55, 56, 57, 58, 59]
+        self.__bridges = [[17,31,45],[31,45,3],[45,3,17],[3,17,31]]
 
     def resizeEvent(self, e: QResizeEvent) -> None:
         super().resizeEvent(e)
@@ -367,18 +368,7 @@ class Ventana(QMainWindow):
         return False
 
     def matarFicha(self, ficha):
-        # - Necesito determinar su origen basado en la ruta del usuario en turno.
-        posI = 0
-        posJ = 0
-        for i in range(len(self.__rutas[self.__turno])):
-            if self.__rutas[self.__turno][i][0] == ficha:
-                posI = i
-                posJ = 0
-                break
-            if self.__rutas[self.__turno][i][1] == ficha:
-                posI = i
-                posJ = 1
-                break
+        posI, posJ = self.obtenerPosRuta(ficha)
         # - Necesito saber de quien es y su numero para determinar su destino.
         index = 0
         for i in range(len(self.__fichas)):
