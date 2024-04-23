@@ -430,3 +430,9 @@ app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt5'))
 application = Ventana()
 application.show()
 sys.exit(app.exec())
+
+# TODO: El bonus de matar no se puede caminar con la misma ficha.
+# TODO: **(La ficha que mata no puede volver a ser movida a menos que otra camine su bonus)**
+# TODO: Detectar puentes de inicio para que no puedan ser cruzados.
+# TODO: **(Animar el movimiento de las fichas por el tablero)**
+# TODO: Terminar de mapear las lineas de meta.
