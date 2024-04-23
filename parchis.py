@@ -155,9 +155,9 @@ class Ventana(QMainWindow):
                         self.__caminos[i][j].move(xR, yR)
 
     def calcularPosicionCasilla(self, x, y, o, i, h, hC, hF):
-        xR, yR = (0, 0)
         dX = x * h // 950
         dY = y * h // 950
+        xR, yR = (dX, dY)
         dP1 = hC // 2 - hF - hF // 10
         dP2 = hC // 2 + hF // 10
         if o == 0:
@@ -165,8 +165,7 @@ class Ventana(QMainWindow):
             yR = dY
         elif o == 1:
             xR = dX
-            yR = dY + dP1 if i == 0 else dY + dP2
-        
+            yR = dY + dP1 if i == 0 else dY + dP2        
         elif o == 2:
             xR = dX + hC // 2 - hF // 4 if i == 0 else dX + hC // 2 + hF // 2 + hF // 10
             yR = dY if i == 0 else dY + hF // 2
@@ -175,8 +174,7 @@ class Ventana(QMainWindow):
             yR = dY + hF if i == 0 else dY + hF * 2 - hF // 3
         elif o == 4:
             xR = dX if i == 0 else dX + hF // 2
-            yR = dY + hC // 2 - hF // 4 if i == 0 else dY + hC // 2 + hF // 2 + hF // 10
-        
+            yR = dY + hC // 2 - hF // 4 if i == 0 else dY + hC // 2 + hF // 2 + hF // 10        
         elif o == 5:
             xR = dX if i == 0 else dX + hF // 2
             yR = dY - hF - hC // 2 + hF // 4 if i == 0 else dY - hF - hC // 2 - hF // 2 - hF // 10
@@ -185,8 +183,7 @@ class Ventana(QMainWindow):
             yR = dY - hF * 2 if i == 0 else dY - hF * 3 + hF // 3
         elif o == 7:
             xR = dX + hC // 2 - hF // 4 if i == 0 else dX + hC // 2 + hF // 2 + hF // 10
-            yR = dY - hF if i == 0 else dY - hF - hF // 2
-        
+            yR = dY - hF if i == 0 else dY - hF - hF // 2        
         elif o == 8:
             xR = dX - hF - hC // 2 + hF // 4 if i == 0 else dX - hF - hC // 2 - hF // 2 - hF // 10
             yR = dY - hF if i == 0 else dY - hF - hF // 2
@@ -196,7 +193,6 @@ class Ventana(QMainWindow):
         elif o == 10:
             xR = dX - hF if i == 0 else dX - hF - hF // 2
             yR = dY - hF - hC // 2 + hF // 4 if i == 0 else dY - hF - hC // 2 - hF // 2 - hF // 10
-
         elif o == 11:
             xR = dX - hF if i == 0 else dX - hF - hF // 2
             yR = dY + hC // 2 - hF // 4 if i == 0 else dY + hC // 2 + hF // 2 + hF // 10
