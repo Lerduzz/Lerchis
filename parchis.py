@@ -97,7 +97,6 @@ class Ventana(QMainWindow):
         self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
         
 
-
 app = QApplication([])
 app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt5'))
 application = Ventana()
