@@ -183,16 +183,19 @@ class Ventana(QMainWindow):
                         continue
                     return True
             else:
-                if self.ui.checkDado1.isEnabled():
-                    if self.puedeMover(ficha, self.__dado1):
-                        return True
-                if self.ui.checkDado2.isEnabled():
-                    if self.puedeMover(ficha, self.__dado2):
-                        return True
-                if self.ui.checkDado1.isEnabled() and self.ui.checkDado2.isEnabled():
-                    if self.puedeMover(ficha, self.__dado1 + self.__dado2):
-                        return True
-                # TODO: Verificar bonus.
+                mData = [(self.ui.checkDado1.isEnabled(),self.__dado1),(self.ui.checkDado2.isEnabled(),self.__dado2),(self.ui.checkMeta.isEnabled(),10),(self.ui.checkMata.isEnabled(),20)]
+                for i in range(len(mData)):
+                    c, v = mData[i]
+                    if c:
+                        if self.puedeMover(ficha, v):
+                            return True
+                        if i + 1 < len(mData):
+                            for j in range(i + 1, len(mData)):
+                                c1, v1 = mData[j]
+                                if c1:
+                                    v += v1
+                                    if self.puedeMover(ficha, v):
+                                        return True
         return False
 
     def puedeMover(self, ficha, pasos):
