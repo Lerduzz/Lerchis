@@ -97,7 +97,7 @@ class Ventana(QMainWindow):
             self.__rutas[3].append(self.__caminos[i])
         for i in range(4):
             self.__rutas[i] += self.__metas[i]
-        self.__excluir = [0, 6, 10, 14, 20, 24, 28, 34, 38, 42, 48, 52]
+        self.__excluir = [0, 6, 10, 14, 20, 24, 28, 34, 38, 42, 48, 52, 53, 54, 55, 56, 57, 58, 59]
 
     def resizeEvent(self, e: QResizeEvent) -> None:
         super().resizeEvent(e)
@@ -141,8 +141,6 @@ class Ventana(QMainWindow):
                             if self.__metas[i][j][k] != None:
                                 xR, yR = self.calcularPosicionCasilla(x, y, o, k, h, hCasilla, hFicha)
                                 self.__metas[i][j][k].move(xR, yR)
-
-
 
     def calcularPosicionCasilla(self, x, y, o, i, h, hC, hF):
         dX = x * h // 950
@@ -285,17 +283,14 @@ class Ventana(QMainWindow):
     def jugarFicha(self):
         if self.esMia(self.sender()):
             mover = True
-            # Manejar la salida de casa.
             if self.estaEnCasa(self.sender()):
                 salio = False
-                # Verificar dado 1.
                 if self.ui.checkDado1.isChecked():
                     if self.__dado1 == 5:
                         if self.salirDeCasa(self.sender()):
                             self.ui.checkDado1.setChecked(False)
                             self.ui.checkDado1.setEnabled(False)
                             salio = True
-                # Verificar dado 2.
                 if not salio and self.ui.checkDado2.isChecked():
                     if self.__dado2 == 5:
                         if self.salirDeCasa(self.sender()):
@@ -304,7 +299,6 @@ class Ventana(QMainWindow):
                             salio = True
                 if not salio:
                     mover = False
-            # Manejar la caminadera por el tablero.
             if mover:
                 movio = False
                 total = 0
@@ -318,47 +312,28 @@ class Ventana(QMainWindow):
                     total += 20
                 if total > 0:
                     posI, posJ = self.obtenerPosRuta(self.sender())
-                    # - Verificar final de ruta para evitar descarrilamiento.
                     if posI + total < len(self.__rutas[self.__turno]):
-                        s1 = self.__rutas[self.__turno][posI + total][0]
-                        s2 = self.__rutas[self.__turno][posI + total][1]
-                        if s1 == None:
-                            if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, 0):
-                                self.relocateAll()
-                                if self.ui.checkDado1.isChecked():
-                                    self.ui.checkDado1.setChecked(False)
-                                    self.ui.checkDado1.setEnabled(False)
-                                if self.ui.checkDado2.isChecked():
-                                    self.ui.checkDado2.setChecked(False)
-                                    self.ui.checkDado2.setEnabled(False)
-                                if self.ui.checkMeta.isChecked():
-                                    self.ui.checkMeta.setChecked(False)
-                                    self.ui.checkMeta.setEnabled(False)
-                                if self.ui.checkMata.isChecked():
-                                    self.ui.checkMata.setChecked(False)
-                                    self.ui.checkMata.setEnabled(False)
-                                if s2 != None and not self.esMia(s2) and not posI + total in self.__excluir:
-                                    if self.matarFicha(s2):
-                                        self.ui.checkMata.setEnabled(True)
-                                movio = True
-                        if not movio and s2 == None:
-                            if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, 1):
-                                self.relocateAll()
-                                if self.ui.checkDado1.isChecked():
-                                    self.ui.checkDado1.setChecked(False)
-                                    self.ui.checkDado1.setEnabled(False)
-                                if self.ui.checkDado2.isChecked():
-                                    self.ui.checkDado2.setChecked(False)
-                                    self.ui.checkDado2.setEnabled(False)
-                                if self.ui.checkMeta.isChecked():
-                                    self.ui.checkMeta.setChecked(False)
-                                    self.ui.checkMeta.setEnabled(False)
-                                if self.ui.checkMata.isChecked():
-                                    self.ui.checkMata.setChecked(False)
-                                    self.ui.checkMata.setEnabled(False)
-                                if s1 != None and not self.esMia(s1) and not posI + total in self.__excluir:
-                                    if self.matarFicha(s1):
-                                        self.ui.checkMata.setEnabled(True)
+                        for j in range(len(self.__rutas[self.__turno][posI + total])):
+                            if self.__rutas[self.__turno][posI + total][j] == None:
+                                if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, j):
+                                    self.relocateAll()
+                                    if self.ui.checkDado1.isChecked():
+                                        self.ui.checkDado1.setChecked(False)
+                                        self.ui.checkDado1.setEnabled(False)
+                                    if self.ui.checkDado2.isChecked():
+                                        self.ui.checkDado2.setChecked(False)
+                                        self.ui.checkDado2.setEnabled(False)
+                                    if self.ui.checkMeta.isChecked():
+                                        self.ui.checkMeta.setChecked(False)
+                                        self.ui.checkMeta.setEnabled(False)
+                                    if self.ui.checkMata.isChecked():
+                                        self.ui.checkMata.setChecked(False)
+                                        self.ui.checkMata.setEnabled(False)
+                                    for jC in range(len(self.__rutas[self.__turno][posI + total])):
+                                        fM = self.__rutas[self.__turno][posI + total][jC]
+                                        if j != jC and fM != None and not posI + total in self.__excluir and not self.esMia(fM):
+                                            if self.matarFicha(fM):
+                                                self.ui.checkMata.setEnabled(True)                        
         if not self.puedeJugar():
             self.cambioDeTurno()
 
@@ -419,7 +394,6 @@ class Ventana(QMainWindow):
             self.relocateAll()
             return True
         return False
-
 
     def cambioDeTurno(self):
         self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
