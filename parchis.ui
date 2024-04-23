@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1166</width>
+    <width>1191</width>
     <height>700</height>
    </rect>
   </property>
@@ -471,88 +471,95 @@
          <property name="title">
           <string>Jugar</string>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
-           <widget class="QWidget" name="widgetDados" native="true">
-            <layout class="QHBoxLayout" name="layoutDados">
-             <property name="spacing">
-              <number>10</number>
-             </property>
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
-              <number>0</number>
-             </property>
-             <item>
-              <widget class="QWidget" name="dado1" native="true">
-               <property name="minimumSize">
-                <size>
-                 <width>150</width>
-                 <height>150</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>150</width>
-                 <height>150</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">border-image: url(:/dados/dado06.png) 0 0 0 0 stretch stretch;</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QWidget" name="dado2" native="true">
-               <property name="minimumSize">
-                <size>
-                 <width>150</width>
-                 <height>150</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>150</width>
-                 <height>150</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">border-image: url(:/dados/dado06.png) 0 0 0 0 stretch stretch;</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+         <layout class="QGridLayout" name="layoutJugar">
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="checkDado1">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Dado # 1 =&gt; 6.</string>
+            </property>
            </widget>
           </item>
-          <item>
-           <widget class="QWidget" name="cajaTirar" native="true">
-            <layout class="QGridLayout" name="layoutTirar">
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
-              <number>0</number>
-             </property>
-             <property name="horizontalSpacing">
-              <number>0</number>
-             </property>
-             <item row="0" column="0">
-              <widget class="QPushButton" name="btnTirar">
+          <item row="0" column="1">
+           <widget class="QWidget" name="dado2" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>150</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>150</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border-image: url(:/dados/dado06.png) 0 0 0 0 stretch stretch;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QWidget" name="dado1" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>150</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>150</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border-image: url(:/dados/dado06.png) 0 0 0 0 stretch stretch;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QCheckBox" name="checkDado2">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Dado # 2 =&gt; 6.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QPushButton" name="btnTirar">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Tirar</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QWidget" name="cajaBonus" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout">
+             <item>
+              <widget class="QCheckBox" name="checkMeta">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="text">
-                <string>Tirar</string>
+                <string>Meta =&gt; 10.</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="checkMata">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>Mata =&gt; 20.</string>
                </property>
               </widget>
              </item>

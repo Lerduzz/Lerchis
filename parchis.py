@@ -24,21 +24,21 @@ class DadosWorker(QObject):
         self.finished.emit(self.__s1, self.__s2)
 
 
-class TesterWorker(QObject):
-    finished = pyqtSignal()
-    progress = pyqtSignal(int)
-
-    def __init__(self, start, limit):
-        super().__init__()
-        self.__start = start
-        self.__limit = limit
-
-    def run(self):
-        while self.__start < self.__limit:
-            self.progress.emit(self.__start)
-            self.__start += 1
-            time.sleep(0.25)
-        self.finished.emit()
+# class TesterWorker(QObject):
+#     finished = pyqtSignal()
+#     progress = pyqtSignal(int)
+# 
+#     def __init__(self, start, limit):
+#         super().__init__()
+#         self.__start = start
+#         self.__limit = limit
+# 
+#     def run(self):
+#         while self.__start < self.__limit:
+#             self.progress.emit(self.__start)
+#             self.__start += 1
+#             time.sleep(0.25)
+#         self.finished.emit()
 
 
 class Ventana(QMainWindow):
@@ -47,82 +47,15 @@ class Ventana(QMainWindow):
         self.ui = Ui_VentanaJuego() 
         self.ui.setupUi(self)
         self.ui.btnTirar.clicked.connect(self.tirarDados)
-        self.ui.btnNuevaPartida.clicked.connect(self.runTester)
+        self.ui.btnNuevaPartida.clicked.connect(self.nuevaPartida)
         self.__dado1 = 6
         self.__dado2 = 6
         self.__turno = 0
-        self.__fichas = [
-            self.ui.ficha00, self.ui.ficha01, self.ui.ficha02, self.ui.ficha03,
-            self.ui.ficha10, self.ui.ficha11, self.ui.ficha12, self.ui.ficha13,
-            self.ui.ficha20, self.ui.ficha21, self.ui.ficha22, self.ui.ficha23,
-            self.ui.ficha30, self.ui.ficha31, self.ui.ficha32, self.ui.ficha33
-        ]
-        self.__casas = [
-            [self.ui.ficha00, self.ui.ficha01, self.ui.ficha02, self.ui.ficha03],
-            [self.ui.ficha10, self.ui.ficha11, self.ui.ficha12, self.ui.ficha13],
-            [self.ui.ficha20, self.ui.ficha21, self.ui.ficha22, self.ui.ficha23],
-            [self.ui.ficha30, self.ui.ficha31, self.ui.ficha32, self.ui.ficha33]
-        ]
-        self.__caminos = [[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],]
-        self.__posCaminos = [
-            (250, 0,    0),
-            (250, 50,   0),
-            (250, 100,  0),
-            (250, 150,  0),
-            (250, 200,  0),
-            (250, 250,  2),
-            (250, 250,  3),
-            (250, 250,  4),
-            (200, 250,  1),
-            (150, 250,  1),
-            (100, 250,  1),
-            (50,  250,  1),
-            (0,   250,  1),
-            (0,   400,  1),
-            (0,   550,  1),
-            (50,  550,  1),
-            (100, 550,  1),
-            (150, 550,  1),
-            (200, 550,  1),
-            (250, 700,  5),
-            (250, 700,  6),
-            (250, 700,  7),
-            (250, 700,  0),
-            (250, 750,  0),
-            (250, 800,  0),
-            (250, 850,  0),
-            (250, 900,  0),
-            (400, 900,  0),
-            (550, 900,  0),
-            (550, 850,  0),
-            (550, 800,  0),
-            (550, 750,  0),
-            (550, 700,  0),
-            (700, 700,  8),
-            (700, 700,  9),
-            (700, 700, 10),
-            (700, 550,  1),
-            (750, 550,  1),
-            (800, 550,  1),
-            (850, 550,  1),
-            (900, 550,  1),
-            (900, 400,  1),
-            (900, 250,  1),
-            (850, 250,  1),
-            (800, 250,  1),
-            (750, 250,  1),
-            (700, 250,  1),
-            (700, 250, 11),
-            (700, 250, 12),
-            (700, 250, 13),
-            (550, 200,  0),
-            (550, 150,  0),
-            (550, 100,  0),
-            (550,  50,  0),
-            (550,   0,  0),
-            (400,   0,  0),
-        ]
-        print(len(self.__posCaminos))
+        self.__jugando = False
+        self.__fichas = [self.ui.ficha00,self.ui.ficha01,self.ui.ficha02,self.ui.ficha03,self.ui.ficha10,self.ui.ficha11,self.ui.ficha12,self.ui.ficha13,self.ui.ficha20,self.ui.ficha21,self.ui.ficha22,self.ui.ficha23,self.ui.ficha30,self.ui.ficha31,self.ui.ficha32,self.ui.ficha33]
+        self.__casas = [[self.ui.ficha00,self.ui.ficha01,self.ui.ficha02,self.ui.ficha03],[self.ui.ficha10,self.ui.ficha11,self.ui.ficha12,self.ui.ficha13],[self.ui.ficha20,self.ui.ficha21,self.ui.ficha22,self.ui.ficha23],[self.ui.ficha30,self.ui.ficha31,self.ui.ficha32,self.ui.ficha33]]
+        self.__caminos = [[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None]]
+        self.__posCaminos = [(250,0,0),(250,50,0),(250,100,0),(250,150,0),(250,200,0),(250,250,2),(250,250,3),(250,250,4),(200,250,1),(150,250,1),(100,250,1),(50,250,1),(0,250,1),(0,400,1),(0,550,1),(50,550,1),(100,550,1),(150,550,1),(200,550,1),(250,700,5),(250,700,6),(250,700,7),(250,700,0),(250,750,0),(250,800,0),(250,850,0),(250,900,0),(400,900,0),(550,900,0),(550,850,0),(550,800,0),(550,750,0),(550,700,0),(700,700,8),(700,700,9),(700,700,10),(700,550,1),(750,550,1),(800,550,1),(850,550,1),(900,550,1),(900,400,1),(900,250,1),(850,250,1),(800,250,1),(750,250,1),(700,250,1),(700,250,11),(700,250,12),(700,250,13),(550,200,0),(550,150,0),(550,100,0),(550,50,0),(550,0,0),(400,0,0)]
     
     def resizeEvent(self, e: QResizeEvent) -> None:
         super().resizeEvent(e)
@@ -232,50 +165,54 @@ class Ventana(QMainWindow):
         self.__dado2 = s2
         self.mostrarDados(s1, s2)
         
-        self.ui.btnTirar.setEnabled(True)
-        self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
+        # TODO: Verificar si puede jugar.
+        # - Si todas sus fichas estan en casa solo puede jugar si le cae algun 5.
+        # - Medir cantidad de pasos posibles para cada ficha.
         
-        self.moverFicha(self.__casas, 0, 0, self.__caminos, 33, 0)
-        self.moverFicha(self.__casas, 2, 0, self.__caminos, 33, 1)
-        self.moverFicha(self.__casas, 1, 0, self.__caminos, 34, 0)
-        self.moverFicha(self.__casas, 3, 0, self.__caminos, 34, 1)
-        self.moverFicha(self.__casas, 0, 1, self.__caminos, 35, 0)
-        self.moverFicha(self.__casas, 2, 1, self.__caminos, 35, 1)
-        self.moverFicha(self.__casas, 1, 1, self.__caminos, 47, 0)
-        self.moverFicha(self.__casas, 3, 1, self.__caminos, 47, 1)
-        self.moverFicha(self.__casas, 0, 2, self.__caminos, 48, 0)
-        self.moverFicha(self.__casas, 2, 2, self.__caminos, 48, 1)
-        self.moverFicha(self.__casas, 1, 2, self.__caminos, 49, 0)
-        self.moverFicha(self.__casas, 3, 2, self.__caminos, 49, 1)
-        self.moverFicha(self.__casas, 1, 3, self.__caminos, 15, 0)
-        self.moverFicha(self.__casas, 3, 3, self.__caminos, 15, 1)
-        self.relocateAll()
+        # self.ui.btnTirar.setEnabled(True)
+        # self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
+        
+        # self.moverFicha(self.__casas, 0, 0, self.__caminos, 33, 0)
+        # self.moverFicha(self.__casas, 2, 0, self.__caminos, 33, 1)
+        # self.moverFicha(self.__casas, 1, 0, self.__caminos, 34, 0)
+        # self.moverFicha(self.__casas, 3, 0, self.__caminos, 34, 1)
+        # self.moverFicha(self.__casas, 0, 1, self.__caminos, 35, 0)
+        # self.moverFicha(self.__casas, 2, 1, self.__caminos, 35, 1)
+        # self.moverFicha(self.__casas, 1, 1, self.__caminos, 47, 0)
+        # self.moverFicha(self.__casas, 3, 1, self.__caminos, 47, 1)
+        # self.moverFicha(self.__casas, 0, 2, self.__caminos, 48, 0)
+        # self.moverFicha(self.__casas, 2, 2, self.__caminos, 48, 1)
+        # self.moverFicha(self.__casas, 1, 2, self.__caminos, 49, 0)
+        # self.moverFicha(self.__casas, 3, 2, self.__caminos, 49, 1)
+        # self.moverFicha(self.__casas, 1, 3, self.__caminos, 15, 0)
+        # self.moverFicha(self.__casas, 3, 3, self.__caminos, 15, 1)
+        # self.relocateAll()
 
-    def runTester(self):
-        self.ui.btnNuevaPartida.setEnabled(False)
-        if (not self.moverFicha(self.__casas, 0, 3, self.__caminos, 0, 0)):
-            self.moverFicha(self.__caminos, len(self.__posCaminos) - 1, 0, self.__caminos, 0, 0)
-        if (not self.moverFicha(self.__casas, 2, 3, self.__caminos, 0, 1)):
-            self.moverFicha(self.__caminos, len(self.__posCaminos) - 1, 1, self.__caminos, 0, 1) 
-        self.relocateAll()
-        self.__testerThread = QThread()
-        self.__testerWorker = TesterWorker(0, len(self.__posCaminos))
-        self.__testerWorker.moveToThread(self.__testerThread)
-        self.__testerThread.started.connect(self.__testerWorker.run)
-        self.__testerWorker.finished.connect(self.__testerThread.quit)
-        self.__testerWorker.finished.connect(self.__testerWorker.deleteLater)
-        self.__testerThread.finished.connect(self.__testerThread.deleteLater)
-        self.__testerWorker.progress.connect(self.progressTest)
-        self.__testerWorker.finished.connect(self.finishTest)        
-        self.__testerThread.start()
+    # def runTester(self):
+    #     self.ui.btnNuevaPartida.setEnabled(False)
+    #     if (not self.moverFicha(self.__casas, 0, 3, self.__caminos, 0, 0)):
+    #         self.moverFicha(self.__caminos, len(self.__posCaminos) - 1, 0, self.__caminos, 0, 0)
+    #     if (not self.moverFicha(self.__casas, 2, 3, self.__caminos, 0, 1)):
+    #         self.moverFicha(self.__caminos, len(self.__posCaminos) - 1, 1, self.__caminos, 0, 1) 
+    #     self.relocateAll()
+    #     self.__testerThread = QThread()
+    #     self.__testerWorker = TesterWorker(0, len(self.__posCaminos))
+    #     self.__testerWorker.moveToThread(self.__testerThread)
+    #     self.__testerThread.started.connect(self.__testerWorker.run)
+    #     self.__testerWorker.finished.connect(self.__testerThread.quit)
+    #     self.__testerWorker.finished.connect(self.__testerWorker.deleteLater)
+    #     self.__testerThread.finished.connect(self.__testerThread.deleteLater)
+    #     self.__testerWorker.progress.connect(self.progressTest)
+    #     self.__testerWorker.finished.connect(self.finishTest)        
+    #     self.__testerThread.start()
 
-    def progressTest(self, value):
-        self.moverFicha(self.__caminos, value - 1, 0, self.__caminos, value, 0)
-        self.moverFicha(self.__caminos, value - 1, 1, self.__caminos, value, 1)
-        self.relocateAll()
+    # def progressTest(self, value):
+    #     self.moverFicha(self.__caminos, value - 1, 0, self.__caminos, value, 0)
+    #     self.moverFicha(self.__caminos, value - 1, 1, self.__caminos, value, 1)
+    #     self.relocateAll()
 
-    def finishTest(self):
-        self.ui.btnNuevaPartida.setEnabled(True)
+    # def finishTest(self):
+    #     self.ui.btnNuevaPartida.setEnabled(True)
     
     def moverFicha(self, desde, iD, jD, hasta, iH, jH):
         if desde[iD][jD] == None or hasta[iH][jH] != None:
@@ -284,7 +221,19 @@ class Ventana(QMainWindow):
         hasta[iH][jH] = desde[iD][jD]
         desde[iD][jD] = temp
         return True
-        
+
+    def nuevaPartida(self):
+        self.__dado1 = 6
+        self.__dado2 = 6
+        self.__turno = 0
+        self.__jugando = True
+        self.mostrarDados(self.__dado1, self.__dado2)
+        self.ui.btnTirar.setEnabled(True)
+        self.ui.checkDado1.setEnabled(False)
+        self.ui.checkDado2.setEnabled(False)
+        self.ui.checkMeta.setEnabled(False)
+        self.ui.checkMata.setEnabled(False)
+
 
 app = QApplication([])
 app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt5'))
