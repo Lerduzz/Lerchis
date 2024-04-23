@@ -45,12 +45,7 @@ class Ventana(QMainWindow):
             [self.ui.ficha20, self.ui.ficha21, self.ui.ficha22, self.ui.ficha23],
             [self.ui.ficha30, self.ui.ficha31, self.ui.ficha32, self.ui.ficha33]
         ]
-        self.__caminos = [
-            [None, None], [None, None], [None, None], [None, None], [None, None],
-            [None, None], [None, None], [None, None], [None, None], [None, None],
-            [None, None], [None, None], [None, None], [None, None], [None, None],
-            [None, None], [None, None], [None, None], [None, None],
-        ]
+        self.__caminos = [[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],]
         self.__posCaminos = [
             (250, 0,    0),
             (250, 50,   0),
@@ -71,7 +66,11 @@ class Ventana(QMainWindow):
             (100, 550,  1),
             (150, 550,  1),
             (200, 550,  1),
+            (250, 700,  5),
+            (250, 700,  6),
+            (250, 700,  7),
         ]
+        print(len(self.__posCaminos))
     
     def resizeEvent(self, e: QResizeEvent) -> None:
         super().resizeEvent(e)
@@ -102,11 +101,12 @@ class Ventana(QMainWindow):
         # CAMINOS
         hCasilla = 150 * h // 950
         for i in range(len(self.__caminos)):
-            x, y, o = self.__posCaminos[i]
-            for j in range(2):
-                if self.__caminos[i][j] != None:
-                    xR, yR = self.calcularPosicionCasilla(x, y, o, j, h, hCasilla, hFicha)
-                    self.__caminos[i][j].move(xR, yR)
+            if i < len(self.__posCaminos):
+                x, y, o = self.__posCaminos[i]
+                for j in range(2):
+                    if self.__caminos[i][j] != None:
+                        xR, yR = self.calcularPosicionCasilla(x, y, o, j, h, hCasilla, hFicha)
+                        self.__caminos[i][j].move(xR, yR)
 
     def calcularPosicionCasilla(self, x, y, o, i, h, hC, hF):
         xR, yR = (0, 0)
@@ -129,6 +129,15 @@ class Ventana(QMainWindow):
         elif o == 4:
             xR = dX if i == 0 else dX + hF // 2
             yR = dY + hC // 2 - hF // 4 if i == 0 else dY + hC // 2 + hF // 2 + hF // 10
+        elif o == 5:
+            xR = dX if i == 0 else dX + hF // 2
+            yR = dY - hF - hC // 2 + hF // 4 if i == 0 else dY - hF - hC // 2 - hF // 2 - hF // 10
+        elif o == 6:
+            xR = dX + hF if i == 0 else dX + hF * 2 - hF // 3
+            yR = dY - hF * 2 if i == 0 else dY - hF * 3 + hF // 3
+        elif o == 7:
+            xR = dX + hC // 2 - hF // 4 if i == 0 else dX + hC // 2 + hF // 2 + hF // 10
+            yR = dY - hF if i == 0 else dY - hF - hF // 2
         return (xR, yR)
 
 
@@ -157,18 +166,18 @@ class Ventana(QMainWindow):
         self.ui.btnTirar.setEnabled(True)
         self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
         
-        self.moverFicha(self.__casas, 0, 0, self.__caminos, 16, 0)
-        self.moverFicha(self.__casas, 2, 0, self.__caminos, 16, 1)
-        self.moverFicha(self.__casas, 1, 0, self.__caminos, 17, 0)
-        self.moverFicha(self.__casas, 3, 0, self.__caminos, 17, 1)
-        self.moverFicha(self.__casas, 0, 1, self.__caminos, 18, 0)
-        self.moverFicha(self.__casas, 2, 1, self.__caminos, 18, 1)
-        self.moverFicha(self.__casas, 1, 1, self.__caminos, 11, 0)
-        self.moverFicha(self.__casas, 3, 1, self.__caminos, 11, 1)
-        self.moverFicha(self.__casas, 0, 2, self.__caminos, 12, 0)
-        self.moverFicha(self.__casas, 2, 2, self.__caminos, 12, 1)
-        self.moverFicha(self.__casas, 1, 2, self.__caminos, 13, 0)
-        self.moverFicha(self.__casas, 3, 2, self.__caminos, 13, 1)
+        self.moverFicha(self.__casas, 0, 0, self.__caminos, 5, 0)
+        self.moverFicha(self.__casas, 2, 0, self.__caminos, 5, 1)
+        self.moverFicha(self.__casas, 1, 0, self.__caminos, 6, 0)
+        self.moverFicha(self.__casas, 3, 0, self.__caminos, 6, 1)
+        self.moverFicha(self.__casas, 0, 1, self.__caminos, 7, 0)
+        self.moverFicha(self.__casas, 2, 1, self.__caminos, 7, 1)
+        self.moverFicha(self.__casas, 1, 1, self.__caminos, 19, 0)
+        self.moverFicha(self.__casas, 3, 1, self.__caminos, 19, 1)
+        self.moverFicha(self.__casas, 0, 2, self.__caminos, 20, 0)
+        self.moverFicha(self.__casas, 2, 2, self.__caminos, 20, 1)
+        self.moverFicha(self.__casas, 1, 2, self.__caminos, 21, 0)
+        self.moverFicha(self.__casas, 3, 2, self.__caminos, 21, 1)
         self.moverFicha(self.__casas, 0, 3, self.__caminos, 14, 0)
         self.moverFicha(self.__casas, 2, 3, self.__caminos, 14, 1)
         self.moverFicha(self.__casas, 1, 3, self.__caminos, 15, 0)
