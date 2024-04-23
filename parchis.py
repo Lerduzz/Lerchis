@@ -45,6 +45,12 @@ class Ventana(QMainWindow):
             [self.ui.ficha20, self.ui.ficha21, self.ui.ficha22, self.ui.ficha23],
             [self.ui.ficha30, self.ui.ficha31, self.ui.ficha32, self.ui.ficha33]
         ]
+        self.__caminos = [
+            [None, None]
+        ]
+        self.__posCaminos = [
+            (250, 0, 0)
+        ]
     
     def resizeEvent(self, e: QResizeEvent) -> None:
         super().resizeEvent(e)
@@ -61,15 +67,30 @@ class Ventana(QMainWindow):
         
     def relocateAll(self):
         h = self.ui.cajaTablero.height()
+        # CASAS
         hCasa = 250 * h // 950
         hFicha = 50 * h // 950
-        for i in range(4):
+        for i in range(len(self.__casas)):
             casaX = (0 if i == 0 or i == 1 else 700) * h // 950
             casaY = (0 if i == 0 or i == 3 else 700) * h // 950
-            for j in range(4):
+            for j in range(len(self.__casas[i])):
                 p1 = hCasa // 2 - hFicha - hFicha // 2
                 p2 = hCasa // 2 + hFicha // 2
-                self.__casas[i][j].move(casaX + (p1 if j == 0 or j == 1 else p2), casaY + (p1 if j == 0 or j == 3 else p2))
+                if self.__casas[i][j] != None:
+                    self.__casas[i][j].move(casaX + (p1 if j == 0 or j == 1 else p2), casaY + (p1 if j == 0 or j == 3 else p2))
+        # CAMINOS
+        hCasilla = 150 * h // 950
+        for i in range(len(self.__caminos)):
+            x, y, o = self.__posCaminos[i]
+            if self.__caminos[i][0] != None:
+                x0 = x * h // 950 + hCasilla // 2 - hFicha - hFicha // 10 if o == 0 else x
+                y0 = y if o == 0 else y * h // 950 + hCasilla // 2 - hFicha - hFicha // 10
+                self.__caminos[i][0].move(x0, y0)
+            if self.__caminos[i][1] != None:
+                x1 = x * h // 950 + hCasilla // 2 + hFicha // 10 if o == 0 else x
+                y1 = y if o == 0 else y * h // 950 + hCasilla // 2 + hFicha // 10
+                self.__caminos[i][1].move(x1, y1)
+
 
     def tirarDados(self):
         self.ui.btnTirar.setEnabled(False)
@@ -95,6 +116,18 @@ class Ventana(QMainWindow):
         # TODO: Esto es una prueba, no va en este lugar.
         self.ui.btnTirar.setEnabled(True)
         self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
+        # TODO: TEST: Relocate.
+        print(self.moverFicha(self.__casas, 0, 0, self.__caminos, 0, 0))
+        print(self.moverFicha(self.__casas, 2, 0, self.__caminos, 0, 1))
+        self.relocateAll()
+
+    def moverFicha(self, desde, iD, jD, hasta, iH, jH):
+        if desde[iD][jD] == None or hasta[iH][jH] != None:
+            return False
+        temp = hasta[iH][jH]
+        hasta[iH][jH] = desde[iD][jD]
+        desde[iD][jD] = temp
+        return True
         
 
 app = QApplication([])
