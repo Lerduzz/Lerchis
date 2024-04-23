@@ -71,9 +71,8 @@ class Ventana(QMainWindow):
             self.__rutas[2].append(self.__caminos[i])        
         for i in range(45, 56):
             self.__rutas[3].append(self.__caminos[i])
-        for i in range(0, 41):
-            self.__rutas[3].append(self.__caminos[i])
-        
+        for i in range(0, 42):
+            self.__rutas[3].append(self.__caminos[i])        
 
     def resizeEvent(self, e: QResizeEvent) -> None:
         super().resizeEvent(e)
@@ -187,15 +186,20 @@ class Ventana(QMainWindow):
         self.ui.checkDado1.setEnabled(True)
         self.ui.checkDado2.setEnabled(True)
         if not self.puedeJugar():
-            # self.showWarning('Turno perdido', 'Has perdido el turno porque no tienes movimientos disponibles.\n\nSugerencias:\n- Para sacar una ficha debes tener un 5 en algún dado.')
-            print('Has perdido el turno porque no tienes movimientos disponibles.')
             self.cambioDeTurno()
 
     def puedeJugar(self):
         for i in range(self.__turno * 4, self.__turno * 4 + 4):
-            if self.estaEnCasa(self.__fichas[i]) and (self.__dado1 == 5 or self.__dado2 == 5):
-                # TODO: Comprobar que no este bloqueada la salida.
-                return True
+            ficha = self.__fichas[i]
+            if self.estaEnCasa(ficha):
+                if (self.ui.checkDado1.isEnabled() and self.__dado1 == 5) or (self.ui.checkDado2.isEnabled() and self.__dado2 == 5):
+                    # TODO: Comprobar que no este bloqueada la salida.
+                    return True
+            else:
+                dist = self.cuantoCamina(ficha)
+                if (self.ui.checkDado1.isEnabled() and self.__dado1 <= dist) or (self.ui.checkDado2.isEnabled() and self.__dado2 <= dist):
+                    # TODO: Verificar los bonus.
+                    return True
         return False
 
     def estaEnCasa(self, ficha):
@@ -203,6 +207,18 @@ class Ventana(QMainWindow):
             if fC != None and ficha != None and fC == ficha:
                 return True
         return False
+
+    def cuantoCamina(self, ficha):
+        if self.estaEnCasa(ficha):
+            return 0
+        startPos = 0
+        checkPos = 0
+        for casilla in self.__rutas[self.__turno]:
+            if casilla[0] == ficha or casilla[1] == ficha:
+                startPos = checkPos
+                break
+            checkPos += 1
+        return len(self.__rutas[self.__turno]) - startPos - 1
 
     def esMia(self, ficha):
         for i in range(self.__turno * 4, self.__turno * 4 + 4):
@@ -212,17 +228,79 @@ class Ventana(QMainWindow):
 
     def jugarFicha(self):
         if self.esMia(self.sender()):
-            print('La ficha es mia; OK.')
-            # Controlar la salida.
+            print(f'La ficha camina: {self.cuantoCamina(self.sender())}.')
+            mover = True
+            # Manejar la salida de casa.
             if self.estaEnCasa(self.sender()):
-                if self.__dado1 == 5 and self.ui.checkDado1.isChecked():
-                    self.salirDeCasa(self.sender())
-                    self.cambioDeTurno()
-                elif self.__dado2 == 5 and self.ui.checkDado2.isChecked():
-                    self.salirDeCasa(self.sender())
-                    self.cambioDeTurno()
+                salio = False
+                # Verificar salida ocupada.
+                s1 = self.__rutas[self.__turno][0][0]
+                s2 = self.__rutas[self.__turno][0][1]
+                if s1 == None or s2 == None or not self.esMia(s1) or not self.esMia(s2):
+                    # Verificar dado 1.
+                    if self.ui.checkDado1.isChecked():
+                        if self.__dado1 == 5:
+                            self.salirDeCasa(self.sender())
+                            self.ui.checkDado1.setChecked(False)
+                            self.ui.checkDado1.setEnabled(False)
+                            salio = True
+                    # Verificar dado 2.
+                    if not salio and self.ui.checkDado2.isChecked():
+                        if self.__dado2 == 5:
+                            self.salirDeCasa(self.sender())
+                            self.ui.checkDado2.setChecked(False)
+                            self.ui.checkDado2.setEnabled(False)
+                            salio = True
+                if not salio:
+                    mover = False
+            # Manejar la caminadera por el tablero.
+            else:
+                if mover:
+                    dist = self.cuantoCamina(self.sender())
+                    total = 0
+                    if self.ui.checkDado1.isChecked():
+                        total += self.__dado1
+                    if self.ui.checkDado2.isChecked():
+                        total += self.__dado2
+                    # TODO: Sumar bonus seleccionados.
+                    if total > 0 and total <= dist:
+                        # TODO: la ficha se encuentra en la ruta... 
+                        # hay que encontrar su posicion... 
+                        # encontrar espacio en la posicion de destino.
+                        posI = 0
+                        posJ = 0
+                        for i in range(len(self.__rutas[self.__turno])):
+                            if self.__rutas[self.__turno][i][0] == self.sender():
+                                posI = i
+                                posJ = 0
+                            if self.__rutas[self.__turno][i][1] == self.sender():
+                                posI = i
+                                posJ = 1
+                        dest = self.__rutas[self.__turno][posI + total]
+                        s1 = self.__rutas[self.__turno][posI + total][0]
+                        s2 = self.__rutas[self.__turno][posI + total][1]
+                        if s1 == None:
+                            if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, 0):
+                                self.relocateAll()
+                                if self.ui.checkDado1.isChecked():
+                                    self.ui.checkDado1.setChecked(False)
+                                    self.ui.checkDado1.setEnabled(False)
+                                if self.ui.checkDado2.isChecked():
+                                    self.ui.checkDado2.setChecked(False)
+                                    self.ui.checkDado2.setEnabled(False)
+                        elif s2 == None:
+                            if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, 1):
+                                self.relocateAll()
+                                if self.ui.checkDado1.isChecked():
+                                    self.ui.checkDado1.setChecked(False)
+                                    self.ui.checkDado1.setEnabled(False)
+                                if self.ui.checkDado2.isChecked():
+                                    self.ui.checkDado2.setChecked(False)
+                                    self.ui.checkDado2.setEnabled(False)
         else:
             print('¡La ficha no es mia!')
+        if not self.puedeJugar():
+            self.cambioDeTurno()
 
     def salirDeCasa(self, ficha):
         pos = 0
@@ -231,10 +309,10 @@ class Ventana(QMainWindow):
                 pos = i
                 break
         if self.__rutas[self.__turno][0][0] == None:
-            if (self.moverFicha(self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 0)):
+            if self.moverFicha(self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 0):
                 self.relocateAll()
         elif self.__rutas[self.__turno][0][1] == None:
-            if (self.moverFicha(self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 1)):
+            if self.moverFicha(self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 1):
                 self.relocateAll()
 
     def cambioDeTurno(self):
