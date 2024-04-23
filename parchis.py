@@ -24,12 +24,30 @@ class DadosWorker(QObject):
         self.finished.emit(self.__s1, self.__s2)
 
 
+class TesterWorker(QObject):
+    finished = pyqtSignal()
+    progress = pyqtSignal(int)
+
+    def __init__(self, start, limit):
+        super().__init__()
+        self.__start = start
+        self.__limit = limit
+
+    def run(self):
+        while self.__start < self.__limit:
+            self.__start += 1
+            time.sleep(1)
+            self.progress.emit(self.__start)            
+        self.finished.emit()
+
+
 class Ventana(QMainWindow):
     def __init__(self):
         super(Ventana, self).__init__()
         self.ui = Ui_VentanaJuego() 
         self.ui.setupUi(self)
         self.ui.btnTirar.clicked.connect(self.tirarDados)
+        self.ui.btnNuevaPartida.clicked.connect(self.runTester)
         self.__dado1 = 6
         self.__dado2 = 6
         self.__turno = 0
@@ -151,7 +169,6 @@ class Ventana(QMainWindow):
             yR = dY - hF if i == 0 else dY - hF - hF // 2
         return (xR, yR)
 
-
     def tirarDados(self):
         self.ui.btnTirar.setEnabled(False)
         self.__dadosThread = QThread()
@@ -189,12 +206,36 @@ class Ventana(QMainWindow):
         self.moverFicha(self.__casas, 2, 2, self.__caminos, 20, 1)
         self.moverFicha(self.__casas, 1, 2, self.__caminos, 21, 0)
         self.moverFicha(self.__casas, 3, 2, self.__caminos, 21, 1)
-        self.moverFicha(self.__casas, 0, 3, self.__caminos, 14, 0)
-        self.moverFicha(self.__casas, 2, 3, self.__caminos, 14, 1)
         self.moverFicha(self.__casas, 1, 3, self.__caminos, 15, 0)
         self.moverFicha(self.__casas, 3, 3, self.__caminos, 15, 1)
         self.relocateAll()
 
+    def runTester(self):
+        self.ui.btnNuevaPartida.setEnabled(False)
+        if (not self.moverFicha(self.__casas, 0, 3, self.__caminos, 0, 0)):
+            self.moverFicha(self.__caminos, 32, 0, self.__caminos, 0, 0)
+        if (not self.moverFicha(self.__casas, 2, 3, self.__caminos, 0, 1)):
+            self.moverFicha(self.__caminos, 32, 1, self.__caminos, 0, 1)            
+        self.relocateAll()
+        self.__testerThread = QThread()
+        self.__testerWorker = TesterWorker(0, 33)
+        self.__testerWorker.moveToThread(self.__testerThread)
+        self.__testerThread.started.connect(self.__testerWorker.run)
+        self.__testerWorker.finished.connect(self.__testerThread.quit)
+        self.__testerWorker.finished.connect(self.__testerWorker.deleteLater)
+        self.__testerThread.finished.connect(self.__testerThread.deleteLater)
+        self.__testerWorker.progress.connect(self.progressTest)
+        self.__testerWorker.finished.connect(self.finishTest)        
+        self.__testerThread.start()
+
+    def progressTest(self, value):
+        self.moverFicha(self.__caminos, value - 1, 0, self.__caminos, value, 0)
+        self.moverFicha(self.__caminos, value - 1, 1, self.__caminos, value, 1)
+        self.relocateAll()
+
+    def finishTest(self):
+        self.ui.btnNuevaPartida.setEnabled(True)
+    
     def moverFicha(self, desde, iD, jD, hasta, iH, jH):
         if desde[iD][jD] == None or hasta[iH][jH] != None:
             return False
