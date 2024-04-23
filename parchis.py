@@ -46,10 +46,22 @@ class Ventana(QMainWindow):
             [self.ui.ficha30, self.ui.ficha31, self.ui.ficha32, self.ui.ficha33]
         ]
         self.__caminos = [
-            [None, None]
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            # TODO: Diagonales [None, None],
+            # TODO: Diagonales [None, None],
         ]
         self.__posCaminos = [
-            (250, 0, 0)
+            (250, 0,   0),
+            (250, 50,  0),
+            (250, 100, 0),
+            (250, 150, 0),
+            (250, 200, 0),
+            (250, 250, 2)
         ]
     
     def resizeEvent(self, e: QResizeEvent) -> None:
@@ -82,14 +94,27 @@ class Ventana(QMainWindow):
         hCasilla = 150 * h // 950
         for i in range(len(self.__caminos)):
             x, y, o = self.__posCaminos[i]
-            if self.__caminos[i][0] != None:
-                x0 = x * h // 950 + hCasilla // 2 - hFicha - hFicha // 10 if o == 0 else x
-                y0 = y if o == 0 else y * h // 950 + hCasilla // 2 - hFicha - hFicha // 10
-                self.__caminos[i][0].move(x0, y0)
-            if self.__caminos[i][1] != None:
-                x1 = x * h // 950 + hCasilla // 2 + hFicha // 10 if o == 0 else x
-                y1 = y if o == 0 else y * h // 950 + hCasilla // 2 + hFicha // 10
-                self.__caminos[i][1].move(x1, y1)
+            for j in range(2):
+                if self.__caminos[i][j] != None:
+                    xR, yR = self.calcularPosicionCasilla(x, y, o, j, h, hCasilla, hFicha)
+                    self.__caminos[i][j].move(xR, yR)
+
+    def calcularPosicionCasilla(self, x, y, o, i, h, hC, hF):
+        xR, yR = (0, 0)
+        dX = x * h // 950
+        dY = y * h // 950
+        dP1 = hC // 2 - hF - hF // 10
+        dP2 = hC // 2 + hF // 10
+        if o == 0:
+            xR = dX + dP1 if i == 0 else dX + dP2
+            yR = dY
+        elif o == 1:
+            xR = dX
+            yR = dY + dP1 if i == 0 else dY + dP2
+        elif o == 2:
+            xR = dX + hC // 2 - hF // 4 if i == 0 else dX + hC // 2 + hF // 2 + hF // 10
+            yR = dY if i == 0 else dY + hF // 2
+        return (xR, yR)
 
 
     def tirarDados(self):
@@ -119,6 +144,20 @@ class Ventana(QMainWindow):
         # TODO: TEST: Relocate.
         print(self.moverFicha(self.__casas, 0, 0, self.__caminos, 0, 0))
         print(self.moverFicha(self.__casas, 2, 0, self.__caminos, 0, 1))
+        print(self.moverFicha(self.__casas, 1, 0, self.__caminos, 1, 0))
+        print(self.moverFicha(self.__casas, 3, 0, self.__caminos, 1, 1))
+        print(self.moverFicha(self.__casas, 0, 1, self.__caminos, 2, 0))
+        print(self.moverFicha(self.__casas, 2, 1, self.__caminos, 2, 1))
+        print(self.moverFicha(self.__casas, 1, 1, self.__caminos, 3, 0))
+        print(self.moverFicha(self.__casas, 3, 1, self.__caminos, 3, 1))
+        print(self.moverFicha(self.__casas, 0, 2, self.__caminos, 4, 0))
+        print(self.moverFicha(self.__casas, 2, 2, self.__caminos, 4, 1))
+        print(self.moverFicha(self.__casas, 1, 2, self.__caminos, 5, 0))
+        print(self.moverFicha(self.__casas, 3, 2, self.__caminos, 5, 1))
+        # print(self.moverFicha(self.__casas, 0, 3, self.__caminos, 0, 0))
+        # print(self.moverFicha(self.__casas, 2, 3, self.__caminos, 0, 1))
+        # print(self.moverFicha(self.__casas, 1, 3, self.__caminos, 1, 0))
+        # print(self.moverFicha(self.__casas, 3, 3, self.__caminos, 1, 1))
         self.relocateAll()
 
     def moverFicha(self, desde, iD, jD, hasta, iH, jH):
