@@ -218,7 +218,7 @@ class Ventana(QMainWindow):
         self.ui.checkDado2.setText(f'Dado # 2 => {s2}.')
         self.ui.checkDado1.setEnabled(True)
         self.ui.checkDado2.setEnabled(True)
-        if not self.puedeJugar():
+        if not self.puedeJugar() or (self.__dado1 == self.__dado2 and self.__cuentaDoble >= 2):
             self.cambioDeTurno()
 
     def puedeJugar(self):
@@ -417,12 +417,21 @@ class Ventana(QMainWindow):
                 self.__cuentaDoble += 1
                 repetir = True
             else:
-                pass # TODO: Virar la ficha más adelantada.
+                self.virarMasAdelantada()
         if not repetir:
             self.__cuentaDoble = 0
             self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
         self.mostrarDados(self.__dado1, self.__dado2)
         self.prepararDados()
+
+    def virarMasAdelantada(self):
+        for i in range(len(self.__rutas[self.__turno]) - 2, -1, -1):
+            for j in range(len(self.__rutas[self.__turno][i])):
+                ficha = self.__rutas[self.__turno][i][j]
+                if ficha != None and self.esMia(ficha):
+                    self.matarFicha(ficha)
+                    return True
+        return False
         
     def prepararDados(self):
         self.ui.btnTirar.setEnabled(True)
