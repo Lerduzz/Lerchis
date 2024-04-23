@@ -268,6 +268,18 @@ class Ventana(QMainWindow):
                     break
         return (posI, posJ)
 
+    def obtenerOwnerIndex(self, ficha):
+        index = 0
+        for i in range(len(self.__fichas)):
+            if self.__fichas[i] == ficha:
+                index = i
+                break
+        owner = 0
+        while index >= 4:
+            index -= 4
+            owner += 1
+        return (owner, index)
+
     def estaEnCasa(self, ficha):
         for fC in self.__casas[self.__turno]:
             if fC != None and ficha != None and fC == ficha:
@@ -369,16 +381,7 @@ class Ventana(QMainWindow):
 
     def matarFicha(self, ficha):
         posI, posJ = self.obtenerPosRuta(ficha)
-        # - Necesito saber de quien es y su numero para determinar su destino.
-        index = 0
-        for i in range(len(self.__fichas)):
-            if self.__fichas[i] == ficha:
-                index = i
-                break
-        owner = 0
-        while index >= 4:
-            index -= 4
-            owner += 1
+        owner, index = self.obtenerOwnerIndex(ficha)
         if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__casas, owner, index):
             self.relocateAll()
             return True
