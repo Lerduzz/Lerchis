@@ -34,4 +34,7 @@
     <file>ficha2.png</file>
     <file>ficha3.png</file>
   </qresource>
+  <qresource prefix="ventana">
+    <file>icono.png</file>
+  </qresource>
 </RCC>

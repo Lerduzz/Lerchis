@@ -33,9 +33,17 @@ class Ventana(QMainWindow):
         self.__dado1 = 6
         self.__dado2 = 6
         self.__turno = 0
-        self.__fichas = [self.ui.ficha00, self.ui.ficha01, self.ui.ficha02, self.ui.ficha03]
+        self.__fichas = [
+            self.ui.ficha00, self.ui.ficha01, self.ui.ficha02, self.ui.ficha03,
+            self.ui.ficha10, self.ui.ficha11, self.ui.ficha12, self.ui.ficha13,
+            self.ui.ficha20, self.ui.ficha21, self.ui.ficha22, self.ui.ficha23,
+            self.ui.ficha30, self.ui.ficha31, self.ui.ficha32, self.ui.ficha33
+        ]
         self.__casas = [
-            [self.ui.ficha00, self.ui.ficha01, self.ui.ficha02, self.ui.ficha03]
+            [self.ui.ficha00, self.ui.ficha01, self.ui.ficha02, self.ui.ficha03],
+            [self.ui.ficha10, self.ui.ficha11, self.ui.ficha12, self.ui.ficha13],
+            [self.ui.ficha20, self.ui.ficha21, self.ui.ficha22, self.ui.ficha23],
+            [self.ui.ficha30, self.ui.ficha31, self.ui.ficha32, self.ui.ficha33]
         ]
     
     def resizeEvent(self, e: QResizeEvent) -> None:
@@ -46,21 +54,22 @@ class Ventana(QMainWindow):
     def resizeAll(self):
         h = self.ui.cajaTablero.height()
         self.ui.cajaTablero.setFixedWidth(h)
-        fH = 34 * h // 1000
+        fH = 50 * h // 950
         for f in self.__fichas:
             f.setFixedWidth(fH)
             f.setFixedHeight(fH)
         
     def relocateAll(self):
-        # Porcentaje de escala.
-        hP = self.ui.cajaTablero.height() // 10
-        # Escala del ancho de las casas.
-        cE = 275 * hP // 100
-        i = 0 # for i in range(4):
-        self.__casas[i][0].move(cE // 2 - 2 * (34 * hP // 100), cE // 2 - 2 * (34 * hP // 100))
-        self.__casas[i][1].move(cE // 2 - 2 * (34 * hP // 100), cE // 2 + (34 * hP // 100))
-        self.__casas[i][2].move(cE // 2 + (34 * hP // 100), cE // 2 + (34 * hP // 100))
-        self.__casas[i][3].move(cE // 2 + (34 * hP // 100), cE // 2 - 2 * (34 * hP // 100))
+        h = self.ui.cajaTablero.height()
+        hCasa = 250 * h // 950
+        hFicha = 50 * h // 950
+        for i in range(4):
+            casaX = (0 if i == 0 or i == 1 else 700) * h // 950
+            casaY = (0 if i == 0 or i == 3 else 700) * h // 950
+            for j in range(4):
+                p1 = hCasa // 2 - hFicha - hFicha // 2
+                p2 = hCasa // 2 + hFicha // 2
+                self.__casas[i][j].move(casaX + (p1 if j == 0 or j == 1 else p2), casaY + (p1 if j == 0 or j == 3 else p2))
 
     def tirarDados(self):
         self.ui.btnTirar.setEnabled(False)

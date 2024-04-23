@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Juego de Parchís</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="parchis.qrc">
+    <normaloff>:/ventana/icono.png</normaloff>:/ventana/icono.png</iconset>
+  </property>
   <widget class="QWidget" name="cajaPrincipal">
    <layout class="QHBoxLayout" name="layoutPrincipal">
     <property name="spacing">
@@ -46,10 +50,10 @@
       <widget class="QToolButton" name="ficha00">
        <property name="geometry">
         <rect>
-         <x>52</x>
-         <y>52</y>
-         <width>22</width>
-         <height>22</height>
+         <x>38</x>
+         <y>38</y>
+         <width>36</width>
+         <height>36</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -62,16 +66,16 @@
         <string notr="true">border-image: url(:/fichas/ficha0.png) 0 0 0 0 stretch stretch;</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string/>
        </property>
       </widget>
       <widget class="QToolButton" name="ficha03">
        <property name="geometry">
         <rect>
-         <x>118</x>
-         <y>52</y>
-         <width>22</width>
-         <height>22</height>
+         <x>110</x>
+         <y>38</y>
+         <width>36</width>
+         <height>36</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -84,16 +88,16 @@
         <string notr="true">border-image: url(:/fichas/ficha0.png) 0 0 0 0 stretch stretch;</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string/>
        </property>
       </widget>
       <widget class="QToolButton" name="ficha01">
        <property name="geometry">
         <rect>
-         <x>52</x>
-         <y>118</y>
-         <width>22</width>
-         <height>22</height>
+         <x>38</x>
+         <y>110</y>
+         <width>36</width>
+         <height>36</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -106,16 +110,16 @@
         <string notr="true">border-image: url(:/fichas/ficha0.png) 0 0 0 0 stretch stretch;</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string/>
        </property>
       </widget>
       <widget class="QToolButton" name="ficha02">
        <property name="geometry">
         <rect>
-         <x>118</x>
-         <y>118</y>
-         <width>22</width>
-         <height>22</height>
+         <x>110</x>
+         <y>110</y>
+         <width>36</width>
+         <height>36</height>
         </rect>
        </property>
        <property name="minimumSize">
@@ -128,7 +132,271 @@
         <string notr="true">border-image: url(:/fichas/ficha0.png) 0 0 0 0 stretch stretch;</string>
        </property>
        <property name="text">
-        <string>...</string>
+        <string/>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="ficha13">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>553</y>
+         <width>36</width>
+         <height>36</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/fichas/ficha1.png) 0 0 0 0 stretch stretch;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="ficha10">
+       <property name="geometry">
+        <rect>
+         <x>38</x>
+         <y>553</y>
+         <width>36</width>
+         <height>36</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/fichas/ficha1.png) 0 0 0 0 stretch stretch;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="ficha11">
+       <property name="geometry">
+        <rect>
+         <x>38</x>
+         <y>625</y>
+         <width>36</width>
+         <height>36</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/fichas/ficha1.png) 0 0 0 0 stretch stretch;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="ficha12">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>625</y>
+         <width>36</width>
+         <height>36</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/fichas/ficha1.png) 0 0 0 0 stretch stretch;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="ficha23">
+       <property name="geometry">
+        <rect>
+         <x>625</x>
+         <y>553</y>
+         <width>36</width>
+         <height>36</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/fichas/ficha2.png) 0 0 0 0 stretch stretch;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="ficha20">
+       <property name="geometry">
+        <rect>
+         <x>553</x>
+         <y>553</y>
+         <width>36</width>
+         <height>36</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/fichas/ficha2.png) 0 0 0 0 stretch stretch;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="ficha21">
+       <property name="geometry">
+        <rect>
+         <x>553</x>
+         <y>625</y>
+         <width>36</width>
+         <height>36</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/fichas/ficha2.png) 0 0 0 0 stretch stretch;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="ficha22">
+       <property name="geometry">
+        <rect>
+         <x>625</x>
+         <y>625</y>
+         <width>36</width>
+         <height>36</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/fichas/ficha2.png) 0 0 0 0 stretch stretch;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="ficha33">
+       <property name="geometry">
+        <rect>
+         <x>625</x>
+         <y>38</y>
+         <width>36</width>
+         <height>36</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/fichas/ficha3.png) 0 0 0 0 stretch stretch;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="ficha30">
+       <property name="geometry">
+        <rect>
+         <x>553</x>
+         <y>38</y>
+         <width>36</width>
+         <height>36</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/fichas/ficha3.png) 0 0 0 0 stretch stretch;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="ficha31">
+       <property name="geometry">
+        <rect>
+         <x>553</x>
+         <y>110</y>
+         <width>36</width>
+         <height>36</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/fichas/ficha3.png) 0 0 0 0 stretch stretch;</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QToolButton" name="ficha32">
+       <property name="geometry">
+        <rect>
+         <x>625</x>
+         <y>110</y>
+         <width>36</width>
+         <height>36</height>
+        </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border-image: url(:/fichas/ficha3.png) 0 0 0 0 stretch stretch;</string>
+       </property>
+       <property name="text">
+        <string/>
        </property>
       </widget>
      </widget>
@@ -158,8 +426,8 @@
               <string>Dos jugadores</string>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>:/dados/dado2.png</normaloff>:/dados/dado2.png</iconset>
+              <iconset resource="parchis.qrc">
+               <normaloff>:/dados/dado12.png</normaloff>:/dados/dado12.png</iconset>
              </property>
             </item>
             <item>
@@ -167,8 +435,8 @@
               <string>Tres jugadores</string>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>:/dados/dado3.png</normaloff>:/dados/dado3.png</iconset>
+              <iconset resource="parchis.qrc">
+               <normaloff>:/dados/dado23.png</normaloff>:/dados/dado23.png</iconset>
              </property>
             </item>
             <item>
@@ -176,8 +444,8 @@
               <string>Cuatro jugadores</string>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>:/dados/dado4.png</normaloff>:/dados/dado4.png</iconset>
+              <iconset resource="parchis.qrc">
+               <normaloff>:/dados/dado34.png</normaloff>:/dados/dado34.png</iconset>
              </property>
             </item>
            </widget>
