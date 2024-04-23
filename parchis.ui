@@ -158,7 +158,7 @@
               <string>Dos jugadores</string>
              </property>
              <property name="icon">
-              <iconset resource="parchis.qrc">
+              <iconset>
                <normaloff>:/dados/dado2.png</normaloff>:/dados/dado2.png</iconset>
              </property>
             </item>
@@ -167,7 +167,7 @@
               <string>Tres jugadores</string>
              </property>
              <property name="icon">
-              <iconset resource="parchis.qrc">
+              <iconset>
                <normaloff>:/dados/dado3.png</normaloff>:/dados/dado3.png</iconset>
              </property>
             </item>
@@ -176,7 +176,7 @@
               <string>Cuatro jugadores</string>
              </property>
              <property name="icon">
-              <iconset resource="parchis.qrc">
+              <iconset>
                <normaloff>:/dados/dado4.png</normaloff>:/dados/dado4.png</iconset>
              </property>
             </item>
@@ -237,7 +237,7 @@
                 </size>
                </property>
                <property name="styleSheet">
-                <string notr="true">border-image: url(:/dados/dado6.png) 0 0 0 0 stretch stretch;</string>
+                <string notr="true">border-image: url(:/dados/dado06.png) 0 0 0 0 stretch stretch;</string>
                </property>
               </widget>
              </item>
@@ -256,7 +256,7 @@
                 </size>
                </property>
                <property name="styleSheet">
-                <string notr="true">border-image: url(:/dados/dado6.png) 0 0 0 0 stretch stretch;</string>
+                <string notr="true">border-image: url(:/dados/dado06.png) 0 0 0 0 stretch stretch;</string>
                </property>
               </widget>
              </item>

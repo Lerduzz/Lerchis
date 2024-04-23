@@ -32,6 +32,7 @@ class Ventana(QMainWindow):
         self.ui.btnTirar.clicked.connect(self.tirarDados)
         self.__dado1 = 6
         self.__dado2 = 6
+        self.__turno = 0
         self.__fichas = [self.ui.ficha00, self.ui.ficha01, self.ui.ficha02, self.ui.ficha03]
         self.__casas = [
             [self.ui.ficha00, self.ui.ficha01, self.ui.ficha02, self.ui.ficha03]
@@ -75,13 +76,17 @@ class Ventana(QMainWindow):
         self.__dadosThread.start()
 
     def mostrarDados(self, s1, s2):
-        self.ui.dado1.setStyleSheet(f'border-image: url(:/dados/dado{s1}.png) 0 0 0 0 stretch stretch;')
-        self.ui.dado2.setStyleSheet(f'border-image: url(:/dados/dado{s2}.png) 0 0 0 0 stretch stretch;')
+        self.ui.dado1.setStyleSheet(f'border-image: url(:/dados/dado{self.__turno}{s1}.png) 0 0 0 0 stretch stretch;')
+        self.ui.dado2.setStyleSheet(f'border-image: url(:/dados/dado{self.__turno}{s2}.png) 0 0 0 0 stretch stretch;')
 
     def onDadosGirados(self, s1, s2):
         self.__dado1 = s1
         self.__dado2 = s2
+        self.mostrarDados(s1, s2)
+        # TODO: Esto es una prueba, no va en este lugar.
         self.ui.btnTirar.setEnabled(True)
+        self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
+        
 
 
 app = QApplication([])

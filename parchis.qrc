@@ -3,12 +3,30 @@
     <file>tablero.png</file>
   </qresource>
   <qresource prefix="dados">
-    <file>dado1.png</file>
-    <file>dado2.png</file>
-    <file>dado3.png</file>
-    <file>dado4.png</file>
-    <file>dado5.png</file>
-    <file>dado6.png</file>
+    <file>dado01.png</file>
+    <file>dado02.png</file>
+    <file>dado03.png</file>
+    <file>dado04.png</file>
+    <file>dado05.png</file>
+    <file>dado06.png</file>
+    <file>dado11.png</file>
+    <file>dado12.png</file>
+    <file>dado13.png</file>
+    <file>dado14.png</file>
+    <file>dado15.png</file>
+    <file>dado16.png</file>
+    <file>dado21.png</file>
+    <file>dado22.png</file>
+    <file>dado23.png</file>
+    <file>dado24.png</file>
+    <file>dado25.png</file>
+    <file>dado26.png</file>
+    <file>dado31.png</file>
+    <file>dado32.png</file>
+    <file>dado33.png</file>
+    <file>dado34.png</file>
+    <file>dado35.png</file>
+    <file>dado36.png</file>
   </qresource>
   <qresource prefix="fichas">
     <file>ficha0.png</file>
