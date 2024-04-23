@@ -215,21 +215,17 @@ class Ventana(QMainWindow):
             # Manejar la salida de casa.
             if self.estaEnCasa(self.sender()):
                 salio = False
-                # Verificar salida ocupada.
-                s1 = self.__rutas[self.__turno][0][0]
-                s2 = self.__rutas[self.__turno][0][1]
-                if s1 == None or s2 == None or not self.esMia(s1) or not self.esMia(s2):
-                    # Verificar dado 1.
-                    if self.ui.checkDado1.isChecked():
-                        if self.__dado1 == 5:
-                            self.salirDeCasa(self.sender())
+                # Verificar dado 1.
+                if self.ui.checkDado1.isChecked():
+                    if self.__dado1 == 5:
+                        if self.salirDeCasa(self.sender()):
                             self.ui.checkDado1.setChecked(False)
                             self.ui.checkDado1.setEnabled(False)
                             salio = True
-                    # Verificar dado 2.
-                    if not salio and self.ui.checkDado2.isChecked():
-                        if self.__dado2 == 5:
-                            self.salirDeCasa(self.sender())
+                # Verificar dado 2.
+                if not salio and self.ui.checkDado2.isChecked():
+                    if self.__dado2 == 5:
+                        if self.salirDeCasa(self.sender()):
                             self.ui.checkDado2.setChecked(False)
                             self.ui.checkDado2.setEnabled(False)
                             salio = True
@@ -285,17 +281,62 @@ class Ventana(QMainWindow):
             self.cambioDeTurno()
 
     def salirDeCasa(self, ficha):
+        # - Determinar el origen de la ficha que va a salir.
         pos = 0
         for i in range(4):
             if ficha == self.__casas[self.__turno][i]:
                 pos = i
                 break
-        if self.__rutas[self.__turno][0][0] == None:
+        # - Verificar si la salida esta llena.
+        s1 = self.__rutas[self.__turno][0][0]
+        s2 = self.__rutas[self.__turno][0][1]
+        if s1 != None and s2 != None:
+            # - Matar las que no sean mias.
+            if s1 != None and not self.esMia(s1):
+                self.matarFicha(s1) # TODO: Activar el bonus en caso de haber matado.
+            if s2 != None and not self.esMia(s2):
+                self.matarFicha(s2) # TODO: Activar el bonus en caso de haber matado.
+        s1 = self.__rutas[self.__turno][0][0]
+        s2 = self.__rutas[self.__turno][0][1]
+        if s1 == None:
             if self.moverFicha(self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 0):
                 self.relocateAll()
-        elif self.__rutas[self.__turno][0][1] == None:
+                return True
+        elif s2 == None:
             if self.moverFicha(self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 1):
                 self.relocateAll()
+                return True
+        return False
+
+    def matarFicha(self, ficha):
+        # - Necesito determinar su origen basado en la ruta del usuario en turno.
+        posI = 0
+        posJ = 0
+        for i in range(len(self.__rutas[self.__turno])):
+            if self.__rutas[self.__turno][i][0] == ficha:
+                posI = i
+                posJ = 0
+                break
+            if self.__rutas[self.__turno][i][1] == ficha:
+                posI = i
+                posJ = 1
+                break
+        # - Necesito saber de quien es y su numero para determinar su destino.
+        index = 0
+        for i in range(len(self.__fichas)):
+            if self.__fichas[i] == ficha:
+                index = i
+                break
+        owner = 0
+        while index >= 4:
+            index -= 4
+            owner += 1
+        print(f'MATANDO FICHA: OWNER: {owner}, INDEX: {index}.')
+        if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__casas, owner, index):
+            self.relocateAll()
+            return True
+        return False
+
 
     def cambioDeTurno(self):
         self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
