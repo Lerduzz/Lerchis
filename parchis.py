@@ -62,7 +62,7 @@ class Ventana(QMainWindow):
             (250, 150, 0),
             (250, 200, 0),
             (250, 250, 2),
-            (250, 250, 2),
+            (250, 300, 3),
         ]
     
     def resizeEvent(self, e: QResizeEvent) -> None:
@@ -115,6 +115,9 @@ class Ventana(QMainWindow):
         elif o == 2:
             xR = dX + hC // 2 - hF // 4 if i == 0 else dX + hC // 2 + hF // 2 + hF // 10
             yR = dY if i == 0 else dY + hF // 2
+        elif o == 3:
+            xR = dX + hF if i == 0 else dX + hF * 2 - hF // 3
+            yR = dY if i == 0 else dY + hF - hF // 3
         return (xR, yR)
 
 
@@ -155,8 +158,8 @@ class Ventana(QMainWindow):
         self.moverFicha(self.__casas, 2, 2, self.__caminos, 4, 1)
         self.moverFicha(self.__casas, 1, 2, self.__caminos, 5, 0)
         self.moverFicha(self.__casas, 3, 2, self.__caminos, 5, 1)
-        # self.moverFicha(self.__casas, 0, 3, self.__caminos, 0, 0)
-        # self.moverFicha(self.__casas, 2, 3, self.__caminos, 0, 1)
+        self.moverFicha(self.__casas, 0, 3, self.__caminos, 6, 0)
+        self.moverFicha(self.__casas, 2, 3, self.__caminos, 6, 1)
         # self.moverFicha(self.__casas, 1, 3, self.__caminos, 1, 0)
         # self.moverFicha(self.__casas, 3, 3, self.__caminos, 1, 1)
         self.relocateAll()
