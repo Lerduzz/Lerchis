@@ -98,6 +98,9 @@ class Ventana(QMainWindow):
             (550, 800,  0),
             (550, 750,  0),
             (550, 700,  0),
+            (700, 700,  8),
+            (700, 700,  9),
+            (700, 700, 10),
         ]
         print(len(self.__posCaminos))
     
@@ -149,6 +152,7 @@ class Ventana(QMainWindow):
         elif o == 1:
             xR = dX
             yR = dY + dP1 if i == 0 else dY + dP2
+        
         elif o == 2:
             xR = dX + hC // 2 - hF // 4 if i == 0 else dX + hC // 2 + hF // 2 + hF // 10
             yR = dY if i == 0 else dY + hF // 2
@@ -158,6 +162,7 @@ class Ventana(QMainWindow):
         elif o == 4:
             xR = dX if i == 0 else dX + hF // 2
             yR = dY + hC // 2 - hF // 4 if i == 0 else dY + hC // 2 + hF // 2 + hF // 10
+        
         elif o == 5:
             xR = dX if i == 0 else dX + hF // 2
             yR = dY - hF - hC // 2 + hF // 4 if i == 0 else dY - hF - hC // 2 - hF // 2 - hF // 10
@@ -167,6 +172,16 @@ class Ventana(QMainWindow):
         elif o == 7:
             xR = dX + hC // 2 - hF // 4 if i == 0 else dX + hC // 2 + hF // 2 + hF // 10
             yR = dY - hF if i == 0 else dY - hF - hF // 2
+        
+        elif o == 8:
+            xR = dX - hF - hC // 2 + hF // 4 if i == 0 else dX - hF - hC // 2 - hF // 2 - hF // 10
+            yR = dY - hF if i == 0 else dY - hF - hF // 2
+        elif o == 9:
+            xR = dX - hF * 2 if i == 0 else dX - hF * 3 + hF // 3
+            yR = dY - hF * 2 if i == 0 else dY - hF * 3 + hF // 3
+        elif o == 10:
+            xR = dX - hF if i == 0 else dX - hF - hF // 2
+            yR = dY - hF - hC // 2 + hF // 4 if i == 0 else dY - hF - hC // 2 - hF // 2 - hF // 10
         return (xR, yR)
 
     def tirarDados(self):
@@ -194,12 +209,12 @@ class Ventana(QMainWindow):
         self.ui.btnTirar.setEnabled(True)
         self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
         
-        self.moverFicha(self.__casas, 0, 0, self.__caminos, 5, 0)
-        self.moverFicha(self.__casas, 2, 0, self.__caminos, 5, 1)
-        self.moverFicha(self.__casas, 1, 0, self.__caminos, 6, 0)
-        self.moverFicha(self.__casas, 3, 0, self.__caminos, 6, 1)
-        self.moverFicha(self.__casas, 0, 1, self.__caminos, 7, 0)
-        self.moverFicha(self.__casas, 2, 1, self.__caminos, 7, 1)
+        self.moverFicha(self.__casas, 0, 0, self.__caminos, 33, 0)
+        self.moverFicha(self.__casas, 2, 0, self.__caminos, 33, 1)
+        self.moverFicha(self.__casas, 1, 0, self.__caminos, 34, 0)
+        self.moverFicha(self.__casas, 3, 0, self.__caminos, 34, 1)
+        self.moverFicha(self.__casas, 0, 1, self.__caminos, 35, 0)
+        self.moverFicha(self.__casas, 2, 1, self.__caminos, 35, 1)
         self.moverFicha(self.__casas, 1, 1, self.__caminos, 19, 0)
         self.moverFicha(self.__casas, 3, 1, self.__caminos, 19, 1)
         self.moverFicha(self.__casas, 0, 2, self.__caminos, 20, 0)
