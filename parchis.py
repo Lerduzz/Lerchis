@@ -112,6 +112,9 @@ class Ventana(QMainWindow):
             (800, 250,  1),
             (750, 250,  1),
             (700, 250,  1),
+            (700, 250, 11),
+            (700, 250, 12),
+            (700, 250, 13),
         ]
         print(len(self.__posCaminos))
     
@@ -193,6 +196,16 @@ class Ventana(QMainWindow):
         elif o == 10:
             xR = dX - hF if i == 0 else dX - hF - hF // 2
             yR = dY - hF - hC // 2 + hF // 4 if i == 0 else dY - hF - hC // 2 - hF // 2 - hF // 10
+
+        elif o == 11:
+            xR = dX - hF if i == 0 else dX - hF - hF // 2
+            yR = dY + hC // 2 - hF // 4 if i == 0 else dY + hC // 2 + hF // 2 + hF // 10
+        elif o == 12:
+            xR = dX - hF * 2 if i == 0 else dX - hF * 3 + hF // 3
+            yR = dY + hF if i == 0 else dY + hF * 2 - hF // 3
+        elif o == 13:
+            xR = dX - hF - hC // 2 + hF // 4 if i == 0 else dX - hF - hC // 2 - hF // 2 - hF // 10
+            yR = dY if i == 0 else dY + hF // 2
         return (xR, yR)
 
     def tirarDados(self):
@@ -226,12 +239,12 @@ class Ventana(QMainWindow):
         self.moverFicha(self.__casas, 3, 0, self.__caminos, 34, 1)
         self.moverFicha(self.__casas, 0, 1, self.__caminos, 35, 0)
         self.moverFicha(self.__casas, 2, 1, self.__caminos, 35, 1)
-        self.moverFicha(self.__casas, 1, 1, self.__caminos, 19, 0)
-        self.moverFicha(self.__casas, 3, 1, self.__caminos, 19, 1)
-        self.moverFicha(self.__casas, 0, 2, self.__caminos, 20, 0)
-        self.moverFicha(self.__casas, 2, 2, self.__caminos, 20, 1)
-        self.moverFicha(self.__casas, 1, 2, self.__caminos, 21, 0)
-        self.moverFicha(self.__casas, 3, 2, self.__caminos, 21, 1)
+        self.moverFicha(self.__casas, 1, 1, self.__caminos, 47, 0)
+        self.moverFicha(self.__casas, 3, 1, self.__caminos, 47, 1)
+        self.moverFicha(self.__casas, 0, 2, self.__caminos, 48, 0)
+        self.moverFicha(self.__casas, 2, 2, self.__caminos, 48, 1)
+        self.moverFicha(self.__casas, 1, 2, self.__caminos, 49, 0)
+        self.moverFicha(self.__casas, 3, 2, self.__caminos, 49, 1)
         self.moverFicha(self.__casas, 1, 3, self.__caminos, 15, 0)
         self.moverFicha(self.__casas, 3, 3, self.__caminos, 15, 1)
         self.relocateAll()
