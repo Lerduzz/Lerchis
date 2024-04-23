@@ -35,9 +35,9 @@ class TesterWorker(QObject):
 
     def run(self):
         while self.__start < self.__limit:
+            self.progress.emit(self.__start)
             self.__start += 1
-            time.sleep(1)
-            self.progress.emit(self.__start)            
+            time.sleep(0.25)
         self.finished.emit()
 
 
@@ -228,12 +228,12 @@ class Ventana(QMainWindow):
     def runTester(self):
         self.ui.btnNuevaPartida.setEnabled(False)
         if (not self.moverFicha(self.__casas, 0, 3, self.__caminos, 0, 0)):
-            self.moverFicha(self.__caminos, 32, 0, self.__caminos, 0, 0)
+            self.moverFicha(self.__caminos, len(self.__posCaminos) - 1, 0, self.__caminos, 0, 0)
         if (not self.moverFicha(self.__casas, 2, 3, self.__caminos, 0, 1)):
-            self.moverFicha(self.__caminos, 32, 1, self.__caminos, 0, 1)            
+            self.moverFicha(self.__caminos, len(self.__posCaminos) - 1, 1, self.__caminos, 0, 1) 
         self.relocateAll()
         self.__testerThread = QThread()
-        self.__testerWorker = TesterWorker(0, 33)
+        self.__testerWorker = TesterWorker(0, len(self.__posCaminos))
         self.__testerWorker.moveToThread(self.__testerThread)
         self.__testerThread.started.connect(self.__testerWorker.run)
         self.__testerWorker.finished.connect(self.__testerThread.quit)
