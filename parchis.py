@@ -177,13 +177,17 @@ class Ventana(QMainWindow):
             ficha = self.__fichas[i]
             if self.estaEnCasa(ficha):
                 if (self.ui.checkDado1.isEnabled() and self.__dado1 == 5) or (self.ui.checkDado2.isEnabled() and self.__dado2 == 5):
-                    # TODO: Comprobar que no este bloqueada la salida.
+                    s1 = self.__rutas[self.__turno][0][0]
+                    s2 = self.__rutas[self.__turno][0][1]
+                    if s1 != None and self.esMia(s1) and s2 != None and self.esMia(s2):
+                        continue
                     return True
             else:
-                dist = self.cuantoCamina(ficha)
-                if (self.ui.checkDado1.isEnabled() and self.__dado1 <= dist) or (self.ui.checkDado2.isEnabled() and self.__dado2 <= dist):
-                    # TODO: Verificar los bonus.
-                    return True
+                pass
+        #         dist = self.cuantoCamina(ficha)
+        #         if (self.ui.checkDado1.isEnabled() and self.__dado1 <= dist) or (self.ui.checkDado2.isEnabled() and self.__dado2 <= dist):
+        #             # TODO: Verificar los bonus.
+        #             return True
         return False
 
     def estaEnCasa(self, ficha):
@@ -191,18 +195,6 @@ class Ventana(QMainWindow):
             if fC != None and ficha != None and fC == ficha:
                 return True
         return False
-
-    def cuantoCamina(self, ficha):
-        if self.estaEnCasa(ficha):
-            return 0
-        startPos = 0
-        checkPos = 0
-        for casilla in self.__rutas[self.__turno]:
-            if casilla[0] == ficha or casilla[1] == ficha:
-                startPos = checkPos
-                break
-            checkPos += 1
-        return len(self.__rutas[self.__turno]) - startPos - 1
 
     def esMia(self, ficha):
         for i in range(self.__turno * 4, self.__turno * 4 + 4):
