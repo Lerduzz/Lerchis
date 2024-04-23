@@ -52,7 +52,7 @@ class Ventana(QMainWindow):
             [None, None],
             [None, None],
             [None, None],
-            # TODO: Diagonales [None, None],
+            [None, None],
             # TODO: Diagonales [None, None],
         ]
         self.__posCaminos = [
@@ -61,7 +61,8 @@ class Ventana(QMainWindow):
             (250, 100, 0),
             (250, 150, 0),
             (250, 200, 0),
-            (250, 250, 2)
+            (250, 250, 2),
+            (250, 250, 2),
         ]
     
     def resizeEvent(self, e: QResizeEvent) -> None:
@@ -142,22 +143,22 @@ class Ventana(QMainWindow):
         self.ui.btnTirar.setEnabled(True)
         self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
         # TODO: TEST: Relocate.
-        print(self.moverFicha(self.__casas, 0, 0, self.__caminos, 0, 0))
-        print(self.moverFicha(self.__casas, 2, 0, self.__caminos, 0, 1))
-        print(self.moverFicha(self.__casas, 1, 0, self.__caminos, 1, 0))
-        print(self.moverFicha(self.__casas, 3, 0, self.__caminos, 1, 1))
-        print(self.moverFicha(self.__casas, 0, 1, self.__caminos, 2, 0))
-        print(self.moverFicha(self.__casas, 2, 1, self.__caminos, 2, 1))
-        print(self.moverFicha(self.__casas, 1, 1, self.__caminos, 3, 0))
-        print(self.moverFicha(self.__casas, 3, 1, self.__caminos, 3, 1))
-        print(self.moverFicha(self.__casas, 0, 2, self.__caminos, 4, 0))
-        print(self.moverFicha(self.__casas, 2, 2, self.__caminos, 4, 1))
-        print(self.moverFicha(self.__casas, 1, 2, self.__caminos, 5, 0))
-        print(self.moverFicha(self.__casas, 3, 2, self.__caminos, 5, 1))
-        # print(self.moverFicha(self.__casas, 0, 3, self.__caminos, 0, 0))
-        # print(self.moverFicha(self.__casas, 2, 3, self.__caminos, 0, 1))
-        # print(self.moverFicha(self.__casas, 1, 3, self.__caminos, 1, 0))
-        # print(self.moverFicha(self.__casas, 3, 3, self.__caminos, 1, 1))
+        self.moverFicha(self.__casas, 0, 0, self.__caminos, 0, 0)
+        self.moverFicha(self.__casas, 2, 0, self.__caminos, 0, 1)
+        self.moverFicha(self.__casas, 1, 0, self.__caminos, 1, 0)
+        self.moverFicha(self.__casas, 3, 0, self.__caminos, 1, 1)
+        self.moverFicha(self.__casas, 0, 1, self.__caminos, 2, 0)
+        self.moverFicha(self.__casas, 2, 1, self.__caminos, 2, 1)
+        self.moverFicha(self.__casas, 1, 1, self.__caminos, 3, 0)
+        self.moverFicha(self.__casas, 3, 1, self.__caminos, 3, 1)
+        self.moverFicha(self.__casas, 0, 2, self.__caminos, 4, 0)
+        self.moverFicha(self.__casas, 2, 2, self.__caminos, 4, 1)
+        self.moverFicha(self.__casas, 1, 2, self.__caminos, 5, 0)
+        self.moverFicha(self.__casas, 3, 2, self.__caminos, 5, 1)
+        # self.moverFicha(self.__casas, 0, 3, self.__caminos, 0, 0)
+        # self.moverFicha(self.__casas, 2, 3, self.__caminos, 0, 1)
+        # self.moverFicha(self.__casas, 1, 3, self.__caminos, 1, 0)
+        # self.moverFicha(self.__casas, 3, 3, self.__caminos, 1, 1)
         self.relocateAll()
 
     def moverFicha(self, desde, iD, jD, hasta, iH, jH):
