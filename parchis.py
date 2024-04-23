@@ -254,49 +254,49 @@ class Ventana(QMainWindow):
                 if not salio:
                     mover = False
             # Manejar la caminadera por el tablero.
-            else:
-                if mover:
-                    dist = self.cuantoCamina(self.sender())
-                    total = 0
-                    if self.ui.checkDado1.isChecked():
-                        total += self.__dado1
-                    if self.ui.checkDado2.isChecked():
-                        total += self.__dado2
-                    # TODO: Sumar bonus seleccionados.
-                    if total > 0 and total <= dist:
-                        # TODO: la ficha se encuentra en la ruta... 
-                        # hay que encontrar su posicion... 
-                        # encontrar espacio en la posicion de destino.
-                        posI = 0
-                        posJ = 0
-                        for i in range(len(self.__rutas[self.__turno])):
-                            if self.__rutas[self.__turno][i][0] == self.sender():
-                                posI = i
-                                posJ = 0
-                            if self.__rutas[self.__turno][i][1] == self.sender():
-                                posI = i
-                                posJ = 1
-                        dest = self.__rutas[self.__turno][posI + total]
-                        s1 = self.__rutas[self.__turno][posI + total][0]
-                        s2 = self.__rutas[self.__turno][posI + total][1]
-                        if s1 == None:
-                            if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, 0):
-                                self.relocateAll()
-                                if self.ui.checkDado1.isChecked():
-                                    self.ui.checkDado1.setChecked(False)
-                                    self.ui.checkDado1.setEnabled(False)
-                                if self.ui.checkDado2.isChecked():
-                                    self.ui.checkDado2.setChecked(False)
-                                    self.ui.checkDado2.setEnabled(False)
-                        elif s2 == None:
-                            if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, 1):
-                                self.relocateAll()
-                                if self.ui.checkDado1.isChecked():
-                                    self.ui.checkDado1.setChecked(False)
-                                    self.ui.checkDado1.setEnabled(False)
-                                if self.ui.checkDado2.isChecked():
-                                    self.ui.checkDado2.setChecked(False)
-                                    self.ui.checkDado2.setEnabled(False)
+            # else:
+            if mover:
+                dist = self.cuantoCamina(self.sender())
+                total = 0
+                if self.ui.checkDado1.isChecked():
+                    total += self.__dado1
+                if self.ui.checkDado2.isChecked():
+                    total += self.__dado2
+                # TODO: Sumar bonus seleccionados.
+                if total > 0 and total <= dist:
+                    # TODO: la ficha se encuentra en la ruta... 
+                    # hay que encontrar su posicion... 
+                    # encontrar espacio en la posicion de destino.
+                    posI = 0
+                    posJ = 0
+                    for i in range(len(self.__rutas[self.__turno])):
+                        if self.__rutas[self.__turno][i][0] == self.sender():
+                            posI = i
+                            posJ = 0
+                        if self.__rutas[self.__turno][i][1] == self.sender():
+                            posI = i
+                            posJ = 1
+                    dest = self.__rutas[self.__turno][posI + total]
+                    s1 = self.__rutas[self.__turno][posI + total][0]
+                    s2 = self.__rutas[self.__turno][posI + total][1]
+                    if s1 == None:
+                        if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, 0):
+                            self.relocateAll()
+                            if self.ui.checkDado1.isChecked():
+                                self.ui.checkDado1.setChecked(False)
+                                self.ui.checkDado1.setEnabled(False)
+                            if self.ui.checkDado2.isChecked():
+                                self.ui.checkDado2.setChecked(False)
+                                self.ui.checkDado2.setEnabled(False)
+                    elif s2 == None:
+                        if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, 1):
+                            self.relocateAll()
+                            if self.ui.checkDado1.isChecked():
+                                self.ui.checkDado1.setChecked(False)
+                                self.ui.checkDado1.setEnabled(False)
+                            if self.ui.checkDado2.isChecked():
+                                self.ui.checkDado2.setChecked(False)
+                                self.ui.checkDado2.setEnabled(False)
         else:
             print('¡La ficha no es mia!')
         if not self.puedeJugar():
