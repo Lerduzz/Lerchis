@@ -232,19 +232,16 @@ class Ventana(QMainWindow):
                 if not salio:
                     mover = False
             # Manejar la caminadera por el tablero.
-            # else:
             if mover:
-                dist = self.cuantoCamina(self.sender())
+                movio = False
                 total = 0
                 if self.ui.checkDado1.isChecked():
                     total += self.__dado1
                 if self.ui.checkDado2.isChecked():
                     total += self.__dado2
                 # TODO: Sumar bonus seleccionados.
-                if total > 0 and total <= dist:
-                    # TODO: la ficha se encuentra en la ruta... 
-                    # hay que encontrar su posicion... 
-                    # encontrar espacio en la posicion de destino.
+                if total > 0:
+                    # - Encontrar posicion de origen de la ficha.
                     posI = 0
                     posJ = 0
                     for i in range(len(self.__rutas[self.__turno])):
@@ -254,27 +251,41 @@ class Ventana(QMainWindow):
                         if self.__rutas[self.__turno][i][1] == self.sender():
                             posI = i
                             posJ = 1
-                    dest = self.__rutas[self.__turno][posI + total]
-                    s1 = self.__rutas[self.__turno][posI + total][0]
-                    s2 = self.__rutas[self.__turno][posI + total][1]
-                    if s1 == None:
-                        if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, 0):
-                            self.relocateAll()
-                            if self.ui.checkDado1.isChecked():
-                                self.ui.checkDado1.setChecked(False)
-                                self.ui.checkDado1.setEnabled(False)
-                            if self.ui.checkDado2.isChecked():
-                                self.ui.checkDado2.setChecked(False)
-                                self.ui.checkDado2.setEnabled(False)
-                    elif s2 == None:
-                        if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, 1):
-                            self.relocateAll()
-                            if self.ui.checkDado1.isChecked():
-                                self.ui.checkDado1.setChecked(False)
-                                self.ui.checkDado1.setEnabled(False)
-                            if self.ui.checkDado2.isChecked():
-                                self.ui.checkDado2.setChecked(False)
-                                self.ui.checkDado2.setEnabled(False)
+                    # - Verificar final de ruta para evitar descarrilamiento.
+                    if posI + total < len(self.__rutas[self.__turno]):
+                        dest = self.__rutas[self.__turno][posI + total]
+                        s1 = self.__rutas[self.__turno][posI + total][0]
+                        s2 = self.__rutas[self.__turno][posI + total][1]
+                        if s1 == None:
+                            if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, 0):
+                                self.relocateAll()
+                                if self.ui.checkDado1.isChecked():
+                                    self.ui.checkDado1.setChecked(False)
+                                    self.ui.checkDado1.setEnabled(False)
+                                if self.ui.checkDado2.isChecked():
+                                    self.ui.checkDado2.setChecked(False)
+                                    self.ui.checkDado2.setEnabled(False)
+                                # TODO: Desactivar bonus utilizados.
+                                if s2 != None and not self.esMia(s2): # TODO: Excluir casillas seguras.
+                                    self.matarFicha(s2) # TODO: Activar el bonus en caso de haber matado.
+                                movio = True
+                        if not movio and s2 == None:
+                            if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, 1):
+                                self.relocateAll()
+                                if self.ui.checkDado1.isChecked():
+                                    self.ui.checkDado1.setChecked(False)
+                                    self.ui.checkDado1.setEnabled(False)
+                                if self.ui.checkDado2.isChecked():
+                                    self.ui.checkDado2.setChecked(False)
+                                    self.ui.checkDado2.setEnabled(False)
+                                # TODO: Desactivar bonus utilizados.
+                                if s1 != None and not self.esMia(s1): # TODO: Excluir casillas seguras.
+                                    self.matarFicha(s1) # TODO: Activar el bonus en caso de haber matado.
+                                movio = True
+                if movio:
+                    print('La ficha se movio.')
+                else:
+                    print('¡La ficha no se movio!')
         else:
             print('¡La ficha no es mia!')
         if not self.puedeJugar():
