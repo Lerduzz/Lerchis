@@ -46,25 +46,10 @@ class Ventana(QMainWindow):
             [self.ui.ficha30, self.ui.ficha31, self.ui.ficha32, self.ui.ficha33]
         ]
         self.__caminos = [
-            [None, None],
-            [None, None],
-            [None, None],
-            [None, None],
-            [None, None],
-            [None, None],
-            [None, None],
-            [None, None],
-            [None, None],
-            [None, None],
-            [None, None],
-            [None, None],
-            [None, None],
-            [None, None],
-            [None, None],
-            [None, None],
-            [None, None],
-            [None, None],
-            [None, None],
+            [None, None], [None, None], [None, None], [None, None], [None, None],
+            [None, None], [None, None], [None, None], [None, None], [None, None],
+            [None, None], [None, None], [None, None], [None, None], [None, None],
+            [None, None], [None, None], [None, None], [None, None],
         ]
         self.__posCaminos = [
             (250, 0,    0),
