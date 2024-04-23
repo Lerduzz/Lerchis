@@ -1,7 +1,7 @@
 import sys, time, random, qdarkstyle
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 from PyQt5.QtGui import QResizeEvent
-from PyQt5.QtWidgets import QMainWindow, QApplication
+from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox
 from parchis_ui import Ui_VentanaJuego
 
 class DadosWorker(QObject):
@@ -164,29 +164,59 @@ class Ventana(QMainWindow):
         self.__dado1 = s1
         self.__dado2 = s2
         self.mostrarDados(s1, s2)
+        self.ui.checkDado1.setText(f'Dado # 1 => {s1}.')
+        self.ui.checkDado2.setText(f'Dado # 2 => {s2}.')
+        self.ui.checkDado1.setEnabled(True)
+        self.ui.checkDado2.setEnabled(True)
+        if not self.puedeJugar():
+            self.showWarning('Turno perdido', 'Has perdido el turno porque no tienes movimientos disponibles.\n\nSugerencias:\n- Para sacar una ficha debes tener un 5 en algún dado.')
+            self.cambioDeTurno()
+
+    def puedeJugar(self):
+        if self.__dado1 == 5 or self.__dado2 == 5:
+            return True # TODO: Solo si tienes alguna ficha en casa.
+        return False
+
+    def cambioDeTurno(self):
+        self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
+        self.mostrarDados(self.__dado1, self.__dado2)
+        self.prepararDados()
         
-        # TODO: Verificar si puede jugar.
-        # - Si todas sus fichas estan en casa solo puede jugar si le cae algun 5.
-        # - Medir cantidad de pasos posibles para cada ficha.
-        
-        # self.ui.btnTirar.setEnabled(True)
-        # self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
-        
-        # self.moverFicha(self.__casas, 0, 0, self.__caminos, 33, 0)
-        # self.moverFicha(self.__casas, 2, 0, self.__caminos, 33, 1)
-        # self.moverFicha(self.__casas, 1, 0, self.__caminos, 34, 0)
-        # self.moverFicha(self.__casas, 3, 0, self.__caminos, 34, 1)
-        # self.moverFicha(self.__casas, 0, 1, self.__caminos, 35, 0)
-        # self.moverFicha(self.__casas, 2, 1, self.__caminos, 35, 1)
-        # self.moverFicha(self.__casas, 1, 1, self.__caminos, 47, 0)
-        # self.moverFicha(self.__casas, 3, 1, self.__caminos, 47, 1)
-        # self.moverFicha(self.__casas, 0, 2, self.__caminos, 48, 0)
-        # self.moverFicha(self.__casas, 2, 2, self.__caminos, 48, 1)
-        # self.moverFicha(self.__casas, 1, 2, self.__caminos, 49, 0)
-        # self.moverFicha(self.__casas, 3, 2, self.__caminos, 49, 1)
-        # self.moverFicha(self.__casas, 1, 3, self.__caminos, 15, 0)
-        # self.moverFicha(self.__casas, 3, 3, self.__caminos, 15, 1)
-        # self.relocateAll()
+    def prepararDados(self):
+        self.ui.btnTirar.setEnabled(True)
+        self.ui.checkDado1.setEnabled(False)
+        self.ui.checkDado2.setEnabled(False)
+        self.ui.checkMeta.setEnabled(False)
+        self.ui.checkMata.setEnabled(False)
+        self.ui.checkDado1.setChecked(False)
+        self.ui.checkDado2.setChecked(False)
+        self.ui.checkMeta.setChecked(False)
+        self.ui.checkMata.setChecked(False)
+
+    def nuevaPartida(self):
+        self.__dado1 = 6
+        self.__dado2 = 6
+        self.__turno = 0
+        self.__jugando = True
+        self.prepararDados()
+        self.showInfo('Nueva partida', 'Ha comenzado una nueva partida, el color de los dados indica a que jugador le toca el turno.\n\nSugerencias:\n- Al inicio de cada turno hay que tirar los dados.')
+
+    def moverFicha(self, desde, iD, jD, hasta, iH, jH):
+        if desde[iD][jD] == None or hasta[iH][jH] != None:
+            return False
+        temp = hasta[iH][jH]
+        hasta[iH][jH] = desde[iD][jD]
+        desde[iD][jD] = temp
+        return True
+
+    def showCritical(self, title, text):
+        QMessageBox.critical(self, title, text)
+
+    def showWarning(self, title, text):
+        QMessageBox.warning(self, title, text)
+
+    def showInfo(self, title, text):
+        QMessageBox.information(self, title, text)
 
     # def runTester(self):
     #     self.ui.btnNuevaPartida.setEnabled(False)
@@ -213,26 +243,6 @@ class Ventana(QMainWindow):
 
     # def finishTest(self):
     #     self.ui.btnNuevaPartida.setEnabled(True)
-    
-    def moverFicha(self, desde, iD, jD, hasta, iH, jH):
-        if desde[iD][jD] == None or hasta[iH][jH] != None:
-            return False
-        temp = hasta[iH][jH]
-        hasta[iH][jH] = desde[iD][jD]
-        desde[iD][jD] = temp
-        return True
-
-    def nuevaPartida(self):
-        self.__dado1 = 6
-        self.__dado2 = 6
-        self.__turno = 0
-        self.__jugando = True
-        self.mostrarDados(self.__dado1, self.__dado2)
-        self.ui.btnTirar.setEnabled(True)
-        self.ui.checkDado1.setEnabled(False)
-        self.ui.checkDado2.setEnabled(False)
-        self.ui.checkMeta.setEnabled(False)
-        self.ui.checkMata.setEnabled(False)
 
 
 app = QApplication([])
