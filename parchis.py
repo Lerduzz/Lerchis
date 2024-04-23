@@ -34,6 +34,7 @@ class Ventana(QMainWindow):
         self.__dado1 = 6
         self.__dado2 = 6
         self.__turno = 0
+        self.__cuentaDoble = 0
         self.__jugando = False
         self.__fichas = [self.ui.ficha00,self.ui.ficha01,self.ui.ficha02,self.ui.ficha03,self.ui.ficha10,self.ui.ficha11,self.ui.ficha12,self.ui.ficha13,self.ui.ficha20,self.ui.ficha21,self.ui.ficha22,self.ui.ficha23,self.ui.ficha30,self.ui.ficha31,self.ui.ficha32,self.ui.ficha33]
         for f in self.__fichas:
@@ -262,14 +263,21 @@ class Ventana(QMainWindow):
             pos = self.__bridges[i]
             posOwner = self.__turno + i
             posOwner -= (4 if posOwner > 3 else 0)
-            if desde < pos and hasta > pos:
-                for j in range(len(self.__rutas[self.__turno][pos])):
-                    if self.__rutas[self.__turno][pos][j] == None:
-                        return False
-                    owner, index = self.obtenerOwnerIndex(self.__rutas[self.__turno][pos][j])
-                    if owner != posOwner:
-                        return False
-                return True                    
+            if desde >= pos:
+                continue
+            if hasta <= pos:
+                break
+            hayPuente = True
+            for j in range(len(self.__rutas[self.__turno][pos])):
+                if self.__rutas[self.__turno][pos][j] == None:
+                    hayPuente = False
+                    break
+                owner, index = self.obtenerOwnerIndex(self.__rutas[self.__turno][pos][j])
+                if owner != posOwner:
+                    hayPuente = False
+                    break
+            if hayPuente:
+                return True
         return False
 
     def obtenerPosRuta(self, ficha):
@@ -403,7 +411,16 @@ class Ventana(QMainWindow):
         return False
 
     def cambioDeTurno(self):
-        self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
+        repetir = False
+        if self.__dado1 == self.__dado2:
+            if self.__cuentaDoble < 2:
+                self.__cuentaDoble += 1
+                repetir = True
+            else:
+                pass # TODO: Virar la ficha más adelantada.
+        if not repetir:
+            self.__cuentaDoble = 0
+            self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
         self.mostrarDados(self.__dado1, self.__dado2)
         self.prepararDados()
         
@@ -422,6 +439,7 @@ class Ventana(QMainWindow):
         self.__dado1 = 6
         self.__dado2 = 6
         self.__turno = 0
+        self.__cuentaDoble = 0
         self.__jugando = True
         self.prepararDados()
 
