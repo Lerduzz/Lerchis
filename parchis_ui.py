@@ -136,6 +136,7 @@ class Ui_VentanaJuego(object):
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.cajaPartida)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.numJugadores = QtWidgets.QComboBox(self.cajaPartida)
+        self.numJugadores.setEnabled(False)
         self.numJugadores.setMinimumSize(QtCore.QSize(0, 30))
         self.numJugadores.setObjectName("numJugadores")
         icon1 = QtGui.QIcon()
