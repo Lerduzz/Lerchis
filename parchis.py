@@ -24,23 +24,6 @@ class DadosWorker(QObject):
         self.finished.emit(self.__s1, self.__s2)
 
 
-# class TesterWorker(QObject):
-#     finished = pyqtSignal()
-#     progress = pyqtSignal(int)
-# 
-#     def __init__(self, start, limit):
-#         super().__init__()
-#         self.__start = start
-#         self.__limit = limit
-# 
-#     def run(self):
-#         while self.__start < self.__limit:
-#             self.progress.emit(self.__start)
-#             self.__start += 1
-#             time.sleep(0.25)
-#         self.finished.emit()
-
-
 class Ventana(QMainWindow):
     def __init__(self):
         super(Ventana, self).__init__()
@@ -228,7 +211,6 @@ class Ventana(QMainWindow):
 
     def jugarFicha(self):
         if self.esMia(self.sender()):
-            print(f'La ficha camina: {self.cuantoCamina(self.sender())}.')
             mover = True
             # Manejar la salida de casa.
             if self.estaEnCasa(self.sender()):
@@ -355,32 +337,6 @@ class Ventana(QMainWindow):
 
     def showInfo(self, title, text):
         QMessageBox.information(self, title, text)
-
-    # def runTester(self):
-    #     self.ui.btnNuevaPartida.setEnabled(False)
-    #     if (not self.moverFicha(self.__casas, 0, 3, self.__caminos, 0, 0)):
-    #         self.moverFicha(self.__caminos, len(self.__posCaminos) - 1, 0, self.__caminos, 0, 0)
-    #     if (not self.moverFicha(self.__casas, 2, 3, self.__caminos, 0, 1)):
-    #         self.moverFicha(self.__caminos, len(self.__posCaminos) - 1, 1, self.__caminos, 0, 1) 
-    #     self.relocateAll()
-    #     self.__testerThread = QThread()
-    #     self.__testerWorker = TesterWorker(0, len(self.__posCaminos))
-    #     self.__testerWorker.moveToThread(self.__testerThread)
-    #     self.__testerThread.started.connect(self.__testerWorker.run)
-    #     self.__testerWorker.finished.connect(self.__testerThread.quit)
-    #     self.__testerWorker.finished.connect(self.__testerWorker.deleteLater)
-    #     self.__testerThread.finished.connect(self.__testerThread.deleteLater)
-    #     self.__testerWorker.progress.connect(self.progressTest)
-    #     self.__testerWorker.finished.connect(self.finishTest)        
-    #     self.__testerThread.start()
-
-    # def progressTest(self, value):
-    #     self.moverFicha(self.__caminos, value - 1, 0, self.__caminos, value, 0)
-    #     self.moverFicha(self.__caminos, value - 1, 1, self.__caminos, value, 1)
-    #     self.relocateAll()
-
-    # def finishTest(self):
-    #     self.ui.btnNuevaPartida.setEnabled(True)
 
 
 app = QApplication([])
