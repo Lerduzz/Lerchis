@@ -61,7 +61,7 @@ class Ventana(QMainWindow):
         for i in range(4):
             self.__rutas[i] += self.__metas[i]
         self.__excluir = [0, 6, 10, 14, 20, 24, 28, 34, 38, 42, 48, 52, 53, 54, 55, 56, 57, 58, 59]
-        self.__bridges = [[17,31,45],[31,45,3],[45,3,17],[3,17,31]]
+        self.__bridges = [0, 14, 28, 42]
 
     def resizeEvent(self, e: QResizeEvent) -> None:
         super().resizeEvent(e)
@@ -253,8 +253,23 @@ class Ventana(QMainWindow):
         if posI + pasos >= len(self.__rutas[self.__turno]):
             return False
         for j in range(len(self.__rutas[self.__turno][posI + pasos])):
-            if self.__rutas[self.__turno][posI + pasos][j] == None:
+            if self.__rutas[self.__turno][posI + pasos][j] == None and not self.hayPuenteEnMedio(posI, posI + pasos):
                 return True
+        return False
+
+    def hayPuenteEnMedio(self, desde, hasta):
+        for i in range(len(self.__bridges)):
+            pos = self.__bridges[i]
+            posOwner = self.__turno + i
+            posOwner -= (4 if posOwner > 3 else 0)
+            if desde < pos and hasta > pos:
+                for j in range(len(self.__rutas[self.__turno][pos])):
+                    if self.__rutas[self.__turno][pos][j] == None:
+                        return False
+                    owner, index = self.obtenerOwnerIndex(self.__rutas[self.__turno][pos][j])
+                    if owner != posOwner:
+                        return False
+                return True                    
         return False
 
     def obtenerPosRuta(self, ficha):
@@ -326,7 +341,7 @@ class Ventana(QMainWindow):
                     posI, posJ = self.obtenerPosRuta(self.sender())
                     if posI + total < len(self.__rutas[self.__turno]):
                         for j in range(len(self.__rutas[self.__turno][posI + total])):
-                            if self.__rutas[self.__turno][posI + total][j] == None:
+                            if self.__rutas[self.__turno][posI + total][j] == None and not self.hayPuenteEnMedio(posI, posI + total):
                                 if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, j):
                                     self.relocateAll()
                                     if self.ui.checkDado1.isChecked():
