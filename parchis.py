@@ -458,6 +458,8 @@ class Ventana(QMainWindow):
         temp = hasta[iH][jH]
         hasta[iH][jH] = desde[iD][jD]
         desde[iD][jD] = temp
+        if iH == len(self.__rutas[self.__turno]) - 1:
+            self.ui.checkMeta.setEnabled(True)
         return True
 
     def showCritical(self, title, text):
@@ -479,5 +481,4 @@ sys.exit(app.exec())
 # TODO: El bonus de matar no se puede caminar con la misma ficha.
 # TODO: **(La ficha que mata no puede volver a ser movida a menos que otra camine su bonus)**
 # TODO: **(Animar el movimiento de las fichas por el tablero)**
-# TODO: Si te cae DOBLE vuelves a tirar los dados (Tres dobles seguidos viran la ficha mas avanzada).
-# TODO: Detectar llegada a la meta para activar el bonus de 10 pasos.
+# TODO: Detectar victoria.
