@@ -41,6 +41,82 @@ class Ventana(QMainWindow):
         self.__casas = [[self.ui.ficha00,self.ui.ficha01,self.ui.ficha02,self.ui.ficha03],[self.ui.ficha10,self.ui.ficha11,self.ui.ficha12,self.ui.ficha13],[self.ui.ficha20,self.ui.ficha21,self.ui.ficha22,self.ui.ficha23],[self.ui.ficha30,self.ui.ficha31,self.ui.ficha32,self.ui.ficha33]]
         self.__caminos = [[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None]]
         self.__posCaminos = [(250,0,0),(250,50,0),(250,100,0),(250,150,0),(250,200,0),(250,250,2),(250,250,3),(250,250,4),(200,250,1),(150,250,1),(100,250,1),(50,250,1),(0,250,1),(0,400,1),(0,550,1),(50,550,1),(100,550,1),(150,550,1),(200,550,1),(250,700,5),(250,700,6),(250,700,7),(250,700,0),(250,750,0),(250,800,0),(250,850,0),(250,900,0),(400,900,0),(550,900,0),(550,850,0),(550,800,0),(550,750,0),(550,700,0),(700,700,8),(700,700,9),(700,700,10),(700,550,1),(750,550,1),(800,550,1),(850,550,1),(900,550,1),(900,400,1),(900,250,1),(850,250,1),(800,250,1),(750,250,1),(700,250,1),(700,250,11),(700,250,12),(700,250,13),(550,200,0),(550,150,0),(550,100,0),(550,50,0),(550,0,0),(400,0,0)]
+        self.__metas = [
+            [
+                [None,None],
+                [None,None],
+                [None,None],
+                [None,None],
+                [None,None],
+                [None,None],
+                [None,None, None, None]
+            ],
+            [
+                [None,None],
+                [None,None],
+                [None,None],
+                [None,None],
+                [None,None],
+                [None,None],
+                [None,None, None, None]
+            ],
+            [
+                [None,None],
+                [None,None],
+                [None,None],
+                [None,None],
+                [None,None],
+                [None,None],
+                [None,None, None, None]
+            ],
+            [
+                [None,None],
+                [None,None],
+                [None,None],
+                [None,None],
+                [None,None],
+                [None,None],
+                [None,None, None, None]
+            ]            
+        ]
+        self.__posMetas = [
+            [
+                (400, 50, 0),
+                (400, 100, 0),
+                (400, 150, 0),
+                (400, 200, 0),
+                (400, 250, 0),
+                (400, 300, 0),
+                (475, 350, -1), # ***META***
+            ],
+            [
+                (50, 400, 1),
+                (100, 400, 1),
+                (150, 400, 1),
+                (200, 400, 1),
+                (250, 400, 1),
+                (300, 400, 1),
+                (350, 475, -1), # ***META***
+            ],
+            [
+                (400, 850, 0),
+                (400, 800, 0),
+                (400, 750, 0),
+                (400, 700, 0),
+                (400, 650, 0),
+                (400, 600, 0),
+                (475, 475, -1), # ***META***
+            ],
+            [
+                (850, 400, 1),
+                (800, 400, 1),
+                (750, 400, 1),
+                (700, 400, 1),
+                (650, 400, 1),
+                (600, 400, 1),
+                (475, 475, -1), # ***META***
+            ]
+        ]
         self.__rutas = [[],[],[],[]]
         for i in range(3, 56):
             self.__rutas[0].append(self.__caminos[i])
@@ -56,6 +132,8 @@ class Ventana(QMainWindow):
             self.__rutas[3].append(self.__caminos[i])
         for i in range(0, 42):
             self.__rutas[3].append(self.__caminos[i])
+        for i in range(4):
+            self.__rutas[i] += self.__metas[i]
         self.__excluir = [0, 6, 10, 14, 20, 24, 28, 34, 38, 42, 48, 52]
 
     def resizeEvent(self, e: QResizeEvent) -> None:
@@ -89,10 +167,22 @@ class Ventana(QMainWindow):
         for i in range(len(self.__caminos)):
             if i < len(self.__posCaminos):
                 x, y, o = self.__posCaminos[i]
-                for j in range(2):
+                for j in range(len(self.__caminos[i])):
                     if self.__caminos[i][j] != None:
                         xR, yR = self.calcularPosicionCasilla(x, y, o, j, h, hCasilla, hFicha)
                         self.__caminos[i][j].move(xR, yR)
+        # METAS
+        for i in range(len(self.__metas)):
+            if i < len(self.__posMetas):
+                for j in range(len(self.__metas[i])):
+                    if j < len(self.__posMetas[i]):
+                        x, y, o = self.__posMetas[i][j]
+                        for k in range(len(self.__metas[i][j])):
+                            if self.__metas[i][j][k] != None:
+                                xR, yR = self.calcularPosicionCasilla(x, y, o, k, h, hCasilla, hFicha)
+                                self.__metas[i][j][k].move(xR, yR)
+
+
 
     def calcularPosicionCasilla(self, x, y, o, i, h, hC, hF):
         dX = x * h // 950
@@ -205,21 +295,17 @@ class Ventana(QMainWindow):
         posI = 0
         posJ = 0
         for i in range(len(self.__rutas[self.__turno])):
-            if self.__rutas[self.__turno][i][0] == ficha:
-                posI = i
-                posJ = 0
-                break
-            if self.__rutas[self.__turno][i][1] == ficha:
-                posI = i
-                posJ = 1
-                break
+            for j in range(len(self.__rutas[self.__turno][i]))
+                if self.__rutas[self.__turno][i][j] == ficha:
+                    posI = i
+                    posJ = j
+                    break
         # - Verificar final de ruta para evitar descarrilamiento.
         if posI + pasos >= len(self.__rutas[self.__turno]):
             return False
-        s1 = self.__rutas[self.__turno][posI + pasos][0]
-        s2 = self.__rutas[self.__turno][posI + pasos][1]
-        if s1 == None or s2 == None:
-            return True
+        for j in range(len(self.__rutas[self.__turno][posI + pasos]))
+            if self.__rutas[self.__turno][posI + pasos][j] == None:
+                return True
         return False
 
     def estaEnCasa(self, ficha):
