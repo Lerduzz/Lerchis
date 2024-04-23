@@ -53,10 +53,28 @@ class Ventana(QMainWindow):
         self.__turno = 0
         self.__jugando = False
         self.__fichas = [self.ui.ficha00,self.ui.ficha01,self.ui.ficha02,self.ui.ficha03,self.ui.ficha10,self.ui.ficha11,self.ui.ficha12,self.ui.ficha13,self.ui.ficha20,self.ui.ficha21,self.ui.ficha22,self.ui.ficha23,self.ui.ficha30,self.ui.ficha31,self.ui.ficha32,self.ui.ficha33]
+        for f in self.__fichas:
+            f.clicked.connect(self.jugarFicha)
         self.__casas = [[self.ui.ficha00,self.ui.ficha01,self.ui.ficha02,self.ui.ficha03],[self.ui.ficha10,self.ui.ficha11,self.ui.ficha12,self.ui.ficha13],[self.ui.ficha20,self.ui.ficha21,self.ui.ficha22,self.ui.ficha23],[self.ui.ficha30,self.ui.ficha31,self.ui.ficha32,self.ui.ficha33]]
         self.__caminos = [[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None]]
         self.__posCaminos = [(250,0,0),(250,50,0),(250,100,0),(250,150,0),(250,200,0),(250,250,2),(250,250,3),(250,250,4),(200,250,1),(150,250,1),(100,250,1),(50,250,1),(0,250,1),(0,400,1),(0,550,1),(50,550,1),(100,550,1),(150,550,1),(200,550,1),(250,700,5),(250,700,6),(250,700,7),(250,700,0),(250,750,0),(250,800,0),(250,850,0),(250,900,0),(400,900,0),(550,900,0),(550,850,0),(550,800,0),(550,750,0),(550,700,0),(700,700,8),(700,700,9),(700,700,10),(700,550,1),(750,550,1),(800,550,1),(850,550,1),(900,550,1),(900,400,1),(900,250,1),(850,250,1),(800,250,1),(750,250,1),(700,250,1),(700,250,11),(700,250,12),(700,250,13),(550,200,0),(550,150,0),(550,100,0),(550,50,0),(550,0,0),(400,0,0)]
-    
+        self.__rutas = [[],[],[],[]]
+        for i in range(3, 56):
+            self.__rutas[0].append(self.__caminos[i])
+        for i in range(17, 56):
+            self.__rutas[1].append(self.__caminos[i])
+        for i in range(0, 14):
+            self.__rutas[1].append(self.__caminos[i])
+        for i in range(31, 56):
+            self.__rutas[2].append(self.__caminos[i])        
+        for i in range(0, 28):
+            self.__rutas[2].append(self.__caminos[i])        
+        for i in range(45, 56):
+            self.__rutas[3].append(self.__caminos[i])
+        for i in range(0, 41):
+            self.__rutas[3].append(self.__caminos[i])
+        
+
     def resizeEvent(self, e: QResizeEvent) -> None:
         super().resizeEvent(e)
         self.resizeAll()
@@ -169,13 +187,55 @@ class Ventana(QMainWindow):
         self.ui.checkDado1.setEnabled(True)
         self.ui.checkDado2.setEnabled(True)
         if not self.puedeJugar():
-            self.showWarning('Turno perdido', 'Has perdido el turno porque no tienes movimientos disponibles.\n\nSugerencias:\n- Para sacar una ficha debes tener un 5 en algún dado.')
+            # self.showWarning('Turno perdido', 'Has perdido el turno porque no tienes movimientos disponibles.\n\nSugerencias:\n- Para sacar una ficha debes tener un 5 en algún dado.')
+            print('Has perdido el turno porque no tienes movimientos disponibles.')
             self.cambioDeTurno()
 
     def puedeJugar(self):
-        if self.__dado1 == 5 or self.__dado2 == 5:
-            return True # TODO: Solo si tienes alguna ficha en casa.
+        for i in range(self.__turno * 4, self.__turno * 4 + 4):
+            if self.estaEnCasa(self.__fichas[i]) and (self.__dado1 == 5 or self.__dado2 == 5):
+                # TODO: Comprobar que no este bloqueada la salida.
+                return True
         return False
+
+    def estaEnCasa(self, ficha):
+        for fC in self.__casas[self.__turno]:
+            if fC != None and ficha != None and fC == ficha:
+                return True
+        return False
+
+    def esMia(self, ficha):
+        for i in range(self.__turno * 4, self.__turno * 4 + 4):
+            if ficha == self.__fichas[i]:
+                return True
+        return False
+
+    def jugarFicha(self):
+        if self.esMia(self.sender()):
+            print('La ficha es mia; OK.')
+            # Controlar la salida.
+            if self.estaEnCasa(self.sender()):
+                if self.__dado1 == 5 and self.ui.checkDado1.isChecked():
+                    self.salirDeCasa(self.sender())
+                    self.cambioDeTurno()
+                elif self.__dado2 == 5 and self.ui.checkDado2.isChecked():
+                    self.salirDeCasa(self.sender())
+                    self.cambioDeTurno()
+        else:
+            print('¡La ficha no es mia!')
+
+    def salirDeCasa(self, ficha):
+        pos = 0
+        for i in range(4):
+            if ficha == self.__casas[self.__turno][i]:
+                pos = i
+                break
+        if self.__rutas[self.__turno][0][0] == None:
+            if (self.moverFicha(self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 0)):
+                self.relocateAll()
+        elif self.__rutas[self.__turno][0][1] == None:
+            if (self.moverFicha(self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 1)):
+                self.relocateAll()
 
     def cambioDeTurno(self):
         self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
