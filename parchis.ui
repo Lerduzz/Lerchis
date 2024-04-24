@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Juego de Parchis | Creado por Lerduzz (https://youtube.com/@lerduzz) | v0.6.5</string>
+   <string>Juego de Parchis | Creado con Python y PyQt | v0.6.5 Beta</string>
   </property>
   <property name="windowIcon">
    <iconset resource="parchis.qrc">
@@ -718,7 +718,20 @@
          </property>
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
-           <widget class="QListWidget" name="listHistorial"/>
+           <widget class="QListWidget" name="listHistorial">
+            <property name="currentRow">
+             <number>0</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>Creado por Lerduzz (https://youtube.com/@lerduzz). Versión: v0.6.5 Beta.</string>
+             </property>
+             <property name="icon">
+              <iconset resource="parchis.qrc">
+               <normaloff>:/ventana/icono.png</normaloff>:/ventana/icono.png</iconset>
+             </property>
+            </item>
+           </widget>
           </item>
          </layout>
         </widget>

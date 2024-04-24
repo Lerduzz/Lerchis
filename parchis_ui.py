@@ -264,6 +264,9 @@ class Ui_VentanaJuego(object):
         self.gridLayout.setObjectName("gridLayout")
         self.listHistorial = QtWidgets.QListWidget(self.cajaHistorial)
         self.listHistorial.setObjectName("listHistorial")
+        item = QtWidgets.QListWidgetItem()
+        item.setIcon(icon)
+        self.listHistorial.addItem(item)
         self.gridLayout.addWidget(self.listHistorial, 0, 0, 1, 1)
         self.verticalLayout_2.addWidget(self.cajaHistorial)
         self.layoutPrincipal.addWidget(self.cajaOpciones)
@@ -288,11 +291,12 @@ class Ui_VentanaJuego(object):
         self.actionAcerca.setObjectName("actionAcerca")
 
         self.retranslateUi(VentanaJuego)
+        self.listHistorial.setCurrentRow(0)
         QtCore.QMetaObject.connectSlotsByName(VentanaJuego)
 
     def retranslateUi(self, VentanaJuego):
         _translate = QtCore.QCoreApplication.translate
-        VentanaJuego.setWindowTitle(_translate("VentanaJuego", "Juego de Parchis | Creado por Lerduzz (https://youtube.com/@lerduzz) | v0.6.5"))
+        VentanaJuego.setWindowTitle(_translate("VentanaJuego", "Juego de Parchis | Creado con Python y PyQt | v0.6.5 Beta"))
         self.cajaPartida.setTitle(_translate("VentanaJuego", "Opciones"))
         self.btnNuevaPartida.setText(_translate("VentanaJuego", "Nueva partida"))
         self.comboPlayer2.setItemText(0, _translate("VentanaJuego", "Jugador local"))
@@ -319,6 +323,11 @@ class Ui_VentanaJuego(object):
         self.checkMeta.setText(_translate("VentanaJuego", "(10) Llegar a meta."))
         self.checkMata.setText(_translate("VentanaJuego", "(20) Retroceder ficha."))
         self.cajaHistorial.setTitle(_translate("VentanaJuego", "Historial"))
+        __sortingEnabled = self.listHistorial.isSortingEnabled()
+        self.listHistorial.setSortingEnabled(False)
+        item = self.listHistorial.item(0)
+        item.setText(_translate("VentanaJuego", "Creado por Lerduzz (https://youtube.com/@lerduzz). Versión: v0.6.5 Beta."))
+        self.listHistorial.setSortingEnabled(__sortingEnabled)
         self.actionNuevaPartida.setText(_translate("VentanaJuego", "Nueva partida"))
         self.actionDosJugadores.setText(_translate("VentanaJuego", "Dos jugadores"))
         self.actionTresJugadores.setText(_translate("VentanaJuego", "Tres jugadores"))

@@ -31,6 +31,7 @@ class Ventana(QMainWindow):
         self.ui.setupUi(self)
         self.ui.btnTirar.clicked.connect(self.tirarDados)
         self.ui.btnNuevaPartida.clicked.connect(self.nuevaPartida)
+        self.ui.btnTerminarPartida.clicked.connect(self.terminarPartida)
         self.__dado1 = 0
         self.__dado2 = 0
         self.__turno = 0
@@ -226,7 +227,8 @@ class Ventana(QMainWindow):
         self.ui.checkDado2.setEnabled(True)
         self.ui.checkDado1.setChecked(True)
         self.ui.checkDado2.setChecked(True)
-        self.ui.listHistorial.insertItem(0, QListWidgetItem(self.__icons[self.__turno], f'{self.__names[self.__turno]} tira los dados y saca {s1}:{s2}.'))
+        self.ui.listHistorial.addItem(QListWidgetItem(self.__icons[self.__turno], f'{self.__names[self.__turno]} tira los dados y saca {s1}:{s2}.'))
+        self.ui.listHistorial.setCurrentRow(self.ui.listHistorial.count() - 1)
         if not self.puedeJugar() or (self.__dado1 == self.__dado2 and self.__cuentaDoble >= 2):
             if s1 != s2:
                 self.showWarning('Sin movimientos', 'Has perdido el turno porque no tienes movimientos.\n\nSugerencias:\n- Para sacar una ficha necesitas un 5 en un dado.')
@@ -477,6 +479,30 @@ class Ventana(QMainWindow):
         self.__cuentaDoble = 0
         self.__jugando = True
         self.prepararDados()
+        self.ui.btnNuevaPartida.setEnabled(False)
+        self.ui.checkPlayer0.setEnabled(False)
+        self.ui.checkPlayer1.setEnabled(False)
+        self.ui.checkPlayer2.setEnabled(False)
+        self.ui.checkPlayer3.setEnabled(False)
+        self.ui.txtNamePlayer0.setEnabled(False)
+        self.ui.txtNamePlayer1.setEnabled(False)
+        self.ui.txtNamePlayer2.setEnabled(False)
+        self.ui.txtNamePlayer3.setEnabled(False)
+        self.ui.btnTerminarPartida.setEnabled(True)
+
+    def terminarPartida(self):        
+        self.ui.btnTerminarPartida.setEnabled(False)
+        self.prepararDados()
+        self.ui.btnTirar.setEnabled(False)
+        self.ui.btnNuevaPartida.setEnabled(True)
+        self.ui.checkPlayer0.setEnabled(True)
+        self.ui.checkPlayer1.setEnabled(True)
+        self.ui.checkPlayer2.setEnabled(True)
+        self.ui.checkPlayer3.setEnabled(True)
+        self.ui.txtNamePlayer0.setEnabled(True)
+        self.ui.txtNamePlayer1.setEnabled(True)
+        self.ui.txtNamePlayer2.setEnabled(True)
+        self.ui.txtNamePlayer3.setEnabled(True)
 
     def moverFicha(self, desde, iD, jD, hasta, iH, jH):
         if desde[iD][jD] == None or hasta[iH][jH] != None:
@@ -508,7 +534,7 @@ sys.exit(app.exec())
 # TODO: Detectar victoria.
 # TODO: Saltarse el turno del que termina (En caso de que se quiera continuar la partida luego de que gane uno).
 # TODO: Si te queda una sola ficha y a esta le queda 6 movimientos o menos para entrar tiras con un solo dado.
-# TODO: Implementar la IA.
-# TODO: Implementar modo online.
+# TODO: *Implementar la IA.
+# TODO: *Implementar modo online.
 # TODO: Mejorar la interfaz de nueva partida para que se pueda elegir de manera individual si un jugador va a ser LOCAL, ONLINE, IA, INACTIVO.
-# TODO: Cuando se tiene marcado salir + caminar y se mata al salir, el caminar se va automaticamente a las 20 casillas del matar.
+# TODO: La funcion de nueva partida deve devolver las fichas al inicio.
