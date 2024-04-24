@@ -250,7 +250,6 @@ class Ventana(QMainWindow):
             elif actionR == actionBonus1Bonus2:
                 return [3, 4]
         return []
-        
 
     def resizeAll(self):
         h = self.ui.cajaTablero.height()
@@ -404,13 +403,6 @@ class Ventana(QMainWindow):
         self.ui.listHistorial.addItem(QListWidgetItem(self.__icons[self.__turno], f'{self.__names[self.__turno]} tira los dados y saca {s1}:{s2}.'))
         self.ui.listHistorial.setCurrentRow(self.ui.listHistorial.count() - 1)
         if not self.puedeJugar() or (self.__dado1 == self.__dado2 and self.__cuentaDoble >= 2):
-            # if s1 != s2:
-            #     self.showWarning('Sin movimientos', 'Has perdido el turno porque no tienes movimientos.\n\nSugerencias:\n- Para sacar una ficha necesitas un 5 en un dado.')
-            # else:
-            #     if self.__cuentaDoble >= 2:
-            #         self.showCritical('Mala suerte', 'Has sacado pareja 3 veces seguidas.\nTu ficha más adelantada será devuelta a casa.')
-            #     else:
-            #         self.showWarning('Sin movimientos', 'No tienes movimientos disponibles.\nPuedes volver a tirar los dados porque te cayó una pareja.\n\nSugerencias:\n- Para sacar una ficha necesitas un 5 en un dado.')
             self.cambioDeTurno()
 
     def puedeJugar(self):
@@ -694,3 +686,4 @@ sys.exit(app.exec())
 # TODO: Agregarle las reglas que tengo escritas en el teléfono.
 
 # TODO: Cuando una ficha tenga una sola posible jugada hacerla sin mostrar el menu.
+# TODO: Si al girar los dados no tienes movimientos entonces mantener mostrando el resultado durante un par de segundos antes de cambiar de turno.
