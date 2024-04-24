@@ -387,6 +387,7 @@ class Ventana(QMainWindow):
 
     def jugarFicha(self):
         # self.abrirMenu(self.sender())
+        # TODO: No dejar jugar si la partida no ha iniciado o si no ha girado los dados.
         if self.esMia(self.sender()):
             mover = True
             if self.estaEnCasa(self.sender()):
