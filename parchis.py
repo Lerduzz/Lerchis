@@ -132,6 +132,11 @@ class Ventana(QMainWindow):
         iconBonus2.addPixmap(QPixmap(f":/dados/dado{self.__turno}s20.png"), QIcon.Normal, QIcon.Off)
         actionBonus2 = QAction(iconBonus2, 'Bonus de matar')
 
+        # DADO 1 + DADO 2
+        iconDadoS = QIcon()
+        iconDadoS.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{self.__dado1 + self.__dado2}.png"), QIcon.Normal, QIcon.Off)
+        actionDadoS = QAction(iconDadoS, 'Ambos dados')
+
         if self.__disponibleDado1:
             if self.estaEnCasa(sender):
                 if self.__dado1 == 5 and self.puedeSalir():
@@ -162,18 +167,26 @@ class Ventana(QMainWindow):
                 menu.addAction(actionBonus2)
                 count += 1
 
+        if self.__disponibleDado1 and self.__disponibleDado2:
+            if not self.estaEnCasa(sender):
+                if self.puedeMover(sender, self.__dado1 + self.__dado2):
+                    menu.addAction(actionDadoS)
+                    count += 1
+
         if count > 0:
             pos = QPoint(sender.x() + sender.width(), sender.y())
             actionR = menu.exec_(self.mapToGlobal(pos))
             if actionR == actionDado1:
-                return 1
+                return [1]
             elif actionR == actionDado2:
-                return 2
+                return [2]
             elif actionR == actionBonus1:
-                return 3
+                return [3]
             elif actionR == actionBonus2:
-                return 4
-        return 0
+                return [4]
+            elif actionR == actionDadoS:
+                return [1, 2]
+        return []
         
 
     def resizeAll(self):
@@ -437,16 +450,16 @@ class Ventana(QMainWindow):
         if not self.__jugando or not self.__dadosTirados or not self.esMia(self.sender()):
             return
         menuResp = self.abrirMenu(self.sender())
-        if menuResp == 0:
+        if len(menuResp) == 0:
             return
         mover = True
         if self.estaEnCasa(self.sender()):
             salio = False
-            if self.__disponibleDado1 and menuResp == 1 and self.__dado1 == 5:
+            if self.__disponibleDado1 and 1 in menuResp and self.__dado1 == 5:
                 if self.salirDeCasa(self.sender()):
                     self.__disponibleDado1 = False
                     salio = True
-            if not salio and self.__disponibleDado2 and menuResp == 2 and self.__dado2 == 5:
+            if not salio and self.__disponibleDado2 and 2 in menuResp and self.__dado2 == 5:
                 if self.salirDeCasa(self.sender()):
                     self.__disponibleDado2 = False
                     salio = True
@@ -459,16 +472,16 @@ class Ventana(QMainWindow):
             usadoDado2 = False
             usadoBonus1 = False
             usadoBonus2 = False
-            if self.__disponibleDado1 and menuResp == 1:
+            if self.__disponibleDado1 and 1 in menuResp:
                 total += self.__dado1
                 usadoDado1 = True
-            if self.__disponibleDado2 and menuResp == 2:
+            if self.__disponibleDado2 and 2 in menuResp:
                 total += self.__dado2
                 usadoDado2 = True
-            if self.__disponibleBonusLlegar and menuResp == 3:
+            if self.__disponibleBonusLlegar and 3 in menuResp:
                 total += 10
                 usadoBonus1 = True
-            if self.__disponibleBonusMatar and menuResp == 4:
+            if self.__disponibleBonusMatar and 4 in menuResp:
                 total += 20
                 usadoBonus2 = True
             if total > 0:
@@ -579,7 +592,7 @@ class Ventana(QMainWindow):
         self.__disponibleDado2 = True
         self.__disponibleBonusMatar = True
         self.__disponibleBonusLlegar = True
-        self.__dado1 = 5
+        self.__dado1 = 1
         self.__dado2 = 5
         # /DEV
 
