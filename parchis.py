@@ -1,7 +1,7 @@
 import sys, time, random, qdarkstyle
-from PyQt5.QtCore import QObject, QThread, pyqtSignal
+from PyQt5.QtCore import QObject, QPoint, QThread, pyqtSignal
 from PyQt5.QtGui import QResizeEvent, QIcon, QPixmap
-from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox, QListWidgetItem
+from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox, QListWidgetItem, QMenu, QAction
 from parchis_ui import Ui_VentanaJuego
 
 class DadosWorker(QObject):
@@ -59,6 +59,8 @@ class Ventana(QMainWindow):
         self.ui = Ui_VentanaJuego() 
         self.ui.setupUi(self)
         self.ui.btnTirar.clicked.connect(self.tirarDados)
+        self.ui.dado1.clicked.connect(self.tirarDados)
+        self.ui.dado2.clicked.connect(self.tirarDados)
         self.ui.btnNuevaPartida.clicked.connect(self.nuevaPartida)
         self.ui.btnTerminarPartida.clicked.connect(self.terminarPartida)
         self.__dado1 = 0
@@ -104,6 +106,27 @@ class Ventana(QMainWindow):
         super().resizeEvent(e)
         self.resizeAll()
         self.relocateAll()
+
+    def abrirMenu(self, sender):
+        # El menu debe tener las opciones de movimiento validas para la ficha.
+        menu = QMenu(self)
+        iconD1 = QIcon()
+        iconD2 = QIcon()
+        iconD1.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado1}.png"), QIcon.Normal, QIcon.Off)
+        iconD2.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado2}.png"), QIcon.Normal, QIcon.Off)
+        actionD1 = QAction(iconD1, f'({self.__dado1}) Primer dado.')
+        actionD2 = QAction(iconD2, f'({self.__dado2}) Segundo dado.')
+        menu.addAction(actionD1)
+        menu.addAction(actionD2)
+        pos = QPoint(sender.x() + sender.width(), sender.y())
+        actionR = menu.exec_(self.mapToGlobal(pos))
+        if actionR == actionD1:
+            print('Seleccionado dado 1.')
+        elif actionR == actionD2:
+            print('Seleccionado dado 2.')
+        else:
+            print('Seleccionada otra cosa.')
+        
 
     def resizeAll(self):
         h = self.ui.cajaTablero.height()
@@ -363,6 +386,7 @@ class Ventana(QMainWindow):
         return False
 
     def jugarFicha(self):
+        # self.abrirMenu(self.sender())
         if self.esMia(self.sender()):
             mover = True
             if self.estaEnCasa(self.sender()):

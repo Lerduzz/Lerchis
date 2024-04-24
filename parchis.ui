@@ -614,77 +614,29 @@
           <string>Jugar</string>
          </property>
          <layout class="QGridLayout" name="layoutJugar">
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="checkDado1">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>(0) Primer dado.</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QWidget" name="dado2" native="true">
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>150</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>150</width>
-              <height>150</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border-image: url(:/dados/dado00.png) 0 0 0 0 stretch stretch;</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QWidget" name="dado1" native="true">
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>150</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>150</width>
-              <height>150</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border-image: url(:/dados/dado00.png) 0 0 0 0 stretch stretch;</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QCheckBox" name="checkDado2">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>(0) Segundo dado.</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QPushButton" name="btnTirar">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Tirar</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="2">
            <widget class="QWidget" name="cajaBonus" native="true">
             <layout class="QVBoxLayout" name="verticalLayout">
+             <item>
+              <widget class="QCheckBox" name="checkDado1">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>(0) Primer dado.</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="checkDado2">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>(0) Segundo dado.</string>
+               </property>
+              </widget>
+             </item>
              <item>
               <widget class="QCheckBox" name="checkMeta">
                <property name="enabled">
@@ -705,7 +657,61 @@
                </property>
               </widget>
              </item>
+             <item>
+              <widget class="QPushButton" name="btnTirar">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>Tirar</string>
+               </property>
+              </widget>
+             </item>
             </layout>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QToolButton" name="dado1">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>150</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>150</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border-image: url(:/dados/dado00.png) 0 0 0 0 stretch stretch;</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QToolButton" name="dado2">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>150</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>150</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border-image: url(:/dados/dado00.png) 0 0 0 0 stretch stretch;</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
            </widget>
           </item>
          </layout>
