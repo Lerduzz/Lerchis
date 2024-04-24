@@ -672,8 +672,9 @@ class Ventana(QMainWindow):
             self.__cuentaDoble = 0
             self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
             estados = [self.ui.checkPlayer0.isChecked(), self.ui.checkPlayer1.isChecked(), self.ui.checkPlayer2.isChecked(), self.ui.checkPlayer3.isChecked()]
-            if True in estados and not estados[self.__turno]:
-                self.cambioDeTurno()
+            if True in estados:
+                 while (not estados[self.__turno]):
+                     self.__turno = 0 if self.__turno >= 3 else self.__turno + 1                
         self.mostrarDados(0, 0)
         self.ui.dado1.setEnabled(True)
         self.ui.dado2.setEnabled(True)
