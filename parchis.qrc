@@ -3,6 +3,50 @@
     <file>tablero.png</file>
   </qresource>
   <qresource prefix="dados">
+    <file>dado0s2.png</file>
+    <file>dado0s3.png</file>
+    <file>dado0s4.png</file>
+    <file>dado0s5.png</file>
+    <file>dado0s6.png</file>
+    <file>dado0s7.png</file>
+    <file>dado0s8.png</file>
+    <file>dado0s9.png</file>
+    <file>dado0s10.png</file>
+    <file>dado0s11.png</file>
+    <file>dado0s12.png</file>
+    <file>dado1s2.png</file>
+    <file>dado1s3.png</file>
+    <file>dado1s4.png</file>
+    <file>dado1s5.png</file>
+    <file>dado1s6.png</file>
+    <file>dado1s7.png</file>
+    <file>dado1s8.png</file>
+    <file>dado1s9.png</file>
+    <file>dado1s10.png</file>
+    <file>dado1s11.png</file>
+    <file>dado1s12.png</file>
+    <file>dado2s2.png</file>
+    <file>dado2s3.png</file>
+    <file>dado2s4.png</file>
+    <file>dado2s5.png</file>
+    <file>dado2s6.png</file>
+    <file>dado2s7.png</file>
+    <file>dado2s8.png</file>
+    <file>dado2s9.png</file>
+    <file>dado2s10.png</file>
+    <file>dado2s11.png</file>
+    <file>dado2s12.png</file>
+    <file>dado3s2.png</file>
+    <file>dado3s3.png</file>
+    <file>dado3s4.png</file>
+    <file>dado3s5.png</file>
+    <file>dado3s6.png</file>
+    <file>dado3s7.png</file>
+    <file>dado3s8.png</file>
+    <file>dado3s9.png</file>
+    <file>dado3s10.png</file>
+    <file>dado3s11.png</file>
+    <file>dado3s12.png</file>
     <file>dado00.png</file>
     <file>dado10.png</file>
     <file>dado20.png</file>
