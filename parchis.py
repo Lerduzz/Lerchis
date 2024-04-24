@@ -678,6 +678,10 @@ class Ventana(QMainWindow):
         self.ui.dado1.setEnabled(True)
         self.ui.dado2.setEnabled(True)
         self.__dadosTirados = False
+        self.__disponibleDado1 = False
+        self.__disponibleDado2 = False
+        self.__disponibleBonusLlegar = False
+        self.__disponibleBonusMatar = False
 
     def virarMasAdelantada(self):
         for i in range(len(self.__rutas[self.__turno]) - 2, -1, -1):
