@@ -3,6 +3,10 @@
     <file>tablero.png</file>
   </qresource>
   <qresource prefix="dados">
+    <file>dado00.png</file>
+    <file>dado10.png</file>
+    <file>dado20.png</file>
+    <file>dado30.png</file>
     <file>dado01.png</file>
     <file>dado02.png</file>
     <file>dado03.png</file>

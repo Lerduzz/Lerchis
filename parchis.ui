@@ -500,7 +500,7 @@
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">border-image: url(:/dados/dado06.png) 0 0 0 0 stretch stretch;</string>
+             <string notr="true">border-image: url(:/dados/dado00.png) 0 0 0 0 stretch stretch;</string>
             </property>
            </widget>
           </item>
@@ -519,7 +519,7 @@
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">border-image: url(:/dados/dado06.png) 0 0 0 0 stretch stretch;</string>
+             <string notr="true">border-image: url(:/dados/dado00.png) 0 0 0 0 stretch stretch;</string>
             </property>
            </widget>
           </item>
