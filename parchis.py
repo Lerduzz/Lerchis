@@ -214,12 +214,15 @@ class Ventana(QMainWindow):
         self.__dado1 = s1
         self.__dado2 = s2
         self.mostrarDados(s1, s2)
-        self.ui.checkDado1.setText(f'Dado # 1 => {s1}.')
-        self.ui.checkDado2.setText(f'Dado # 2 => {s2}.')
+        self.ui.checkDado1.setText(f'({s1}) Primer dado.')
+        self.ui.checkDado2.setText(f'({s2}) Segundo dado.')
         self.ui.checkDado1.setEnabled(True)
         self.ui.checkDado2.setEnabled(True)
         if not self.puedeJugar() or (self.__dado1 == self.__dado2 and self.__cuentaDoble >= 2):
-            self.showWarning('Turno perdido', 'Has perdido el turno porque no tienes movimientos.\n\nSugerencias:\n- Para sacar una ficha necesitas un 5 en un dado.')
+            if s1 != s2:
+                self.showWarning('Sin movimientos', 'Has perdido el turno porque no tienes movimientos.\n\nSugerencias:\n- Para sacar una ficha necesitas un 5 en un dado.')
+            else:
+                self.showWarning('Sin movimientos', 'No tienes movimientos disponibles.\nPuedes volver a tirar los dados porque te cayó una pareja.\n\nSugerencias:\n- Para sacar una ficha necesitas un 5 en un dado.')
             self.cambioDeTurno()
 
     def puedeJugar(self):

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1191</width>
+    <width>1245</width>
     <height>700</height>
    </rect>
   </property>
@@ -481,7 +481,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Dado # 1 =&gt; 6.</string>
+             <string>(0) Primer dado.</string>
             </property>
            </widget>
           </item>
@@ -529,7 +529,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Dado # 2 =&gt; 6.</string>
+             <string>(0) Segundo dado.</string>
             </property>
            </widget>
           </item>
@@ -552,7 +552,7 @@
                 <bool>false</bool>
                </property>
                <property name="text">
-                <string>Meta =&gt; 10.</string>
+                <string>(10) Llegar a meta.</string>
                </property>
               </widget>
              </item>
@@ -562,7 +562,7 @@
                 <bool>false</bool>
                </property>
                <property name="text">
-                <string>Mata =&gt; 20.</string>
+                <string>(20) Retroceder ficha.</string>
                </property>
               </widget>
              </item>
