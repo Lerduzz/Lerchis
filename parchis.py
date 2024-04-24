@@ -1,6 +1,6 @@
 import sys, time, random, qdarkstyle
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
-from PyQt5.QtGui import QResizeEvent
+from PyQt5.QtGui import QResizeEvent, QIcon, QPixmap
 from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox
 from parchis_ui import Ui_VentanaJuego
 
@@ -63,6 +63,11 @@ class Ventana(QMainWindow):
             self.__rutas[i] += self.__metas[i]
         self.__excluir = [0, 6, 10, 14, 20, 24, 28, 34, 38, 42, 48, 52, 53, 54, 55, 56, 57, 58, 59]
         self.__bridges = [0, 14, 28, 42]
+        self.__icons = [QIcon(),QIcon(),QIcon(),QIcon()]
+        self.__icons[0].addPixmap(QPixmap(":/fichas/ficha0.png"), QIcon.Normal, QIcon.Off)
+        self.__icons[1].addPixmap(QPixmap(":/fichas/ficha1.png"), QIcon.Normal, QIcon.Off)
+        self.__icons[2].addPixmap(QPixmap(":/fichas/ficha2.png"), QIcon.Normal, QIcon.Off)
+        self.__icons[3].addPixmap(QPixmap(":/fichas/ficha3.png"), QIcon.Normal, QIcon.Off)
 
     def resizeEvent(self, e: QResizeEvent) -> None:
         super().resizeEvent(e)
