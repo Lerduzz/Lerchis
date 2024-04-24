@@ -1,7 +1,7 @@
 import sys, time, random, qdarkstyle
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 from PyQt5.QtGui import QResizeEvent, QIcon, QPixmap
-from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox, QListWidgetItem
 from parchis_ui import Ui_VentanaJuego
 
 class DadosWorker(QObject):
@@ -68,6 +68,7 @@ class Ventana(QMainWindow):
         self.__icons[1].addPixmap(QPixmap(":/fichas/ficha1.png"), QIcon.Normal, QIcon.Off)
         self.__icons[2].addPixmap(QPixmap(":/fichas/ficha2.png"), QIcon.Normal, QIcon.Off)
         self.__icons[3].addPixmap(QPixmap(":/fichas/ficha3.png"), QIcon.Normal, QIcon.Off)
+        self.__names = ['Jugador rojo','Jugador verde','Jugador azul','Jugador naranja']
 
     def resizeEvent(self, e: QResizeEvent) -> None:
         super().resizeEvent(e)
@@ -223,6 +224,7 @@ class Ventana(QMainWindow):
         self.ui.checkDado2.setText(f'({s2}) Segundo dado.')
         self.ui.checkDado1.setEnabled(True)
         self.ui.checkDado2.setEnabled(True)
+        self.ui.listHistorial.insertItem(0, QListWidgetItem(self.__icons[self.__turno], f'{self.__names[self.__turno]} tira los dados y saca {s1}:{s2}.'))
         if not self.puedeJugar() or (self.__dado1 == self.__dado2 and self.__cuentaDoble >= 2):
             if s1 != s2:
                 self.showWarning('Sin movimientos', 'Has perdido el turno porque no tienes movimientos.\n\nSugerencias:\n- Para sacar una ficha necesitas un 5 en un dado.')
