@@ -298,12 +298,14 @@ class Ventana(QMainWindow):
         self.__dado1 = s1
         self.__dado2 = s2
         self.mostrarDados(s1, s2)
-        self.ui.checkDado1.setText(f'({s1}) Primer dado.')
-        self.ui.checkDado2.setText(f'({s2}) Segundo dado.')
-        self.ui.checkDado1.setEnabled(True)
-        self.ui.checkDado2.setEnabled(True)
-        self.ui.checkDado1.setChecked(True)
-        self.ui.checkDado2.setChecked(True)
+        # self.ui.checkDado1.setText(f'({s1}) Primer dado.')
+        # self.ui.checkDado2.setText(f'({s2}) Segundo dado.')
+        # self.ui.checkDado1.setEnabled(True)
+        # self.ui.checkDado2.setEnabled(True)
+        # self.ui.checkDado1.setChecked(True)
+        # self.ui.checkDado2.setChecked(True)
+        self.__disponibleDado1 = True
+        self.__disponibleDado2 = True
         self.ui.listHistorial.addItem(QListWidgetItem(self.__icons[self.__turno], f'{self.__names[self.__turno]} tira los dados y saca {s1}:{s2}.'))
         self.ui.listHistorial.setCurrentRow(self.ui.listHistorial.count() - 1)
         if not self.puedeJugar() or (self.__dado1 == self.__dado2 and self.__cuentaDoble >= 2):
@@ -320,14 +322,11 @@ class Ventana(QMainWindow):
         for i in range(self.__turno * 4, self.__turno * 4 + 4):
             ficha = self.__fichas[i]
             if self.estaEnCasa(ficha):
-                if (self.ui.checkDado1.isEnabled() and self.__dado1 == 5) or (self.ui.checkDado2.isEnabled() and self.__dado2 == 5):
-                    s1 = self.__rutas[self.__turno][0][0]
-                    s2 = self.__rutas[self.__turno][0][1]
-                    if s1 != None and self.esMia(s1) and s2 != None and self.esMia(s2):
-                        continue
-                    return True
+                if (self.__disponibleDado1 and self.__dado1 == 5) or (self.__disponibleDado2 and self.__dado2 == 5):
+                    if self.puedeSalir():
+                        return True
             else:
-                mData = [(self.ui.checkDado1.isEnabled(),self.__dado1),(self.ui.checkDado2.isEnabled(),self.__dado2),(self.ui.checkMeta.isEnabled(),10),(self.ui.checkMata.isEnabled(),20)]
+                mData = [(self.__disponibleDado1,self.__dado1),(self.__disponibleDado2,self.__dado2),(self.ui.checkMeta.isEnabled(),10),(self.ui.checkMata.isEnabled(),20)]
                 for i in range(len(mData)):
                     c, v = mData[i]
                     if c:
