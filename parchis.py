@@ -31,8 +31,8 @@ class Ventana(QMainWindow):
         self.ui.setupUi(self)
         self.ui.btnTirar.clicked.connect(self.tirarDados)
         self.ui.btnNuevaPartida.clicked.connect(self.nuevaPartida)
-        self.__dado1 = 6
-        self.__dado2 = 6
+        self.__dado1 = 0
+        self.__dado2 = 0
         self.__turno = 0
         self.__cuentaDoble = 0
         self.__jugando = False
@@ -219,6 +219,7 @@ class Ventana(QMainWindow):
         self.ui.checkDado1.setEnabled(True)
         self.ui.checkDado2.setEnabled(True)
         if not self.puedeJugar() or (self.__dado1 == self.__dado2 and self.__cuentaDoble >= 2):
+            self.showWarning('Turno perdido', 'Has perdido el turno porque no tienes movimientos.\n\nSugerencias:\n- Para sacar una ficha necesitas un 5 en un dado.')
             self.cambioDeTurno()
 
     def puedeJugar(self):
@@ -421,6 +422,8 @@ class Ventana(QMainWindow):
         if not repetir:
             self.__cuentaDoble = 0
             self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
+        self.__dado1 = 0
+        self.__dado2 = 0
         self.mostrarDados(self.__dado1, self.__dado2)
         self.prepararDados()
 
@@ -482,3 +485,4 @@ sys.exit(app.exec())
 # TODO: **(La ficha que mata no puede volver a ser movida a menos que otra camine su bonus)**
 # TODO: **(Animar el movimiento de las fichas por el tablero)**
 # TODO: Detectar victoria.
+# TODO: Saltarse el turno del que termina (En caso de que se quiera continuar la partida luego de que gane uno).
