@@ -208,6 +208,7 @@ class Ventana(QMainWindow):
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, self.__dado1 + 20):
                     menu.addAction(actionDado1Bonus2)
+                    count += 1
 
         if self.__disponibleDado2 and self.__disponibleBonusLlegar:
             if not self.estaEnCasa(sender):
@@ -225,6 +226,7 @@ class Ventana(QMainWindow):
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, 30):
                     menu.addAction(actionBonus1Bonus2)
+                    count += 1
 
         if count > 0:
             pos = QPoint(sender.x() + sender.width(), sender.y())
@@ -250,6 +252,63 @@ class Ventana(QMainWindow):
             elif actionR == actionBonus1Bonus2:
                 return [3, 4]
         return []
+
+    def detectarJugadaAutomatica(self, sender):
+        jugadasValidas = []
+        if self.__disponibleDado1:
+            if self.estaEnCasa(sender):
+                if self.__dado1 == 5 and self.puedeSalir():
+                    jugadasValidas.append([1])
+            else:
+                if self.puedeMover(sender, self.__dado1):
+                    jugadasValidas.append([1])     
+        
+        if self.__disponibleDado2:
+            if self.estaEnCasa(sender):
+                if self.__dado2 == 5 and self.puedeSalir():
+                    jugadasValidas.append([2])
+            else:
+                if self.puedeMover(sender, self.__dado2):
+                    jugadasValidas.append([2])
+
+        if self.__disponibleBonusLlegar:
+            if not self.estaEnCasa(sender) and self.puedeMover(sender, 10):
+                jugadasValidas.append([3])
+
+        if self.__disponibleBonusMatar:
+            if not self.estaEnCasa(sender) and self.puedeMover(sender, 20):
+                jugadasValidas.append([4])
+
+        if self.__disponibleDado1 and self.__disponibleDado2:
+            if not self.estaEnCasa(sender):
+                if self.puedeMover(sender, self.__dado1 + self.__dado2):
+                    jugadasValidas.append([1, 2])
+
+        if self.__disponibleDado1 and self.__disponibleBonusLlegar:
+            if not self.estaEnCasa(sender):
+                if self.puedeMover(sender, self.__dado1 + 10):
+                    jugadasValidas.append([1, 3])
+        
+        if self.__disponibleDado1 and self.__disponibleBonusMatar:
+            if not self.estaEnCasa(sender):
+                if self.puedeMover(sender, self.__dado1 + 20):
+                    jugadasValidas.append([1, 4])
+
+        if self.__disponibleDado2 and self.__disponibleBonusLlegar:
+            if not self.estaEnCasa(sender):
+                if self.puedeMover(sender, self.__dado2 + 10):
+                    jugadasValidas.append([2, 3])
+        
+        if self.__disponibleDado2 and self.__disponibleBonusMatar:
+            if not self.estaEnCasa(sender):
+                if self.puedeMover(sender, self.__dado2 + 20):
+                    jugadasValidas.append([2, 4])
+
+        if self.__disponibleBonusLlegar and self.__disponibleBonusMatar:
+            if not self.estaEnCasa(sender):
+                if self.puedeMover(sender, 30):
+                    jugadasValidas.append([3, 4])
+        return jugadasValidas[0] if len(jugadasValidas) == 1 else None
 
     def resizeAll(self):
         h = self.ui.cajaTablero.height()
@@ -504,7 +563,9 @@ class Ventana(QMainWindow):
     def jugarFicha(self):
         if not self.__jugando or not self.__dadosTirados or not self.esMia(self.sender()):
             return
-        menuResp = self.abrirMenu(self.sender())
+        menuResp = self.detectarJugadaAutomatica(self.sender())
+        if menuResp == None:
+            menuResp = self.abrirMenu(self.sender())
         if len(menuResp) == 0:
             return
         mover = True
@@ -685,5 +746,4 @@ sys.exit(app.exec())
 # TODO: La funcion de nueva partida deve devolver las fichas al inicio.
 # TODO: Agregarle las reglas que tengo escritas en el teléfono.
 
-# TODO: Cuando una ficha tenga una sola posible jugada hacerla sin mostrar el menu.
 # TODO: Si al girar los dados no tienes movimientos entonces mantener mostrando el resultado durante un par de segundos antes de cambiar de turno.
