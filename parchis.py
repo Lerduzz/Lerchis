@@ -224,6 +224,8 @@ class Ventana(QMainWindow):
         self.ui.checkDado2.setText(f'({s2}) Segundo dado.')
         self.ui.checkDado1.setEnabled(True)
         self.ui.checkDado2.setEnabled(True)
+        self.ui.checkDado1.setChecked(True)
+        self.ui.checkDado2.setChecked(True)
         self.ui.listHistorial.insertItem(0, QListWidgetItem(self.__icons[self.__turno], f'{self.__names[self.__turno]} tira los dados y saca {s1}:{s2}.'))
         if not self.puedeJugar() or (self.__dado1 == self.__dado2 and self.__cuentaDoble >= 2):
             if s1 != s2:
@@ -379,7 +381,8 @@ class Ventana(QMainWindow):
                                         fM = self.__rutas[self.__turno][posI + total][jC]
                                         if j != jC and fM != None and not posI + total in self.__excluir and not self.esMia(fM):
                                             if self.matarFicha(fM):
-                                                self.ui.checkMata.setEnabled(True)                        
+                                                self.ui.checkMata.setEnabled(True)
+                                                self.ui.checkMata.setChecked(True)
         if not self.puedeJugar():
             self.cambioDeTurno()
 
@@ -398,9 +401,11 @@ class Ventana(QMainWindow):
             if s1 != None and not self.esMia(s1):
                 if self.matarFicha(s1):
                     self.ui.checkMata.setEnabled(True)
+                    self.ui.checkMata.setChecked(True)
             if s2 != None and not self.esMia(s2):
                 if self.matarFicha(s2):
                     self.ui.checkMata.setEnabled(True)
+                    self.ui.checkMata.setChecked(True)
         s1 = self.__rutas[self.__turno][0][0]
         s2 = self.__rutas[self.__turno][0][1]
         if s1 == None:
@@ -473,6 +478,7 @@ class Ventana(QMainWindow):
         desde[iD][jD] = temp
         if iH == len(self.__rutas[self.__turno]) - 1:
             self.ui.checkMeta.setEnabled(True)
+            self.ui.checkMeta.setChecked(True)
         return True
 
     def showCritical(self, title, text):
