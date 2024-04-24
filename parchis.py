@@ -648,17 +648,6 @@ class Ventana(QMainWindow):
         self.ui.checkPlayer3.setEnabled(False)
         self.ui.btnTerminarPartida.setEnabled(True)
 
-        # DEV: ...
-        self.__jugando = True
-        self.__dadosTirados = True
-        self.__disponibleDado1 = True
-        self.__disponibleDado2 = True
-        self.__disponibleBonusMatar = True
-        self.__disponibleBonusLlegar = True
-        self.__dado1 = 1
-        self.__dado2 = 5
-        # /DEV
-
     def terminarPartida(self):        
         self.ui.btnTerminarPartida.setEnabled(False)
         self.__jugando = False
@@ -695,13 +684,10 @@ application = Ventana()
 application.show()
 sys.exit(app.exec())
 
-# TODO: El bonus de matar no se puede caminar con la misma ficha.
-# TODO: **(La ficha que mata no puede volver a ser movida a menos que otra camine su bonus)**
 # TODO: **(Animar el movimiento de las fichas por el tablero)**
 # TODO: Detectar victoria.
 # TODO: Saltarse el turno del que termina (En caso de que se quiera continuar la partida luego de que gane uno).
 # TODO: Si te queda una sola ficha y a esta le queda 6 movimientos o menos para entrar tiras con un solo dado.
 # TODO: *Implementar la IA.
 # TODO: *Implementar modo online.
-# TODO: Mejorar la interfaz de nueva partida para que se pueda elegir de manera individual si un jugador va a ser LOCAL, ONLINE, IA, INACTIVO.
 # TODO: La funcion de nueva partida deve devolver las fichas al inicio.
