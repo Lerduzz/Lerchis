@@ -66,7 +66,6 @@ class Ventana(QMainWindow):
         self.__dado2 = 0
         self.__turno = 0
         self.__cuentaDoble = 0
-        self.__jugando = False
         self.__fichas = [self.ui.ficha00,self.ui.ficha01,self.ui.ficha02,self.ui.ficha03,self.ui.ficha10,self.ui.ficha11,self.ui.ficha12,self.ui.ficha13,self.ui.ficha20,self.ui.ficha21,self.ui.ficha22,self.ui.ficha23,self.ui.ficha30,self.ui.ficha31,self.ui.ficha32,self.ui.ficha33]
         for f in self.__fichas:
             f.clicked.connect(self.jugarFicha)
@@ -100,6 +99,7 @@ class Ventana(QMainWindow):
         self.__icons[2].addPixmap(QPixmap(":/fichas/ficha2.png"), QIcon.Normal, QIcon.Off)
         self.__icons[3].addPixmap(QPixmap(":/fichas/ficha3.png"), QIcon.Normal, QIcon.Off)
         self.__names = ['Jugador rojo','Jugador verde','Jugador azul','Jugador naranja']
+        self.__jugando = False
         self.__dadosTirados = False
         self.__disponibleDado1 = False
         self.__disponibleDado2 = False
@@ -154,12 +154,12 @@ class Ventana(QMainWindow):
 
         if self.__disponibleBonusLlegar:
             if not self.estaEnCasa(sender) and self.puedeMover(sender, 10):
-                menu.addAction(actionDado2)
+                menu.addAction(actionBonus1)
                 count += 1
 
         if self.__disponibleBonusMatar:
             if not self.estaEnCasa(sender) and self.puedeMover(sender, 20):
-                menu.addAction(actionDado2)
+                menu.addAction(actionBonus2)
                 count += 1
 
         if count > 0:
@@ -437,6 +437,8 @@ class Ventana(QMainWindow):
         if not self.__jugando or not self.__dadosTirados or not self.esMia(self.sender()):
             return
         menuResp = self.abrirMenu(self.sender())
+        if menuResp == 0:
+            return
         mover = True
         if self.estaEnCasa(self.sender()):
             salio = False
@@ -569,6 +571,17 @@ class Ventana(QMainWindow):
         self.ui.checkPlayer2.setEnabled(False)
         self.ui.checkPlayer3.setEnabled(False)
         self.ui.btnTerminarPartida.setEnabled(True)
+
+        # DEV: ...
+        self.__jugando = True
+        self.__dadosTirados = True
+        self.__disponibleDado1 = True
+        self.__disponibleDado2 = True
+        self.__disponibleBonusMatar = True
+        self.__disponibleBonusLlegar = True
+        self.__dado1 = 5
+        self.__dado2 = 5
+        # /DEV
 
     def terminarPartida(self):        
         self.ui.btnTerminarPartida.setEnabled(False)
