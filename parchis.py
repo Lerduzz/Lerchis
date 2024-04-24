@@ -115,49 +115,70 @@ class Ventana(QMainWindow):
         menu = QMenu(self)
         count = 0
 
-        iconD1 = QIcon()
-        iconD1.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado1}.png"), QIcon.Normal, QIcon.Off)
-        actionD1 = QAction(iconD1, 'Primer dado')
+        # DADO 1
+        iconDado1 = QIcon()
+        iconDado1.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado1}.png"), QIcon.Normal, QIcon.Off)
+        actionDado1 = QAction(iconDado1, 'Primer dado')
+        # DADO 2
+        iconDado2 = QIcon()
+        iconDado2.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado2}.png"), QIcon.Normal, QIcon.Off)
+        actionDado2 = QAction(iconDado2, 'Segundo dado')
+        # BONUS 1
+        iconBonus1 = QIcon()
+        iconBonus1.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado1}.png"), QIcon.Normal, QIcon.Off)
+        actionBonus1 = QAction(iconBonus1, 'Bonus de llegar')
+        # BONUS 2
+        iconBonus2 = QIcon()
+        iconBonus2.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado1}.png"), QIcon.Normal, QIcon.Off)
+        actionBonus2 = QAction(iconBonus2, 'Bonus de matar')
+
         if self.__disponibleDado1:
             if self.estaEnCasa(sender):
                 if self.__dado1 == 5 and self.puedeSalir():
-                    menu.addAction(actionD1)
+                    menu.addAction(actionDado1)
                     count += 1
             else:
                 if self.puedeMover(sender, self.__dado1):
-                    menu.addAction(actionD1)
-                    count += 1
+                    menu.addAction(actionDado1)
+                    count += 1        
         
-        iconD2 = QIcon()
-        iconD2.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado2}.png"), QIcon.Normal, QIcon.Off)
-        actionD2 = QAction(iconD2, 'Segundo dado')
         if self.__disponibleDado2:
             if self.estaEnCasa(sender):
                 if self.__dado2 == 5 and self.puedeSalir():
-                    menu.addAction(actionD2)
+                    menu.addAction(actionDado2)
                     count += 1
             else:
                 if self.puedeMover(sender, self.__dado2):
-                    menu.addAction(actionD2)
+                    menu.addAction(actionDado2)
                     count += 1
 
-        iconD12 = QIcon()
-        iconD12.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{self.__dado1 + self.__dado2}.png"), QIcon.Normal, QIcon.Off)
-        actionD12 = QAction(iconD12, 'Ambos dados')
-        if self.__disponibleDado1 and self.__disponibleDado2:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, self.__dado1 + self.__dado2):
-                    menu.addAction(actionD12)
-                    count += 1
-        
+        if self.__disponibleBonusLlegar:
+            if not self.estaEnCasa(sender) and self.puedeMover(sender, 10):
+                menu.addAction(actionDado2)
+                count += 1
+
+        if self.__disponibleBonusMatar:
+            if not self.estaEnCasa(sender) and self.puedeMover(sender, 20):
+                menu.addAction(actionDado2)
+                count += 1
+
+        # iconDado12 = QIcon()
+        # iconDado12.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{self.__dado1 + self.__dado2}.png"), QIcon.Normal, QIcon.Off)
+        # actionDado12 = QAction(iconDado12, 'Ambos dados')
+        # if self.__disponibleDado1 and self.__disponibleDado2:
+        #     if not self.estaEnCasa(sender):
+        #         if self.puedeMover(sender, self.__dado1 + self.__dado2):
+        #             menu.addAction(actionDado12)
+        #             count += 1
+
         if count > 0:
             pos = QPoint(sender.x() + sender.width(), sender.y())
             actionR = menu.exec_(self.mapToGlobal(pos))
-            if actionR == actionD1:
+            if actionR == actionDado1:
                 return 1
-            elif actionR == actionD2:
+            elif actionR == actionDado2:
                 return 2
-            elif actionR == actionD12:
+            elif actionR == actionDado12:
                 return 3
         return 0
         
@@ -314,13 +335,13 @@ class Ventana(QMainWindow):
         self.ui.listHistorial.addItem(QListWidgetItem(self.__icons[self.__turno], f'{self.__names[self.__turno]} tira los dados y saca {s1}:{s2}.'))
         self.ui.listHistorial.setCurrentRow(self.ui.listHistorial.count() - 1)
         if not self.puedeJugar() or (self.__dado1 == self.__dado2 and self.__cuentaDoble >= 2):
-            if s1 != s2:
-                self.showWarning('Sin movimientos', 'Has perdido el turno porque no tienes movimientos.\n\nSugerencias:\n- Para sacar una ficha necesitas un 5 en un dado.')
-            else:
-                if self.__cuentaDoble >= 2:
-                    self.showCritical('Mala suerte', 'Has sacado pareja 3 veces seguidas.\nTu ficha más adelantada será devuelta a casa.')
-                else:
-                    self.showWarning('Sin movimientos', 'No tienes movimientos disponibles.\nPuedes volver a tirar los dados porque te cayó una pareja.\n\nSugerencias:\n- Para sacar una ficha necesitas un 5 en un dado.')
+            # if s1 != s2:
+            #     self.showWarning('Sin movimientos', 'Has perdido el turno porque no tienes movimientos.\n\nSugerencias:\n- Para sacar una ficha necesitas un 5 en un dado.')
+            # else:
+            #     if self.__cuentaDoble >= 2:
+            #         self.showCritical('Mala suerte', 'Has sacado pareja 3 veces seguidas.\nTu ficha más adelantada será devuelta a casa.')
+            #     else:
+            #         self.showWarning('Sin movimientos', 'No tienes movimientos disponibles.\nPuedes volver a tirar los dados porque te cayó una pareja.\n\nSugerencias:\n- Para sacar una ficha necesitas un 5 en un dado.')
             self.cambioDeTurno()
 
     def puedeJugar(self):
