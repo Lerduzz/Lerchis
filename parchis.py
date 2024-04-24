@@ -691,3 +691,6 @@ sys.exit(app.exec())
 # TODO: *Implementar la IA.
 # TODO: *Implementar modo online.
 # TODO: La funcion de nueva partida deve devolver las fichas al inicio.
+# TODO: Agregarle las reglas que tengo escritas en el teléfono.
+
+# TODO: Cuando una ficha tenga una sola posible jugada hacerla sin mostrar el menu.
