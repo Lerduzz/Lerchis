@@ -486,3 +486,4 @@ sys.exit(app.exec())
 # TODO: **(Animar el movimiento de las fichas por el tablero)**
 # TODO: Detectar victoria.
 # TODO: Saltarse el turno del que termina (En caso de que se quiera continuar la partida luego de que gane uno).
+# TODO: Si te queda una sola ficha y a esta le queda 6 movimientos o menos para entrar tiras con un solo dado.
