@@ -388,6 +388,15 @@ class Ventana(QMainWindow):
                                         self.ui.checkMeta.setChecked(True)
         if not self.puedeJugar():
             self.cambioDeTurno()
+        else:
+            if self.ui.checkDado1.isEnabled():
+                self.ui.checkDado1.setChecked(True)
+            if self.ui.checkDado2.isEnabled():
+                self.ui.checkDado2.setChecked(True)
+            if self.ui.checkMeta.isEnabled():
+                self.ui.checkMeta.setChecked(True)
+            if self.ui.checkMata.isEnabled():
+                self.ui.checkMata.setChecked(True)
 
     def salirDeCasa(self, ficha):
         pos = 0
@@ -504,4 +513,3 @@ sys.exit(app.exec())
 # TODO: Implementar modo online.
 # TODO: Mejorar la interfaz de nueva partida para que se pueda elegir de manera individual si un jugador va a ser LOCAL, ONLINE, IA, INACTIVO.
 # TODO: Cuando se tiene marcado salir + caminar y se mata al salir, el caminar se va automaticamente a las 20 casillas del matar.
-# TODO: Al jugar menos del total (Ej.: un solo dado) el resto de movimientos se deben seleccionar luego de mover.
