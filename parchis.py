@@ -119,10 +119,10 @@ class Ventana(QMainWindow):
 
         iconD1 = QIcon()
         iconD1.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado1}.png"), QIcon.Normal, QIcon.Off)
-        actionD1 = QAction(iconD1, f'({self.__dado1}) Primer dado.')
+        actionD1 = QAction(iconD1, 'Primer dado')
         if self.__disponibleDado1:
-            if self.estaEnCasa(sender) and self.puedeSalir():
-                if self.__dado1 == 5:
+            if self.estaEnCasa(sender):
+                if self.__dado1 == 5 and self.puedeSalir():
                     menu.addAction(actionD1)
                     count += 1
             else:
@@ -132,15 +132,24 @@ class Ventana(QMainWindow):
         
         iconD2 = QIcon()
         iconD2.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado2}.png"), QIcon.Normal, QIcon.Off)
-        actionD2 = QAction(iconD2, f'({self.__dado2}) Segundo dado.')
+        actionD2 = QAction(iconD2, 'Segundo dado')
         if self.__disponibleDado2:
-            if self.estaEnCasa(sender) and self.puedeSalir():
-                if self.__dado2 == 5:
+            if self.estaEnCasa(sender):
+                if self.__dado2 == 5 and self.puedeSalir():
                     menu.addAction(actionD2)
                     count += 1
             else:
                 if self.puedeMover(sender, self.__dado2):
                     menu.addAction(actionD2)
+                    count += 1
+
+        iconD12 = QIcon()
+        iconD12.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{self.__dado1 + self.__dado2}.png"), QIcon.Normal, QIcon.Off)
+        actionD12 = QAction(iconD12, 'Ambos dados')
+        if self.__disponibleDado1 and self.__disponibleDado2:
+            if not self.estaEnCasa(sender):
+                if self.puedeMover(sender, self.__dado1 + self.__dado2):
+                    menu.addAction(actionD12)
                     count += 1
         
         if count > 0:
@@ -150,6 +159,8 @@ class Ventana(QMainWindow):
                 return 1
             elif actionR == actionD2:
                 return 2
+            elif actionR == actionD12:
+                return 3
         return 0
         
 
@@ -436,10 +447,10 @@ class Ventana(QMainWindow):
                 total = 0
                 usadoDado1 = False
                 usadoDado2 = False
-                if self.__disponibleDado1 and menuResp == 1:
+                if self.__disponibleDado1 and (menuResp == 1 or menuResp == 3):
                     total += self.__dado1
                     usadoDado1 = True
-                if self.__disponibleDado2 and menuResp == 2:
+                if self.__disponibleDado2 and (menuResp == 2 or menuResp == 3):
                     total += self.__dado2
                     usadoDado2 = True
                 # if self.ui.checkMeta.isChecked():
