@@ -387,17 +387,14 @@ class Ventana(QMainWindow):
             self.cambioDeTurno()
 
     def salirDeCasa(self, ficha):
-        # - Determinar el origen de la ficha que va a salir.
         pos = 0
         for i in range(4):
             if ficha == self.__casas[self.__turno][i]:
                 pos = i
                 break
-        # - Verificar si la salida esta llena.
         s1 = self.__rutas[self.__turno][0][0]
         s2 = self.__rutas[self.__turno][0][1]
         if s1 != None and s2 != None:
-            # - Matar las que no sean mias.
             if s1 != None and not self.esMia(s1):
                 if self.matarFicha(s1):
                     self.ui.checkMata.setEnabled(True)

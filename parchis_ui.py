@@ -231,7 +231,7 @@ class Ui_VentanaJuego(object):
 
     def retranslateUi(self, VentanaJuego):
         _translate = QtCore.QCoreApplication.translate
-        VentanaJuego.setWindowTitle(_translate("VentanaJuego", "Juego de Parchís"))
+        VentanaJuego.setWindowTitle(_translate("VentanaJuego", "Juego de Parchis | Creado por Lerduzz (https://youtube.com/@lerduzz) | v0.6.5"))
         self.cajaPartida.setTitle(_translate("VentanaJuego", "Opciones"))
         self.numJugadores.setItemText(0, _translate("VentanaJuego", "Dos jugadores"))
         self.numJugadores.setItemText(1, _translate("VentanaJuego", "Tres jugadores"))

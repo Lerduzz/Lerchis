@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Juego de Parchís</string>
+   <string>Juego de Parchis | Creado por Lerduzz (https://youtube.com/@lerduzz) | v0.6.5</string>
   </property>
   <property name="windowIcon">
    <iconset resource="parchis.qrc">
