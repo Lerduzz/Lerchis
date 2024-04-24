@@ -383,6 +383,9 @@ class Ventana(QMainWindow):
                                             if self.matarFicha(fM):
                                                 self.ui.checkMata.setEnabled(True)
                                                 self.ui.checkMata.setChecked(True)
+                                    if posI + total == len(self.__rutas[self.__turno]) - 1:
+                                        self.ui.checkMeta.setEnabled(True)
+                                        self.ui.checkMeta.setChecked(True)
         if not self.puedeJugar():
             self.cambioDeTurno()
 
@@ -473,9 +476,6 @@ class Ventana(QMainWindow):
         temp = hasta[iH][jH]
         hasta[iH][jH] = desde[iD][jD]
         desde[iD][jD] = temp
-        if iH == len(self.__rutas[self.__turno]) - 1:
-            self.ui.checkMeta.setEnabled(True)
-            self.ui.checkMeta.setChecked(True)
         return True
 
     def showCritical(self, title, text):
