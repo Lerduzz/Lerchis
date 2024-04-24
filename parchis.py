@@ -121,7 +121,7 @@ class Ventana(QMainWindow):
         iconD1.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado1}.png"), QIcon.Normal, QIcon.Off)
         actionD1 = QAction(iconD1, f'({self.__dado1}) Primer dado.')
         if self.__disponibleDado1:
-            if self.estaEnCasa(sender):
+            if self.estaEnCasa(sender) and self.puedeSalir():
                 if self.__dado1 == 5:
                     menu.addAction(actionD1)
                     count += 1
@@ -134,7 +134,7 @@ class Ventana(QMainWindow):
         iconD2.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado2}.png"), QIcon.Normal, QIcon.Off)
         actionD2 = QAction(iconD2, f'({self.__dado2}) Segundo dado.')
         if self.__disponibleDado2:
-            if self.estaEnCasa(sender):
+            if self.estaEnCasa(sender) and self.puedeSalir():
                 if self.__dado2 == 5:
                     menu.addAction(actionD2)
                     count += 1
@@ -147,11 +147,10 @@ class Ventana(QMainWindow):
             pos = QPoint(sender.x() + sender.width(), sender.y())
             actionR = menu.exec_(self.mapToGlobal(pos))
             if actionR == actionD1:
-                print('Seleccionado dado 1.')
+                return 1
             elif actionR == actionD2:
-                print('Seleccionado dado 2.')
-            else:
-                print('Seleccionada otra cosa.')
+                return 2
+        return 0
         
 
     def resizeAll(self):
@@ -354,6 +353,11 @@ class Ventana(QMainWindow):
                 return True
         return False
 
+    def puedeSalir(self):
+        s1 = self.__rutas[self.__turno][0][0]
+        s2 = self.__rutas[self.__turno][0][1]
+        return False if s1 != None and s2 != None and self.esMia(s1) and self.esMia(s2) else True
+
     def hayPuenteEnMedio(self, desde, hasta):
         for i in range(len(self.__bridges)):
             pos = self.__bridges[i]
@@ -412,19 +416,19 @@ class Ventana(QMainWindow):
         return False
 
     def jugarFicha(self):
-        self.abrirMenu(self.sender())
         # TODO: No dejar jugar si la partida no ha iniciado o si no ha girado los dados.
         if self.esMia(self.sender()):
+            menuRes = self.abrirMenu(self.sender())
             mover = True
             if self.estaEnCasa(self.sender()):
                 salio = False
-                if self.ui.checkDado1.isChecked():
+                if menuRes == 1:
                     if self.__dado1 == 5:
                         if self.salirDeCasa(self.sender()):
                             self.ui.checkDado1.setChecked(False)
                             self.ui.checkDado1.setEnabled(False)
                             salio = True
-                if not salio and self.ui.checkDado2.isChecked():
+                elif menuRes == 2:
                     if self.__dado2 == 5:
                         if self.salirDeCasa(self.sender()):
                             self.ui.checkDado2.setChecked(False)
@@ -435,14 +439,14 @@ class Ventana(QMainWindow):
             if mover:
                 movio = False
                 total = 0
-                if self.ui.checkDado1.isChecked():
+                if menuRes == 1:
                     total += self.__dado1
-                if self.ui.checkDado2.isChecked():
+                elif menuRes == 2:
                     total += self.__dado2
-                if self.ui.checkMeta.isChecked():
-                    total += 10
-                if self.ui.checkMata.isChecked():
-                    total += 20
+                # if self.ui.checkMeta.isChecked():
+                #     total += 10
+                # if self.ui.checkMata.isChecked():
+                #     total += 20
                 if total > 0:
                     posI, posJ = self.obtenerPosRuta(self.sender())
                     if posI + total < len(self.__rutas[self.__turno]):
