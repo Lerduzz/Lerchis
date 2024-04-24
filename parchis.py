@@ -125,11 +125,11 @@ class Ventana(QMainWindow):
         actionDado2 = QAction(iconDado2, 'Segundo dado')
         # BONUS 1
         iconBonus1 = QIcon()
-        iconBonus1.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado1}.png"), QIcon.Normal, QIcon.Off)
+        iconBonus1.addPixmap(QPixmap(f":/dados/dado{self.__turno}s10.png"), QIcon.Normal, QIcon.Off)
         actionBonus1 = QAction(iconBonus1, 'Bonus de llegar')
         # BONUS 2
         iconBonus2 = QIcon()
-        iconBonus2.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado1}.png"), QIcon.Normal, QIcon.Off)
+        iconBonus2.addPixmap(QPixmap(f":/dados/dado{self.__turno}s20.png"), QIcon.Normal, QIcon.Off)
         actionBonus2 = QAction(iconBonus2, 'Bonus de matar')
 
         if self.__disponibleDado1:
@@ -162,15 +162,6 @@ class Ventana(QMainWindow):
                 menu.addAction(actionDado2)
                 count += 1
 
-        # iconDado12 = QIcon()
-        # iconDado12.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{self.__dado1 + self.__dado2}.png"), QIcon.Normal, QIcon.Off)
-        # actionDado12 = QAction(iconDado12, 'Ambos dados')
-        # if self.__disponibleDado1 and self.__disponibleDado2:
-        #     if not self.estaEnCasa(sender):
-        #         if self.puedeMover(sender, self.__dado1 + self.__dado2):
-        #             menu.addAction(actionDado12)
-        #             count += 1
-
         if count > 0:
             pos = QPoint(sender.x() + sender.width(), sender.y())
             actionR = menu.exec_(self.mapToGlobal(pos))
@@ -178,8 +169,10 @@ class Ventana(QMainWindow):
                 return 1
             elif actionR == actionDado2:
                 return 2
-            elif actionR == actionDado12:
+            elif actionR == actionBonus1:
                 return 3
+            elif actionR == actionBonus2:
+                return 4
         return 0
         
 
@@ -464,16 +457,16 @@ class Ventana(QMainWindow):
             usadoDado2 = False
             usadoBonus1 = False
             usadoBonus2 = False
-            if self.__disponibleDado1 and (menuResp == 1 or menuResp == 3):
+            if self.__disponibleDado1 and menuResp == 1:
                 total += self.__dado1
                 usadoDado1 = True
-            if self.__disponibleDado2 and (menuResp == 2 or menuResp == 3):
+            if self.__disponibleDado2 and menuResp == 2:
                 total += self.__dado2
                 usadoDado2 = True
-            if self.__disponibleBonusLlegar:
+            if self.__disponibleBonusLlegar and menuResp == 3:
                 total += 10
                 usadoBonus1 = True
-            if self.__disponibleBonusMatar:
+            if self.__disponibleBonusMatar and menuResp == 4:
                 total += 20
                 usadoBonus2 = True
             if total > 0:
