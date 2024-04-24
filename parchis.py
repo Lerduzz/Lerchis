@@ -503,3 +503,6 @@ sys.exit(app.exec())
 # TODO: Detectar victoria.
 # TODO: Saltarse el turno del que termina (En caso de que se quiera continuar la partida luego de que gane uno).
 # TODO: Si te queda una sola ficha y a esta le queda 6 movimientos o menos para entrar tiras con un solo dado.
+# TODO: Implementar la IA.
+# TODO: Implementar modo online.
+# TODO: Mejorar la interfaz de nueva partida para que se pueda elegir de manera individual si un jugador va a ser LOCAL, ONLINE, IA, INACTIVO.
