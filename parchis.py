@@ -503,3 +503,5 @@ sys.exit(app.exec())
 # TODO: Implementar la IA.
 # TODO: Implementar modo online.
 # TODO: Mejorar la interfaz de nueva partida para que se pueda elegir de manera individual si un jugador va a ser LOCAL, ONLINE, IA, INACTIVO.
+# TODO: Cuando se tiene marcado salir + caminar y se mata al salir, el caminar se va automaticamente a las 20 casillas del matar.
+# TODO: Al jugar menos del total (Ej.: un solo dado) el resto de movimientos se deben seleccionar luego de mover.
