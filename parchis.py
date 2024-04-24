@@ -101,6 +101,12 @@ class Ventana(QMainWindow):
         self.__icons[2].addPixmap(QPixmap(":/fichas/ficha2.png"), QIcon.Normal, QIcon.Off)
         self.__icons[3].addPixmap(QPixmap(":/fichas/ficha3.png"), QIcon.Normal, QIcon.Off)
         self.__names = ['Jugador rojo','Jugador verde','Jugador azul','Jugador naranja']
+        # VARIABLES DE PRUEBA PARA MENU CONTEXTUAL.
+        self.__disponibleDado1 = True
+        self.__disponibleDado2 = True
+        self.__disponibleBonusMatar = True
+        self.__disponibleBonusLlegar = True
+        # ----------------------------------------
 
     def resizeEvent(self, e: QResizeEvent) -> None:
         super().resizeEvent(e)
@@ -108,24 +114,44 @@ class Ventana(QMainWindow):
         self.relocateAll()
 
     def abrirMenu(self, sender):
-        # El menu debe tener las opciones de movimiento validas para la ficha.
         menu = QMenu(self)
+        count = 0
+
         iconD1 = QIcon()
-        iconD2 = QIcon()
         iconD1.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado1}.png"), QIcon.Normal, QIcon.Off)
-        iconD2.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado2}.png"), QIcon.Normal, QIcon.Off)
         actionD1 = QAction(iconD1, f'({self.__dado1}) Primer dado.')
+        if self.__disponibleDado1:
+            if self.estaEnCasa(sender):
+                if self.__dado1 == 5:
+                    menu.addAction(actionD1)
+                    count += 1
+            else:
+                if self.puedeMover(sender, self.__dado1):
+                    menu.addAction(actionD1)
+                    count += 1
+        
+        iconD2 = QIcon()
+        iconD2.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado2}.png"), QIcon.Normal, QIcon.Off)
         actionD2 = QAction(iconD2, f'({self.__dado2}) Segundo dado.')
-        menu.addAction(actionD1)
-        menu.addAction(actionD2)
-        pos = QPoint(sender.x() + sender.width(), sender.y())
-        actionR = menu.exec_(self.mapToGlobal(pos))
-        if actionR == actionD1:
-            print('Seleccionado dado 1.')
-        elif actionR == actionD2:
-            print('Seleccionado dado 2.')
-        else:
-            print('Seleccionada otra cosa.')
+        if self.__disponibleDado2:
+            if self.estaEnCasa(sender):
+                if self.__dado2 == 5:
+                    menu.addAction(actionD2)
+                    count += 1
+            else:
+                if self.puedeMover(sender, self.__dado2):
+                    menu.addAction(actionD2)
+                    count += 1
+        
+        if count > 0:
+            pos = QPoint(sender.x() + sender.width(), sender.y())
+            actionR = menu.exec_(self.mapToGlobal(pos))
+            if actionR == actionD1:
+                print('Seleccionado dado 1.')
+            elif actionR == actionD2:
+                print('Seleccionado dado 2.')
+            else:
+                print('Seleccionada otra cosa.')
         
 
     def resizeAll(self):
@@ -386,7 +412,7 @@ class Ventana(QMainWindow):
         return False
 
     def jugarFicha(self):
-        # self.abrirMenu(self.sender())
+        self.abrirMenu(self.sender())
         # TODO: No dejar jugar si la partida no ha iniciado o si no ha girado los dados.
         if self.esMia(self.sender()):
             mover = True
