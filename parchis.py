@@ -231,7 +231,10 @@ class Ventana(QMainWindow):
             if s1 != s2:
                 self.showWarning('Sin movimientos', 'Has perdido el turno porque no tienes movimientos.\n\nSugerencias:\n- Para sacar una ficha necesitas un 5 en un dado.')
             else:
-                self.showWarning('Sin movimientos', 'No tienes movimientos disponibles.\nPuedes volver a tirar los dados porque te cayó una pareja.\n\nSugerencias:\n- Para sacar una ficha necesitas un 5 en un dado.')
+                if self.__cuentaDoble >= 2:
+                    self.showCritical('Mala suerte', 'Has sacado pareja 3 veces seguidas.\nTu ficha más adelantada será devuelta a casa.')
+                else:
+                    self.showWarning('Sin movimientos', 'No tienes movimientos disponibles.\nPuedes volver a tirar los dados porque te cayó una pareja.\n\nSugerencias:\n- Para sacar una ficha necesitas un 5 en un dado.')
             self.cambioDeTurno()
 
     def puedeJugar(self):
@@ -382,10 +385,8 @@ class Ventana(QMainWindow):
                                         if j != jC and fM != None and not posI + total in self.__excluir and not self.esMia(fM):
                                             if self.matarFicha(fM):
                                                 self.ui.checkMata.setEnabled(True)
-                                                self.ui.checkMata.setChecked(True)
                                     if posI + total == len(self.__rutas[self.__turno]) - 1:
                                         self.ui.checkMeta.setEnabled(True)
-                                        self.ui.checkMeta.setChecked(True)
         if not self.puedeJugar():
             self.cambioDeTurno()
         else:
@@ -410,11 +411,9 @@ class Ventana(QMainWindow):
             if s1 != None and not self.esMia(s1):
                 if self.matarFicha(s1):
                     self.ui.checkMata.setEnabled(True)
-                    self.ui.checkMata.setChecked(True)
             if s2 != None and not self.esMia(s2):
                 if self.matarFicha(s2):
                     self.ui.checkMata.setEnabled(True)
-                    self.ui.checkMata.setChecked(True)
         s1 = self.__rutas[self.__turno][0][0]
         s2 = self.__rutas[self.__turno][0][1]
         if s1 == None:
