@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1245</width>
+    <width>1279</width>
     <height>700</height>
    </rect>
   </property>
@@ -403,275 +403,33 @@
     </item>
     <item>
      <widget class="QWidget" name="cajaOpciones" native="true">
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QGroupBox" name="cajaPartida">
-         <property name="title">
-          <string>Opciones</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="4" column="2">
-           <widget class="QPushButton" name="btnNuevaPartida">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Nueva partida</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QCheckBox" name="checkPlayer2">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="parchis.qrc">
-              <normaloff>:/fichas/ficha2.png</normaloff>:/fichas/ficha2.png</iconset>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QComboBox" name="comboPlayer2">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <item>
-             <property name="text">
-              <string>Jugador local</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Inteligencia artificial</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Jugador por red</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="checkPlayer1">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="parchis.qrc">
-              <normaloff>:/fichas/ficha1.png</normaloff>:/fichas/ficha1.png</iconset>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QComboBox" name="comboPlayer0">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <item>
-             <property name="text">
-              <string>Jugador local</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Inteligencia artificial</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Jugador por red</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="checkPlayer0">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="parchis.qrc">
-              <normaloff>:/fichas/ficha0.png</normaloff>:/fichas/ficha0.png</iconset>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLineEdit" name="txtNamePlayer2">
-            <property name="text">
-             <string>Jugador azul</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="2">
-           <widget class="QComboBox" name="comboPlayer3">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <item>
-             <property name="text">
-              <string>Jugador local</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Inteligencia artificial</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Jugador por red</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="txtNamePlayer0">
-            <property name="text">
-             <string>Jugador rojo</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="txtNamePlayer1">
-            <property name="text">
-             <string>Jugador verde</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="txtNamePlayer3">
-            <property name="text">
-             <string>Jugador naranja</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QComboBox" name="comboPlayer1">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <item>
-             <property name="text">
-              <string>Jugador local</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Inteligencia artificial</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Jugador por red</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QCheckBox" name="checkPlayer3">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="parchis.qrc">
-              <normaloff>:/fichas/ficha3.png</normaloff>:/fichas/ficha3.png</iconset>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="2">
-           <widget class="QPushButton" name="btnTerminarPartida">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Terminar partida</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
+      <layout class="QVBoxLayout" name="layoutOpciones">
+       <property name="spacing">
+        <number>5</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QGroupBox" name="cajaJugar">
          <property name="title">
           <string>Jugar</string>
          </property>
          <layout class="QGridLayout" name="layoutJugar">
-          <item row="0" column="2">
-           <widget class="QWidget" name="cajaBonus" native="true">
-            <layout class="QVBoxLayout" name="verticalLayout">
-             <item>
-              <widget class="QCheckBox" name="checkDado1">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>(0) Primer dado.</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="checkDado2">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>(0) Segundo dado.</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="checkMeta">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>(10) Llegar a meta.</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="checkMata">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>(20) Retroceder ficha.</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btnTirar">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>Tirar</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
           <item row="0" column="0">
            <widget class="QToolButton" name="dado1">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="minimumSize">
              <size>
               <width>150</width>
@@ -694,6 +452,9 @@
           </item>
           <item row="0" column="1">
            <widget class="QToolButton" name="dado2">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="minimumSize">
              <size>
               <width>150</width>
@@ -712,6 +473,91 @@
             <property name="text">
              <string/>
             </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QWidget" name="cajaBonus" native="true">
+            <layout class="QGridLayout" name="gridLayout_3">
+             <item row="0" column="0">
+              <widget class="QCheckBox" name="checkPlayer0">
+               <property name="text">
+                <string>Rojo</string>
+               </property>
+               <property name="icon">
+                <iconset resource="parchis.qrc">
+                 <normaloff>:/fichas/ficha0.png</normaloff>:/fichas/ficha0.png</iconset>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QPushButton" name="btnNuevaPartida">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Nueva partida</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QCheckBox" name="checkPlayer3">
+               <property name="text">
+                <string>Naranja</string>
+               </property>
+               <property name="icon">
+                <iconset resource="parchis.qrc">
+                 <normaloff>:/fichas/ficha3.png</normaloff>:/fichas/ficha3.png</iconset>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QCheckBox" name="checkPlayer1">
+               <property name="text">
+                <string>Verde</string>
+               </property>
+               <property name="icon">
+                <iconset resource="parchis.qrc">
+                 <normaloff>:/fichas/ficha1.png</normaloff>:/fichas/ficha1.png</iconset>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QCheckBox" name="checkPlayer2">
+               <property name="text">
+                <string>Azul</string>
+               </property>
+               <property name="icon">
+                <iconset resource="parchis.qrc">
+                 <normaloff>:/fichas/ficha2.png</normaloff>:/fichas/ficha2.png</iconset>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QPushButton" name="btnTerminarPartida">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>Terminar partida</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>

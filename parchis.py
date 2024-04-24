@@ -58,7 +58,6 @@ class Ventana(QMainWindow):
         super(Ventana, self).__init__()
         self.ui = Ui_VentanaJuego() 
         self.ui.setupUi(self)
-        self.ui.btnTirar.clicked.connect(self.tirarDados)
         self.ui.dado1.clicked.connect(self.tirarDados)
         self.ui.dado2.clicked.connect(self.tirarDados)
         self.ui.btnNuevaPartida.clicked.connect(self.nuevaPartida)
@@ -288,7 +287,8 @@ class Ventana(QMainWindow):
         return (xR, yR)
 
     def tirarDados(self):
-        self.ui.btnTirar.setEnabled(False)
+        self.ui.dado1.setEnabled(False)
+        self.ui.dado2.setEnabled(False)
         self.__dadosThread = QThread()
         self.__dadosWorker = DadosWorker(self.__dado1, self.__dado2)
         self.__dadosWorker.moveToThread(self.__dadosThread)
@@ -527,7 +527,8 @@ class Ventana(QMainWindow):
             self.__cuentaDoble = 0
             self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
         self.mostrarDados(0, 0)
-        self.ui.btnTirar.setEnabled(True)
+        self.ui.dado1.setEnabled(True)
+        self.ui.dado2.setEnabled(True)
         self.__dadosTirados = False
 
     def virarMasAdelantada(self):
@@ -540,35 +541,32 @@ class Ventana(QMainWindow):
         return False
         
     def nuevaPartida(self):
+        self.ui.btnNuevaPartida.setEnabled(False)
         self.__dado1 = 0
         self.__dado2 = 0
         self.__turno = 0
         self.__cuentaDoble = 0
         self.__jugando = True
-        self.ui.btnTirar.setEnabled(True)
-        self.ui.btnNuevaPartida.setEnabled(False)
+        self.__dadosTirados = False
+        self.ui.dado1.setEnabled(True)
+        self.ui.dado2.setEnabled(True)        
         self.ui.checkPlayer0.setEnabled(False)
         self.ui.checkPlayer1.setEnabled(False)
         self.ui.checkPlayer2.setEnabled(False)
         self.ui.checkPlayer3.setEnabled(False)
-        self.ui.txtNamePlayer0.setEnabled(False)
-        self.ui.txtNamePlayer1.setEnabled(False)
-        self.ui.txtNamePlayer2.setEnabled(False)
-        self.ui.txtNamePlayer3.setEnabled(False)
         self.ui.btnTerminarPartida.setEnabled(True)
 
     def terminarPartida(self):        
         self.ui.btnTerminarPartida.setEnabled(False)
-        self.ui.btnTirar.setEnabled(False)
-        self.ui.btnNuevaPartida.setEnabled(True)
+        self.__jugando = False
+        self.__dadosTirados = False
+        self.ui.dado1.setEnabled(False)
+        self.ui.dado2.setEnabled(False)
         self.ui.checkPlayer0.setEnabled(True)
         self.ui.checkPlayer1.setEnabled(True)
         self.ui.checkPlayer2.setEnabled(True)
         self.ui.checkPlayer3.setEnabled(True)
-        self.ui.txtNamePlayer0.setEnabled(True)
-        self.ui.txtNamePlayer1.setEnabled(True)
-        self.ui.txtNamePlayer2.setEnabled(True)
-        self.ui.txtNamePlayer3.setEnabled(True)
+        self.ui.btnNuevaPartida.setEnabled(True)
 
     def moverFicha(self, desde, iD, jD, hasta, iH, jH):
         if desde[iD][jD] == None or hasta[iH][jH] != None:
