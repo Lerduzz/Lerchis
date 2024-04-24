@@ -126,37 +126,42 @@ class Ventana(QMainWindow):
         # BONUS 1
         iconBonus1 = QIcon()
         iconBonus1.addPixmap(QPixmap(f":/dados/dado{self.__turno}s10.png"), QIcon.Normal, QIcon.Off)
-        actionBonus1 = QAction(iconBonus1, 'Bonus de llegar')
+        actionBonus1 = QAction(iconBonus1, 'Bono por llegar')
         # BONUS 2
         iconBonus2 = QIcon()
         iconBonus2.addPixmap(QPixmap(f":/dados/dado{self.__turno}s20.png"), QIcon.Normal, QIcon.Off)
-        actionBonus2 = QAction(iconBonus2, 'Bonus de matar')
+        actionBonus2 = QAction(iconBonus2, 'Bono por matar')
 
         # DADO 1 + DADO 2
         iconDado1Dado2 = QIcon()
         iconDado1Dado2.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{self.__dado1 + self.__dado2}.png"), QIcon.Normal, QIcon.Off)
-        actionDado1Dado2 = QAction(iconDado1Dado2, 'Ambos dados')
+        actionDado1Dado2 = QAction(iconDado1Dado2, 'Todos los dados')
 
         # DADO 1 + BONUS 1
         iconDado1Bonus1 = QIcon()
         iconDado1Bonus1.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{self.__dado1 + 10}.png"), QIcon.Normal, QIcon.Off)
-        actionDado1Bonus1 = QAction(iconDado1Bonus1, 'Primer dado + Llegar')
+        actionDado1Bonus1 = QAction(iconDado1Bonus1, 'Primer dado + Bono por llegar')
         
         # DADO 1 + BONUS 2
         iconDado1Bonus2 = QIcon()
         iconDado1Bonus2.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{self.__dado1 + 20}.png"), QIcon.Normal, QIcon.Off)
-        actionDado1Bonus2 = QAction(iconDado1Bonus2, 'Primer dado + Matar')
+        actionDado1Bonus2 = QAction(iconDado1Bonus2, 'Primer dado + Bono por matar')
 
         # DADO 2 + BONUS 1
         iconDado2Bonus1 = QIcon()
         iconDado2Bonus1.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{self.__dado2 + 10}.png"), QIcon.Normal, QIcon.Off)
-        actionDado2Bonus1 = QAction(iconDado2Bonus1, 'Segundo dado + Llegar')
+        actionDado2Bonus1 = QAction(iconDado2Bonus1, 'Segundo dado + Bono por llegar')
         
         # DADO 2 + BONUS 2
         iconDado2Bonus2 = QIcon()
         iconDado2Bonus2.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{self.__dado2 + 20}.png"), QIcon.Normal, QIcon.Off)
-        actionDado2Bonus2 = QAction(iconDado2Bonus2, 'Segundo dado + Matar')
+        actionDado2Bonus2 = QAction(iconDado2Bonus2, 'Segundo dado + Bono por matar')
         
+        # BONUS 1 + BONUS 2
+        iconBonus1Bonus2 = QIcon()
+        iconBonus1Bonus2.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{30}.png"), QIcon.Normal, QIcon.Off)
+        actionBonus1Bonus2 = QAction(iconBonus1Bonus2, 'Todos los bonos')
+
         if self.__disponibleDado1:
             if self.estaEnCasa(sender):
                 if self.__dado1 == 5 and self.puedeSalir():
@@ -216,6 +221,11 @@ class Ventana(QMainWindow):
                     menu.addAction(actionDado2Bonus2)
                     count += 1
 
+        if self.__disponibleBonusLlegar and self.__disponibleBonusMatar:
+            if not self.estaEnCasa(sender):
+                if self.puedeMover(sender, 30):
+                    menu.addAction(actionBonus1Bonus2)
+
         if count > 0:
             pos = QPoint(sender.x() + sender.width(), sender.y())
             actionR = menu.exec_(self.mapToGlobal(pos))
@@ -237,6 +247,8 @@ class Ventana(QMainWindow):
                 return [2, 3]
             elif actionR == actionDado2Bonus2:
                 return [2, 4]
+            elif actionR == actionBonus1Bonus2:
+                return [3, 4]
         return []
         
 
