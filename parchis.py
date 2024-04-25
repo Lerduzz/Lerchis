@@ -629,6 +629,7 @@ class Ventana(QMainWindow):
 
     def cambioDeTurno(self):
         if not self.__jugando:
+            self.onPartidaTerminada()
             return
         self.insertarMensaje(">>>========>> TURNO TERMINADO")
         self.__cuentaDoble = 0
@@ -724,13 +725,17 @@ class Ventana(QMainWindow):
         self.__dadosTirados = False
         self.ui.dado1.setEnabled(False)
         self.ui.dado2.setEnabled(False)
+        if self.__contandoTurno:
+            self.__turnoWorker.faster()
+        else:
+            self.onPartidaTerminada()
+
+    def onPartidaTerminada(self):
         self.ui.checkPlayer0.setEnabled(True)
         self.ui.checkPlayer1.setEnabled(True)
         self.ui.checkPlayer2.setEnabled(True)
         self.ui.checkPlayer3.setEnabled(True)
         self.ui.btnNuevaPartida.setEnabled(True)
-        if self.__contandoTurno:
-            self.__turnoWorker.faster()
 
     def iniciarContadorTurno(self, start):
         if not self.__contandoTurno:
