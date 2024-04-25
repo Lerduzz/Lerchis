@@ -276,7 +276,9 @@ class Ventana(QMainWindow):
                                 self.__metas[i][j][k].move(xR, yR)
 
     def tirarDados(self):
-        enJuego = 4 - Utils.contarFichas(self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1])
+        enJuego = 4 - Utils.contarFichas(
+            self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1]
+        )
         dadoSolo = 0
         if enJuego == 1:
             rectaFinal = False
@@ -635,28 +637,36 @@ class Ventana(QMainWindow):
         ]
         terminar = False
         if True in estados:
-            enMeta = Utils.contarFichas(self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1])
+            enMeta = Utils.contarFichas(
+                self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1]
+            )
             numSaltos = 0
             while not estados[self.__turno] or enMeta == 4:
                 self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
-                enMeta = Utils.contarFichas(self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1])
+                enMeta = Utils.contarFichas(
+                    self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1]
+                )
                 numSaltos += 1
                 if numSaltos >= 4:
                     terminar = True
                     break
         else:
-            enMeta = Utils.contarFichas(self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1])
+            enMeta = Utils.contarFichas(
+                self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1]
+            )
             numSaltos = 0
             while enMeta == 4:
                 self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
-                enMeta = Utils.contarFichas(self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1])
+                enMeta = Utils.contarFichas(
+                    self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1]
+                )
                 numSaltos += 1
                 if numSaltos >= 4:
                     terminar = True
                     break
         if terminar:
             self.terminarPartida()
-        else: 
+        else:
             self.prepararDados()
             self.__repetirTirada = False
             self.__tempThread = self.__turnoThread
