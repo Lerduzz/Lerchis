@@ -708,7 +708,7 @@ class Ventana(QMainWindow):
     def cambioDeTurno(self):
         if not self.__jugando:
             return
-        self.insertarMensaje('=============== Turno terminado ===============')
+        self.insertarMensaje('>>>=====> TURNO TERMINADO <=====<<<')
         self.__cuentaDoble = 0
         self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
         estados = [self.ui.checkPlayer0.isChecked(), self.ui.checkPlayer1.isChecked(), self.ui.checkPlayer2.isChecked(), self.ui.checkPlayer3.isChecked()]
