@@ -1,7 +1,7 @@
 import sys, time, random, qdarkstyle
 from PyQt5.QtCore import QObject, QPoint, QThread, pyqtSignal
-from PyQt5.QtGui import QResizeEvent, QIcon, QPixmap
-from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem, QMenu, QAction
+from PyQt5.QtGui import QResizeEvent, QIcon, QPixmap, QFont
+from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem, QMenu, QAction, QProxyStyle, QStyle
 from parchis_ui import Ui_VentanaJuego
 
 class DadosWorker(QObject):
@@ -90,6 +90,17 @@ class ReactivarWorker(QObject):
         self.finished.emit()
 
 
+class EstiloIconos(QProxyStyle):
+    def __init__(self, size):
+        super().__init__()
+        self.__size = size
+
+    def pixelMetric(self, metric, option = 0, widget = 0):
+        if metric == QStyle.PM_SmallIconSize:
+            return self.__size
+        return super().pixelMetric(metric, option, widget)
+
+
 class Ventana(QMainWindow):
     def __init__(self):
         super(Ventana, self).__init__()
@@ -131,12 +142,12 @@ class Ventana(QMainWindow):
             self.__rutas[i] += self.__metas[i]
         self.__excluir = [0, 6, 10, 14, 20, 24, 28, 34, 38, 42, 48, 52, 53, 54, 55, 56, 57, 58, 59]
         self.__bridges = [0, 14, 28, 42]
+        self.__names = ['ROJO','VERDE','AZUL','NARANJA']
         self.__icons = [QIcon(),QIcon(),QIcon(),QIcon()]
         self.__icons[0].addPixmap(QPixmap(":/fichas/ficha0.png"), QIcon.Normal, QIcon.Off)
         self.__icons[1].addPixmap(QPixmap(":/fichas/ficha1.png"), QIcon.Normal, QIcon.Off)
         self.__icons[2].addPixmap(QPixmap(":/fichas/ficha2.png"), QIcon.Normal, QIcon.Off)
         self.__icons[3].addPixmap(QPixmap(":/fichas/ficha3.png"), QIcon.Normal, QIcon.Off)
-        self.__names = ['Jugador rojo','Jugador verde','Jugador azul','Jugador naranja']
         self.__jugando = False
         self.__dadosTirados = False
         self.__disponibleDado1 = False
@@ -152,37 +163,52 @@ class Ventana(QMainWindow):
 
     def abrirMenu(self, sender):
         menu = QMenu(self)
+        menu.setStyle(EstiloIconos(sender.width()))
         count = 0
         iconDado1 = QIcon()
         iconDado1.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado1}.png"), QIcon.Normal, QIcon.Off)
         actionDado1 = QAction(iconDado1, 'Primer dado')
+        font = QFont()
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        actionDado1.setFont(font)
         iconDado2 = QIcon()
         iconDado2.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado2}.png"), QIcon.Normal, QIcon.Off)
         actionDado2 = QAction(iconDado2, 'Segundo dado')
+        actionDado2.setFont(font)
         iconBonus1 = QIcon()
         iconBonus1.addPixmap(QPixmap(f":/dados/dado{self.__turno}s10.png"), QIcon.Normal, QIcon.Off)
         actionBonus1 = QAction(iconBonus1, 'Bono por llegar')
+        actionBonus1.setFont(font)
         iconBonus2 = QIcon()
         iconBonus2.addPixmap(QPixmap(f":/dados/dado{self.__turno}s20.png"), QIcon.Normal, QIcon.Off)
         actionBonus2 = QAction(iconBonus2, 'Bono por matar')
+        actionBonus2.setFont(font)
         iconDado1Dado2 = QIcon()
         iconDado1Dado2.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{self.__dado1 + self.__dado2}.png"), QIcon.Normal, QIcon.Off)
         actionDado1Dado2 = QAction(iconDado1Dado2, 'Todos los dados')
+        actionDado1Dado2.setFont(font)
         iconDado1Bonus1 = QIcon()
         iconDado1Bonus1.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{self.__dado1 + 10}.png"), QIcon.Normal, QIcon.Off)
         actionDado1Bonus1 = QAction(iconDado1Bonus1, 'Primer dado + Bono por llegar')
+        actionDado1Bonus1.setFont(font)
         iconDado1Bonus2 = QIcon()
         iconDado1Bonus2.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{self.__dado1 + 20}.png"), QIcon.Normal, QIcon.Off)
         actionDado1Bonus2 = QAction(iconDado1Bonus2, 'Primer dado + Bono por matar')
+        actionDado1Bonus2.setFont(font)
         iconDado2Bonus1 = QIcon()
         iconDado2Bonus1.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{self.__dado2 + 10}.png"), QIcon.Normal, QIcon.Off)
         actionDado2Bonus1 = QAction(iconDado2Bonus1, 'Segundo dado + Bono por llegar')
+        actionDado2Bonus1.setFont(font)
         iconDado2Bonus2 = QIcon()
         iconDado2Bonus2.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{self.__dado2 + 20}.png"), QIcon.Normal, QIcon.Off)
         actionDado2Bonus2 = QAction(iconDado2Bonus2, 'Segundo dado + Bono por matar')
+        actionDado2Bonus2.setFont(font)
         iconBonus1Bonus2 = QIcon()
         iconBonus1Bonus2.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{30}.png"), QIcon.Normal, QIcon.Off)
         actionBonus1Bonus2 = QAction(iconBonus1Bonus2, 'Todos los bonos')
+        actionBonus1Bonus2.setFont(font)
         if self.__disponibleDado1:
             if self.estaEnCasa(sender):
                 if self.__dado1 == 5 and self.puedeSalir():
@@ -462,6 +488,7 @@ class Ventana(QMainWindow):
         self.ui.dado2.setStyleSheet(f'border-image: url(:/dados/dado{self.__turno}{s2}.png) 0 0 0 0 stretch stretch;')
 
     def onDadosGirados(self, s1, s2):
+        self.insertarMensaje(f'Tira los dados y saca [{s1}]:[{s2}]')
         self.__dado1 = s1
         self.__dado2 = s2
         self.mostrarDados(s1, s2)
@@ -483,9 +510,11 @@ class Ventana(QMainWindow):
         if not self.puedeJugar():
             if self.__repetirTirada:
                 self.iniciarReactivadorDados()
+                self.insertarMensaje('Sin movimientos disponibles, vuelve a tirar los dados')
             else:
                 if self.__contandoTurno:
                     self.__turnoWorker.faster()
+                self.insertarMensaje('Sin movimientos disponibles, terminando turno')
 
     def puedeJugar(self):
         for i in range(self.__turno * 4, self.__turno * 4 + 4):
@@ -596,13 +625,16 @@ class Ventana(QMainWindow):
                 if self.__disponibleDado1 and 1 in menuResp and self.__dado1 == 5:
                     if self.salirDeCasa(self.sender()):
                         self.__disponibleDado1 = False
+                        self.insertarMensaje('Saca una ficha con el primer dado')
                 elif self.__disponibleDado2 and 2 in menuResp and self.__dado2 == 5:
                     if self.salirDeCasa(self.sender()):
                         self.__disponibleDado2 = False
+                        self.insertarMensaje('Saca una ficha con el segundo dado')
                 elif self.__disponibleDado1 and self.__disponibleDado2 and 1 in menuResp and 2 in menuResp and self.__dado1 + self.__dado2 == 5:
                     if self.salirDeCasa(self.sender()):
                         self.__disponibleDado1 = False
                         self.__disponibleDado2 = False
+                        self.insertarMensaje('Saca una ficha con ambos dados')
         else:
             movio = False
             total = 0
@@ -629,6 +661,8 @@ class Ventana(QMainWindow):
                         if self.__rutas[self.__turno][posI + total][j] == None and not self.hayPuenteEnMedio(posI, posI + total):
                             if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, j):
                                 self.relocateAll()
+                                mFicha = None
+                                llego = False
                                 if usadoDado1:
                                     self.__disponibleDado1 = False
                                 if usadoDado2:
@@ -642,8 +676,18 @@ class Ventana(QMainWindow):
                                     if j != jC and fM != None and not posI + total in self.__excluir and not self.esMia(fM):
                                         if self.matarFicha(fM):
                                             self.__disponibleBonusMatar = True
+                                            mFicha = fM
                                 if posI + total == len(self.__rutas[self.__turno]) - 1:
                                     self.__disponibleBonusLlegar = True
+                                    llego = True
+                                pL = 's' if total > 1 else ''
+                                if mFicha != None:
+                                    oFicha, iFicha = self.obtenerOwnerIndex(mFicha)                                    
+                                    self.insertarMensaje(f'Mata una ficha del jugador [{self.__names[oFicha]}] con {total} paso{pL}')
+                                elif llego:
+                                    self.insertarMensaje(f'Entra en la casilla de meta con {total} paso{pL}')
+                                else:
+                                    self.insertarMensaje(f'Camina un total de {total} paso{pL}')
         if not self.puedeJugar():
             if self.__repetirTirada:
                 self.__repetirTirada = False
@@ -690,6 +734,7 @@ class Ventana(QMainWindow):
     def cambioDeTurno(self):
         if not self.__jugando:
             return
+        self.insertarMensaje('>>>=====> TURNO TERMINADO <=====<<<')
         self.__cuentaDoble = 0
         self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
         estados = [self.ui.checkPlayer0.isChecked(), self.ui.checkPlayer1.isChecked(), self.ui.checkPlayer2.isChecked(), self.ui.checkPlayer3.isChecked()]
@@ -804,6 +849,16 @@ class Ventana(QMainWindow):
         self.__reactivarWorker.finished.connect(self.prepararDados) 
         self.__reactivarThread.start()
 
+    def insertarMensaje(self, msg):
+        self.ui.listHistorial.addItem(
+            QListWidgetItem(self.__icons[self.__turno], f'[{self.__names[self.__turno]}]: {msg}.')
+        )
+        count = self.ui.listHistorial.count()
+        while count > 1024:
+            self.ui.listHistorial.takeItem(0)
+            count = self.ui.listHistorial.count()
+        self.ui.listHistorial.setCurrentRow(count - 1)
+
 
 app = QApplication([])
 app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt5'))
@@ -811,13 +866,12 @@ application = Ventana()
 application.show()
 sys.exit(app.exec())
 
+# TODO: (URGENTE) Puede que haya problema si tienes el menu abierto y se agota el tiempo de tu turno.
 # TODO: Si solo una de tus fichas se puede mover y no hay jugada esrtategica (O sea que puede caminar todas las cantidades individuales y en ninguna come): moverla automaticamente.
 # TODO: Saltarse el turno del que termina (En caso de que se quiera continuar la partida luego de que gane uno).
 # TODO: Si te queda una sola ficha y a esta le queda 6 movimientos o menos para entrar tiras con un solo dado.
 # TODO: La funcion de nueva partida deve devolver las fichas al inicio.
 # TODO: (Informativo) Agregarle las reglas que tengo escritas en el teléfono.
-# TODO: (Informativo) self.ui.listHistorial.addItem(QListWidgetItem(self.__icons[self.__turno], f'{self.__names[self.__turno]} tira los dados y saca {s1}:{s2}.'))
-#                     self.ui.listHistorial.setCurrentRow(self.ui.listHistorial.count() - 1)
 # TODO: (Opcional) Animar el movimiento de las fichas por el tablero.
 # TODO: (Opcional) Detectar victoria.
 # TODO: (Proximamente) Implementar la IA.
