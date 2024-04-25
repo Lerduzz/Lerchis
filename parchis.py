@@ -73,7 +73,21 @@ class TurnoWorker(QObject):
         self.finished.emit(self.__value)
 
     def faster(self):
-        self.__interval = 0.05
+        self.__interval = 0.025
+
+
+class ReactivarWorker(QObject):
+    finished = pyqtSignal()
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        count = 0
+        while count < 5:
+            time.sleep(0.25)
+            count += 1
+        self.finished.emit()
 
 
 class Ventana(QMainWindow):
@@ -495,9 +509,12 @@ class Ventana(QMainWindow):
                 if self.__contandoTurno:
                     self.__turnoWorker.faster()
                 return
+        else:
+            self.__cuentaDoble = 0
+            self.__repetirTirada = False
         if not self.puedeJugar():
             if self.__repetirTirada:
-                pass # TODO: Reactivar los dados.
+                self.iniciarReactivadorDados()
             else:
                 if self.__contandoTurno:
                     self.__turnoWorker.faster()
@@ -663,7 +680,7 @@ class Ventana(QMainWindow):
         if not self.puedeJugar():
             if self.__repetirTirada:
                 self.__repetirTirada = False
-                self.prepararDados()
+                self.iniciarReactivadorDados()
             else:
                 if self.__contandoTurno:
                     self.__turnoWorker.faster()
@@ -808,6 +825,17 @@ class Ventana(QMainWindow):
         self.onContadorTurnoProgress(value)
         self.__contandoTurno = False
         self.cambioDeTurno()
+
+    def iniciarReactivadorDados(self):
+        self.__reactivarThread = QThread()
+        self.__reactivarWorker = ReactivarWorker()
+        self.__reactivarWorker.moveToThread(self.__reactivarThread)
+        self.__reactivarThread.started.connect(self.__reactivarWorker.run)
+        self.__reactivarWorker.finished.connect(self.__reactivarThread.quit)
+        self.__reactivarWorker.finished.connect(self.__reactivarWorker.deleteLater)
+        self.__reactivarThread.finished.connect(self.__reactivarThread.deleteLater)
+        self.__reactivarWorker.finished.connect(self.prepararDados) 
+        self.__reactivarThread.start()
 
     def showCritical(self, title, text):
         QMessageBox.critical(self, title, text)
