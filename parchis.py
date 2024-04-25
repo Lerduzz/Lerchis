@@ -8,6 +8,7 @@ from workers.dados import DadosWorker, ReactivarWorker
 from workers.turno import TurnoWorker
 from utils.utils import EstiloIconos, Utils
 from utils.static import InitStatic, AuxStatic
+from ia.pro import LerchisIA
 
 
 class Ventana(QMainWindow):
@@ -39,6 +40,34 @@ class Ventana(QMainWindow):
         self.__disponibleBonusMatar = False
         self.__disponibleBonusLlegar = False
         self.__contandoTurno = False
+
+        self.__ia = LerchisIA()
+        self.__ia.dado1Usado.connect(self.dado1Usado)
+        self.__ia.dado2Usado.connect(self.dado2Usado)
+        self.__ia.bono1Usado.connect(self.bono1Usado)
+        self.__ia.bono2Usado.connect(self.bono2Usado)
+        self.__ia.terminado.connect(self.haJugado)
+
+    def dado1Usado(self):
+        self.__disponibleDado1 = False
+
+    def dado2Usado(self):
+        self.__disponibleDado2 = False
+
+    def bono1Usado(self):
+        self.__disponibleBonusLlegar = False
+
+    def bono2Usado(self):
+        self.__disponibleBonusMatar = False
+
+    def haJugado(self):
+        if not self.puedeJugar():
+            if self.__repetirTirada:
+                self.__repetirTirada = False
+                self.iniciarReactivadorDados()
+            else:
+                if self.__contandoTurno:
+                    self.__turnoWorker.faster()
 
     def restablecerTablero(self):
         self.__casas = InitStatic.casas(self.ui)
@@ -183,7 +212,7 @@ class Ventana(QMainWindow):
                 return [3, 4]
         return []
 
-    def detectarJugadaAutomatica(self, sender):
+    def cargarJugadasPosibles(self, sender):
         jugadasValidas = []
         if self.__disponibleDado1:
             if self.estaEnCasa(sender):
@@ -232,7 +261,7 @@ class Ventana(QMainWindow):
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, 30):
                     jugadasValidas.append([3, 4])
-        return jugadasValidas[0] if len(jugadasValidas) == 1 else None
+        return jugadasValidas if len(jugadasValidas) > 0 else None
 
     def resizeAll(self):
         h = self.ui.cajaTablero.height()
@@ -294,8 +323,10 @@ class Ventana(QMainWindow):
             if rectaFinal:
                 if self.sender() == self.ui.dado1:
                     dadoSolo = 1
-                if self.sender() == self.ui.dado2:
+                elif self.sender() == self.ui.dado2:
                     dadoSolo = 2
+                else:
+                    dadoSolo = 1
         self.ui.dado1.setEnabled(False)
         self.ui.dado2.setEnabled(False)
         self.__dadosThread = QThread()
@@ -347,6 +378,27 @@ class Ventana(QMainWindow):
                 if self.__contandoTurno:
                     self.__turnoWorker.faster()
                 self.insertarMensaje("Sin movimientos disponibles, terminando turno")
+        else:
+            # TEST IA:
+            d1 = self.__dado1 if self.__disponibleDado1 else 0
+            d2 = self.__dado2 if self.__disponibleDado2 else 0
+            b1 = 10 if self.__disponibleBonusLlegar else 0
+            b2 = 20 if self.__disponibleBonusMatar else 0
+            mias = []
+            for i in range(self.__turno * 4, self.__turno * 4 + 4):
+                mias.append(self.__fichas[i])
+            self.__ia.jugar(
+                d1,
+                d2,
+                b1,
+                b2,
+                mias,
+                self.__casas[self.__turno],
+                self.puedeJugar,
+                self.salirDeCasa,
+                self.cargarJugadasPosibles,
+                self.moverFichaAutomatico,
+            )
 
     def puedeJugar(self):
         for i in range(self.__turno * 4, self.__turno * 4 + 4):
@@ -470,7 +522,9 @@ class Ventana(QMainWindow):
             or not self.esMia(self.sender())
         ):
             return
-        menuResp = self.detectarJugadaAutomatica(self.sender())
+        menuResp = self.cargarJugadasPosibles(self.sender())
+        if menuResp != None:
+            menuResp = menuResp[0] if len(menuResp) == 1 else None
         if menuResp == None:
             menuResp = self.abrirMenu(self.sender())
             if (
@@ -480,14 +534,25 @@ class Ventana(QMainWindow):
                 or len(menuResp) == 0
             ):
                 return
-        if self.estaEnCasa(self.sender()):
+        self.moverFichaAutomatico(self.sender(), menuResp)
+        if not self.puedeJugar():
+            if self.__repetirTirada:
+                self.__repetirTirada = False
+                self.iniciarReactivadorDados()
+            else:
+                if self.__contandoTurno:
+                    self.__turnoWorker.faster()
+
+    def moverFichaAutomatico(self, ficha, menuResp):
+        print(f'moverFichaAutomatico, {ficha}, {menuResp}.')
+        if self.estaEnCasa(ficha):
             if self.puedeSalir():
                 if self.__disponibleDado1 and 1 in menuResp and self.__dado1 == 5:
-                    if self.salirDeCasa(self.sender()):
+                    if self.salirDeCasa(ficha):
                         self.__disponibleDado1 = False
                         self.insertarMensaje("Saca una ficha con el primer dado")
                 elif self.__disponibleDado2 and 2 in menuResp and self.__dado2 == 5:
-                    if self.salirDeCasa(self.sender()):
+                    if self.salirDeCasa(ficha):
                         self.__disponibleDado2 = False
                         self.insertarMensaje("Saca una ficha con el segundo dado")
                 elif (
@@ -497,7 +562,7 @@ class Ventana(QMainWindow):
                     and 2 in menuResp
                     and self.__dado1 + self.__dado2 == 5
                 ):
-                    if self.salirDeCasa(self.sender()):
+                    if self.salirDeCasa(ficha):
                         self.__disponibleDado1 = False
                         self.__disponibleDado2 = False
                         self.insertarMensaje("Saca una ficha con ambos dados")
@@ -520,7 +585,7 @@ class Ventana(QMainWindow):
                 total += 20
                 usadoBonus2 = True
             if total > 0:
-                posI, posJ = self.obtenerPosRuta(self.sender())
+                posI, posJ = self.obtenerPosRuta(ficha)
                 if posI + total < len(self.__rutas[self.__turno]):
                     for j in range(len(self.__rutas[self.__turno][posI + total])):
                         if self.__rutas[self.__turno][posI + total][
@@ -557,9 +622,11 @@ class Ventana(QMainWindow):
                                     ):
                                         if self.matarFicha(fM):
                                             self.__disponibleBonusMatar = True
+                                            self.__ia.haMatado.emit()
                                             mFicha = fM
                                 if posI + total == len(self.__rutas[self.__turno]) - 1:
                                     self.__disponibleBonusLlegar = True
+                                    self.__ia.haLlegado.emit()
                                     llego = True
                                 pL = "s" if total > 1 else ""
                                 if mFicha != None:
@@ -575,13 +642,6 @@ class Ventana(QMainWindow):
                                     self.insertarMensaje(
                                         f"Camina un total de {total} paso{pL}"
                                     )
-        if not self.puedeJugar():
-            if self.__repetirTirada:
-                self.__repetirTirada = False
-                self.iniciarReactivadorDados()
-            else:
-                if self.__contandoTurno:
-                    self.__turnoWorker.faster()
 
     def salirDeCasa(self, ficha):
         pos = 0
@@ -684,6 +744,8 @@ class Ventana(QMainWindow):
         self.__disponibleDado2 = False
         self.__disponibleBonusLlegar = False
         self.__disponibleBonusMatar = False
+        # TEST IA:
+        self.tirarDados()
 
     def virarMasAdelantada(self):
         for i in range(len(self.__rutas[self.__turno]) - 2, -1, -1):
@@ -700,18 +762,15 @@ class Ventana(QMainWindow):
         self.__dado1 = 0
         self.__dado2 = 0
         self.__turno = 0
-        self.mostrarDados(0, 0)
         self.__cuentaDoble = 0
         self.__repetirTirada = False
         self.__jugando = True
-        self.__dadosTirados = False
-        self.ui.dado1.setEnabled(True)
-        self.ui.dado2.setEnabled(True)
         self.ui.checkPlayer0.setEnabled(False)
         self.ui.checkPlayer1.setEnabled(False)
         self.ui.checkPlayer2.setEnabled(False)
         self.ui.checkPlayer3.setEnabled(False)
         self.ui.btnTerminarPartida.setEnabled(True)
+        self.prepararDados()
         self.iniciarContadorTurno(30)
 
     def terminarPartida(self):
