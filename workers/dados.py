@@ -1,6 +1,7 @@
 import time, random
 from PyQt5.QtCore import QObject, pyqtSignal
 
+
 class DadosWorker(QObject):
     finished = pyqtSignal(int, int)
     progress = pyqtSignal(int, int)

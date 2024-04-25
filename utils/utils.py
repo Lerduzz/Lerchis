@@ -44,8 +44,11 @@ class Utils:
             yR = dY + hC // 2 - hF // 4 if i == 0 else dY + hC // 2 + hF // 2 + hF // 10
         elif o == 5:
             xR = dX if i == 0 else dX + hF // 2
-            yR = dY - hF - hC // 2 + hF // 4 if i == 0 else dY - \
-                hF - hC // 2 - hF // 2 - hF // 10
+            yR = (
+                dY - hF - hC // 2 + hF // 4
+                if i == 0
+                else dY - hF - hC // 2 - hF // 2 - hF // 10
+            )
         elif o == 6:
             xR = dX + hF if i == 0 else dX + hF * 2 - hF // 3
             yR = dY - hF * 2 if i == 0 else dY - hF * 3 + hF // 3
@@ -53,16 +56,22 @@ class Utils:
             xR = dX + hC // 2 - hF // 4 if i == 0 else dX + hC // 2 + hF // 2 + hF // 10
             yR = dY - hF if i == 0 else dY - hF - hF // 2
         elif o == 8:
-            xR = dX - hF - hC // 2 + hF // 4 if i == 0 else dX - \
-                hF - hC // 2 - hF // 2 - hF // 10
+            xR = (
+                dX - hF - hC // 2 + hF // 4
+                if i == 0
+                else dX - hF - hC // 2 - hF // 2 - hF // 10
+            )
             yR = dY - hF if i == 0 else dY - hF - hF // 2
         elif o == 9:
             xR = dX - hF * 2 if i == 0 else dX - hF * 3 + hF // 3
             yR = dY - hF * 2 if i == 0 else dY - hF * 3 + hF // 3
         elif o == 10:
             xR = dX - hF if i == 0 else dX - hF - hF // 2
-            yR = dY - hF - hC // 2 + hF // 4 if i == 0 else dY - \
-                hF - hC // 2 - hF // 2 - hF // 10
+            yR = (
+                dY - hF - hC // 2 + hF // 4
+                if i == 0
+                else dY - hF - hC // 2 - hF // 2 - hF // 10
+            )
         elif o == 11:
             xR = dX - hF if i == 0 else dX - hF - hF // 2
             yR = dY + hC // 2 - hF // 4 if i == 0 else dY + hC // 2 + hF // 2 + hF // 10
@@ -70,8 +79,11 @@ class Utils:
             xR = dX - hF * 2 if i == 0 else dX - hF * 3 + hF // 3
             yR = dY + hF if i == 0 else dY + hF * 2 - hF // 3
         elif o == 13:
-            xR = dX - hF - hC // 2 + hF // 4 if i == 0 else dX - \
-                hF - hC // 2 - hF // 2 - hF // 10
+            xR = (
+                dX - hF - hC // 2 + hF // 4
+                if i == 0
+                else dX - hF - hC // 2 - hF // 2 - hF // 10
+            )
             yR = dY if i == 0 else dY + hF // 2
         elif o == 14:
             xR = dX - hF if i == 0 or i == 1 else dX

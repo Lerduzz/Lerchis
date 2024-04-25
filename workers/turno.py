@@ -1,6 +1,7 @@
 import time
 from PyQt5.QtCore import QObject, pyqtSignal
 
+
 class TurnoWorker(QObject):
     started = pyqtSignal(int)
     finished = pyqtSignal(int)
