@@ -872,6 +872,7 @@ sys.exit(app.exec())
 # TODO: Si te queda una sola ficha y a esta le queda 6 movimientos o menos para entrar tiras con un solo dado.
 # TODO: La funcion de nueva partida deve devolver las fichas al inicio.
 # TODO: (Informativo) Agregarle las reglas que tengo escritas en el teléfono.
+# TODO: (REGLA OPCIONAL) Hacer que si te cae doble tengas que abrir el puente obligatoriamente.
 # TODO: (Opcional) Animar el movimiento de las fichas por el tablero.
 # TODO: (Opcional) Detectar victoria.
 # TODO: (Proximamente) Implementar la IA.
