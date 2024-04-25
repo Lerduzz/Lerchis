@@ -633,14 +633,25 @@ class Ventana(QMainWindow):
             self.ui.checkPlayer2.isChecked(),
             self.ui.checkPlayer3.isChecked(),
         ]
+        terminar = False
         if True in estados:
-            while not estados[self.__turno]:
+            enMeta = Utils.contarFichas(self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1])
+            numSaltos = 0
+            while not estados[self.__turno] or enMeta == 4:
                 self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
-        self.prepararDados()
-        self.__repetirTirada = False
-        self.__tempThread = self.__turnoThread
-        self.__tempWorker = self.__turnoWorker
-        self.iniciarContadorTurno(30)
+                enMeta = Utils.contarFichas(self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1])
+                numSaltos += 1
+                if numSaltos >= 4:
+                    terminar = True
+                    break
+        if terminar:
+            self.terminarPartida()
+        else: 
+            self.prepararDados()
+            self.__repetirTirada = False
+            self.__tempThread = self.__turnoThread
+            self.__tempWorker = self.__turnoWorker
+            self.iniciarContadorTurno(30)
 
     def prepararDados(self):
         self.mostrarDados(0, 0)

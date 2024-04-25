@@ -14,7 +14,7 @@ class EstiloIconos(QProxyStyle):
 
 class Utils:
     @staticmethod
-    def contarFichas(self, lista):
+    def contarFichas(lista):
         count = 0
         for f in lista:
             if f != None:
