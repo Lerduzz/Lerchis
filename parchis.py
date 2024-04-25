@@ -92,7 +92,7 @@ class ReactivarWorker(QObject):
 
 class EstiloIconos(QProxyStyle):
     def pixelMetric(self, metric, option = 0, widget = 0):
-        if metric == QStyle.PM_SmallIconSize:
+        if metric == QStyle.PM_SmallIconSize and (widget == None or isinstance(widget, QMenu)):
             return 40
         return super().pixelMetric(metric, option, widget)
 
