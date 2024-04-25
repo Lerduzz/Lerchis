@@ -1,7 +1,7 @@
 import sys
 import qdarkstyle
 from PyQt5.QtCore import QPoint, QThread
-from PyQt5.QtGui import QResizeEvent, QIcon, QPixmap
+from PyQt5.QtGui import QResizeEvent
 from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem, QMenu, QAction
 from parchis_ui import Ui_VentanaJuego
 from workers.dados import DadosWorker, ReactivarWorker
