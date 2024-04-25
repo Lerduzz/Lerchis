@@ -275,12 +275,25 @@ class Ventana(QMainWindow):
                                 )
                                 self.__metas[i][j][k].move(xR, yR)
 
+    def contarFichas(self, lista):
+        count = 0
+        for f in lista:
+            if f != None:
+                count += 1
+        return count
+    
     def tirarDados(self):
-        # TODO: Detectar si te queda una sola ficha y se encuentra en la recta final.
+        enJuego = 4 - self.contarFichas(self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1])
+        dadoSolo = 0
+        if enJuego == 1:
+            if self.sender() == self.ui.dado1:
+                dadoSolo = 1
+            if self.sender() == self.ui.dado2:
+                dadoSolo = 2
         self.ui.dado1.setEnabled(False)
         self.ui.dado2.setEnabled(False)
         self.__dadosThread = QThread()
-        self.__dadosWorker = DadosWorker(self.__dado1, self.__dado2)
+        self.__dadosWorker = DadosWorker(self.__dado1, self.__dado2, dadoSolo)
         self.__dadosWorker.moveToThread(self.__dadosThread)
         self.__dadosThread.started.connect(self.__dadosWorker.run)
         self.__dadosWorker.finished.connect(self.__dadosThread.quit)
