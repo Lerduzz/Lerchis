@@ -14,6 +14,14 @@ class EstiloIconos(QProxyStyle):
 
 class Utils:
     @staticmethod
+    def contarFichas(self, lista):
+        count = 0
+        for f in lista:
+            if f != None:
+                count += 1
+        return count
+
+    @staticmethod
     def moverFicha(desde, iD, jD, hasta, iH, jH):
         if desde[iD][jD] == None or hasta[iH][jH] != None:
             return False
