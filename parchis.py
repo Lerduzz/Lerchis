@@ -93,7 +93,7 @@ class ReactivarWorker(QObject):
 class Ventana(QMainWindow):
     def __init__(self):
         super(Ventana, self).__init__()
-        self.ui = Ui_VentanaJuego() 
+        self.ui = Ui_VentanaJuego()
         self.ui.setupUi(self)
         self.ui.dado1.clicked.connect(self.tirarDados)
         self.ui.dado2.clicked.connect(self.tirarDados)
@@ -772,7 +772,7 @@ class Ventana(QMainWindow):
         self.ui.btnTerminarPartida.setEnabled(True)
         self.iniciarContadorTurno(30)
 
-    def terminarPartida(self):        
+    def terminarPartida(self):
         self.ui.btnTerminarPartida.setEnabled(False)
         self.__cuentaDoble = 0
         self.__repetirTirada = False
@@ -861,5 +861,3 @@ sys.exit(app.exec())
 # TODO: *Implementar modo online.
 # TODO: La funcion de nueva partida deve devolver las fichas al inicio.
 # TODO: Agregarle las reglas que tengo escritas en el teléfono.
-
-# TODO: Si al girar los dados no tienes movimientos entonces mantener mostrando el resultado durante un par de segundos antes de cambiar de turno.
