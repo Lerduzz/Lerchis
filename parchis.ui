@@ -430,7 +430,10 @@
          <property name="title">
           <string>Jugar</string>
          </property>
-         <layout class="QGridLayout" name="layoutJugar">
+         <layout class="QHBoxLayout" name="layoutJugar">
+          <property name="spacing">
+           <number>5</number>
+          </property>
           <property name="leftMargin">
            <number>5</number>
           </property>
@@ -443,10 +446,7 @@
           <property name="bottomMargin">
            <number>5</number>
           </property>
-          <property name="spacing">
-           <number>5</number>
-          </property>
-          <item row="0" column="0">
+          <item>
            <widget class="QToolButton" name="dado1">
             <property name="enabled">
              <bool>false</bool>
@@ -471,7 +471,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item>
            <widget class="QToolButton" name="dado2">
             <property name="enabled">
              <bool>false</bool>
@@ -496,9 +496,9 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="2">
+          <item>
            <widget class="QWidget" name="cajaPartida" native="true">
-            <layout class="QGridLayout" name="layoutPartida">
+            <layout class="QVBoxLayout" name="layoutColores">
              <property name="leftMargin">
               <number>0</number>
              </property>
@@ -511,10 +511,7 @@
              <property name="bottomMargin">
               <number>0</number>
              </property>
-             <property name="spacing">
-              <number>5</number>
-             </property>
-             <item row="0" column="0">
+             <item>
               <widget class="QCheckBox" name="checkPlayer0">
                <property name="text">
                 <string>Rojo</string>
@@ -528,34 +525,7 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="1">
-              <widget class="QPushButton" name="btnNuevaPartida">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>30</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Nueva partida</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QCheckBox" name="checkPlayer3">
-               <property name="text">
-                <string>Naranja</string>
-               </property>
-               <property name="icon">
-                <iconset resource="parchis.qrc">
-                 <normaloff>:/fichas/ficha3.png</normaloff>:/fichas/ficha3.png</iconset>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
+             <item>
               <widget class="QCheckBox" name="checkPlayer1">
                <property name="text">
                 <string>Verde</string>
@@ -569,7 +539,7 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="0">
+             <item>
               <widget class="QCheckBox" name="checkPlayer2">
                <property name="text">
                 <string>Azul</string>
@@ -583,7 +553,73 @@
                </property>
               </widget>
              </item>
-             <item row="3" column="1">
+             <item>
+              <widget class="QCheckBox" name="checkPlayer3">
+               <property name="text">
+                <string>Naranja</string>
+               </property>
+               <property name="icon">
+                <iconset resource="parchis.qrc">
+                 <normaloff>:/fichas/ficha3.png</normaloff>:/fichas/ficha3.png</iconset>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="cajaBotones" native="true">
+            <layout class="QVBoxLayout" name="layoutBotones">
+             <property name="spacing">
+              <number>5</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="lblTiempo">
+               <property name="font">
+                <font>
+                 <family>Mustardo</family>
+                 <pointsize>40</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>30</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnNuevaPartida">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Nueva partida</string>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QPushButton" name="btnTerminarPartida">
                <property name="enabled">
                 <bool>false</bool>
@@ -600,11 +636,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="cajaHistorial">
+        <widget class="QGroupBox" name="cajaTurno">
          <property name="title">
-          <string>Historial</string>
+          <string>Progreso del turno</string>
          </property>
-         <layout class="QGridLayout" name="layoutHistorial">
+         <layout class="QHBoxLayout" name="layoutTurno">
+          <property name="spacing">
+           <number>0</number>
+          </property>
           <property name="leftMargin">
            <number>5</number>
           </property>
@@ -617,10 +656,41 @@
           <property name="bottomMargin">
            <number>5</number>
           </property>
+          <item>
+           <widget class="QProgressBar" name="progressTiempo">
+            <property name="maximum">
+             <number>30</number>
+            </property>
+            <property name="textVisible">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="cajaHistorial">
+         <property name="title">
+          <string>Historial</string>
+         </property>
+         <layout class="QVBoxLayout" name="layoutHistorial">
           <property name="spacing">
            <number>5</number>
           </property>
-          <item row="0" column="0">
+          <property name="leftMargin">
+           <number>5</number>
+          </property>
+          <property name="topMargin">
+           <number>5</number>
+          </property>
+          <property name="rightMargin">
+           <number>5</number>
+          </property>
+          <property name="bottomMargin">
+           <number>5</number>
+          </property>
+          <item>
            <widget class="QListWidget" name="listHistorial">
             <property name="currentRow">
              <number>0</number>

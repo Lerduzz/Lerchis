@@ -53,6 +53,29 @@ class DadosWorker(QObject):
         self.finished.emit(self.__r1, self.__r2)
 
 
+class TurnoWorker(QObject):
+    started = pyqtSignal(int)
+    finished = pyqtSignal(int)
+    progress = pyqtSignal(int)
+
+    def __init__(self, start):
+        super().__init__()
+        self.__max = start
+        self.__value = 0
+        self.__interval = 0.9
+
+    def run(self):
+        self.started.emit(self.__max)
+        while self.__value < self.__max:
+            self.progress.emit(self.__value)
+            self.__value += 1
+            time.sleep(self.__interval)
+        self.finished.emit(self.__value)
+
+    def faster(self):
+        self.__interval = 0.05
+
+
 class Ventana(QMainWindow):
     def __init__(self):
         super(Ventana, self).__init__()
@@ -66,6 +89,7 @@ class Ventana(QMainWindow):
         self.__dado2 = 0
         self.__turno = 0
         self.__cuentaDoble = 0
+        self.__repetirTirada = False
         self.__fichas = [self.ui.ficha00,self.ui.ficha01,self.ui.ficha02,self.ui.ficha03,self.ui.ficha10,self.ui.ficha11,self.ui.ficha12,self.ui.ficha13,self.ui.ficha20,self.ui.ficha21,self.ui.ficha22,self.ui.ficha23,self.ui.ficha30,self.ui.ficha31,self.ui.ficha32,self.ui.ficha33]
         for f in self.__fichas:
             f.clicked.connect(self.jugarFicha)
@@ -105,6 +129,7 @@ class Ventana(QMainWindow):
         self.__disponibleDado2 = False
         self.__disponibleBonusMatar = False
         self.__disponibleBonusLlegar = False
+        self.__contandoTurno = False
         
     def resizeEvent(self, e: QResizeEvent) -> None:
         super().resizeEvent(e)
@@ -461,8 +486,21 @@ class Ventana(QMainWindow):
         self.__disponibleDado2 = True
         self.ui.listHistorial.addItem(QListWidgetItem(self.__icons[self.__turno], f'{self.__names[self.__turno]} tira los dados y saca {s1}:{s2}.'))
         self.ui.listHistorial.setCurrentRow(self.ui.listHistorial.count() - 1)
-        if not self.puedeJugar() or (self.__dado1 == self.__dado2 and self.__cuentaDoble >= 2):
-            self.cambioDeTurno()
+        if s1 == s2:
+            if self.__cuentaDoble < 2:
+                self.__cuentaDoble += 1
+                self.__repetirTirada = True
+            else:
+                self.virarMasAdelantada()
+                if self.__contandoTurno:
+                    self.__turnoWorker.faster()
+                return
+        if not self.puedeJugar():
+            if self.__repetirTirada:
+                pass # TODO: Reactivar los dados.
+            else:
+                if self.__contandoTurno:
+                    self.__turnoWorker.faster()
 
     def puedeJugar(self):
         for i in range(self.__turno * 4, self.__turno * 4 + 4):
@@ -623,7 +661,12 @@ class Ventana(QMainWindow):
                                 if posI + total == len(self.__rutas[self.__turno]) - 1:
                                     self.__disponibleBonusLlegar = True
         if not self.puedeJugar():
-            self.cambioDeTurno()
+            if self.__repetirTirada:
+                self.__repetirTirada = False
+                self.prepararDados()
+            else:
+                if self.__contandoTurno:
+                    self.__turnoWorker.faster()
 
     def salirDeCasa(self, ficha):
         pos = 0
@@ -661,20 +704,21 @@ class Ventana(QMainWindow):
         return False
 
     def cambioDeTurno(self):
-        repetir = False
-        if self.__dado1 == self.__dado2:
-            if self.__cuentaDoble < 2:
-                self.__cuentaDoble += 1
-                repetir = True
-            else:
-                self.virarMasAdelantada()
-        if not repetir:
-            self.__cuentaDoble = 0
-            self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
-            estados = [self.ui.checkPlayer0.isChecked(), self.ui.checkPlayer1.isChecked(), self.ui.checkPlayer2.isChecked(), self.ui.checkPlayer3.isChecked()]
-            if True in estados:
-                 while (not estados[self.__turno]):
-                     self.__turno = 0 if self.__turno >= 3 else self.__turno + 1                
+        if not self.__jugando:
+            return
+        self.__cuentaDoble = 0
+        self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
+        estados = [self.ui.checkPlayer0.isChecked(), self.ui.checkPlayer1.isChecked(), self.ui.checkPlayer2.isChecked(), self.ui.checkPlayer3.isChecked()]
+        if True in estados:
+             while (not estados[self.__turno]):
+                 self.__turno = 0 if self.__turno >= 3 else self.__turno + 1                
+        self.prepararDados()
+        self.__repetirTirada = False
+        self.__tempThread = self.__turnoThread
+        self.__tempWorker = self.__turnoWorker
+        self.iniciarContadorTurno(30)
+
+    def prepararDados(self):
         self.mostrarDados(0, 0)
         self.ui.dado1.setEnabled(True)
         self.ui.dado2.setEnabled(True)
@@ -699,6 +743,7 @@ class Ventana(QMainWindow):
         self.__dado2 = 0
         self.__turno = 0
         self.__cuentaDoble = 0
+        self.__repetirTirada = False
         self.__jugando = True
         self.__dadosTirados = False
         self.ui.dado1.setEnabled(True)
@@ -708,9 +753,12 @@ class Ventana(QMainWindow):
         self.ui.checkPlayer2.setEnabled(False)
         self.ui.checkPlayer3.setEnabled(False)
         self.ui.btnTerminarPartida.setEnabled(True)
+        self.iniciarContadorTurno(30)
 
     def terminarPartida(self):        
         self.ui.btnTerminarPartida.setEnabled(False)
+        self.__cuentaDoble = 0
+        self.__repetirTirada = False
         self.__jugando = False
         self.__dadosTirados = False
         self.ui.dado1.setEnabled(False)
@@ -720,6 +768,8 @@ class Ventana(QMainWindow):
         self.ui.checkPlayer2.setEnabled(True)
         self.ui.checkPlayer3.setEnabled(True)
         self.ui.btnNuevaPartida.setEnabled(True)
+        if self.__contandoTurno:
+            self.__turnoWorker.faster()
 
     def moverFicha(self, desde, iD, jD, hasta, iH, jH):
         if desde[iD][jD] == None or hasta[iH][jH] != None:
@@ -728,6 +778,36 @@ class Ventana(QMainWindow):
         hasta[iH][jH] = desde[iD][jD]
         desde[iD][jD] = temp
         return True
+
+    def iniciarContadorTurno(self, start):
+        if not self.__contandoTurno:
+            self.__contandoTurno = True
+            self.__turnoThread = QThread()
+            self.__turnoWorker = TurnoWorker(start)
+            self.__turnoWorker.moveToThread(self.__turnoThread)
+            self.__turnoThread.started.connect(self.__turnoWorker.run)
+            self.__turnoWorker.finished.connect(self.__turnoThread.quit)
+            self.__turnoWorker.finished.connect(self.__turnoWorker.deleteLater)
+            self.__turnoThread.finished.connect(self.__turnoThread.deleteLater)
+            self.__turnoWorker.started.connect(self.onContadorTurnoStarted)
+            self.__turnoWorker.progress.connect(self.onContadorTurnoProgress)
+            self.__turnoWorker.finished.connect(self.onContadorTurnoFinished) 
+            self.__turnoThread.start()
+
+    def onContadorTurnoStarted(self, maxValue):
+        self.ui.lblTiempo.setText(str(maxValue))
+        self.ui.progressTiempo.setMaximum(int(maxValue))
+        self.ui.progressTiempo.setValue(0)
+
+    def onContadorTurnoProgress(self, value):
+        if value >= 0 and value <= self.ui.progressTiempo.maximum():
+            self.ui.progressTiempo.setValue(value)
+            self.ui.lblTiempo.setText(str(self.ui.progressTiempo.maximum() - value))
+
+    def onContadorTurnoFinished(self, value):
+        self.onContadorTurnoProgress(value)
+        self.__contandoTurno = False
+        self.cambioDeTurno()
 
     def showCritical(self, title, text):
         QMessageBox.critical(self, title, text)
