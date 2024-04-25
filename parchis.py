@@ -323,7 +323,10 @@ class Ventana(QMainWindow):
                 jugadasValidas.append([4])
 
         if self.__disponibleDado1 and self.__disponibleDado2:
-            if not self.estaEnCasa(sender):
+            if self.estaEnCasa(sender):
+                if self.__dado1 + self.__dado2 == 5 and self.puedeSalir():
+                    jugadasValidas.append([1, 2])
+            else:
                 if self.puedeMover(sender, self.__dado1 + self.__dado2):
                     jugadasValidas.append([1, 2])
 
