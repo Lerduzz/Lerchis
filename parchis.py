@@ -1,13 +1,13 @@
 import sys
 import qdarkstyle
 from PyQt5.QtCore import QPoint, QThread
-from PyQt5.QtGui import QResizeEvent, QIcon, QPixmap, QFont
+from PyQt5.QtGui import QResizeEvent, QIcon, QPixmap
 from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem, QMenu, QAction
 from parchis_ui import Ui_VentanaJuego
 from workers.dados import DadosWorker, ReactivarWorker
 from workers.turno import TurnoWorker
 from utils.utils import EstiloIconos, Utils
-from utils.static import InitStatic
+from utils.static import InitStatic, AuxStatic
 
 
 class Ventana(QMainWindow):
@@ -50,84 +50,38 @@ class Ventana(QMainWindow):
 
     def abrirMenu(self, sender):
         menu = QMenu(self)
+        font = AuxStatic.fontMenu()
         menu.setStyle(EstiloIconos(sender.width()))
         count = 0
-        iconDado1 = QIcon()
-        iconDado1.addPixmap(
-            QPixmap(f":/dados/dado{self.__turno}{self.__dado1}.png"),
-            QIcon.Normal,
-            QIcon.Off,
-        )
+        iconDado1 = AuxStatic.iconoMenu(self.__turno, self.__dado1)
         actionDado1 = QAction(iconDado1, "Primer dado")
-        font = QFont()
-        font.setPointSize(14)
-        font.setBold(True)
-        font.setWeight(75)
         actionDado1.setFont(font)
-        iconDado2 = QIcon()
-        iconDado2.addPixmap(
-            QPixmap(f":/dados/dado{self.__turno}{self.__dado2}.png"),
-            QIcon.Normal,
-            QIcon.Off,
-        )
+        iconDado2 = AuxStatic.iconoMenu(self.__turno, self.__dado2)
         actionDado2 = QAction(iconDado2, "Segundo dado")
         actionDado2.setFont(font)
-        iconBonus1 = QIcon()
-        iconBonus1.addPixmap(
-            QPixmap(f":/dados/dado{self.__turno}s10.png"), QIcon.Normal, QIcon.Off
-        )
+        iconBonus1 = AuxStatic.iconoMenu(self.__turno, 10, "s")
         actionBonus1 = QAction(iconBonus1, "Bono por llegar")
         actionBonus1.setFont(font)
-        iconBonus2 = QIcon()
-        iconBonus2.addPixmap(
-            QPixmap(f":/dados/dado{self.__turno}s20.png"), QIcon.Normal, QIcon.Off
-        )
+        iconBonus2 = AuxStatic.iconoMenu(self.__turno, 20, "s")
         actionBonus2 = QAction(iconBonus2, "Bono por matar")
         actionBonus2.setFont(font)
-        iconDado1Dado2 = QIcon()
-        iconDado1Dado2.addPixmap(
-            QPixmap(f":/dados/dado{self.__turno}s{self.__dado1 + self.__dado2}.png"),
-            QIcon.Normal,
-            QIcon.Off,
-        )
+        sumDados = self.__dado1 + self.__dado2
+        iconDado1Dado2 = AuxStatic.iconoMenu(self.__turno, sumDados, "s")
         actionDado1Dado2 = QAction(iconDado1Dado2, "Todos los dados")
         actionDado1Dado2.setFont(font)
-        iconDado1Bonus1 = QIcon()
-        iconDado1Bonus1.addPixmap(
-            QPixmap(f":/dados/dado{self.__turno}s{self.__dado1 + 10}.png"),
-            QIcon.Normal,
-            QIcon.Off,
-        )
+        iconDado1Bonus1 = AuxStatic.iconoMenu(self.__turno, self.__dado1 + 10, "s")
         actionDado1Bonus1 = QAction(iconDado1Bonus1, "Primer dado + Bono por llegar")
         actionDado1Bonus1.setFont(font)
-        iconDado1Bonus2 = QIcon()
-        iconDado1Bonus2.addPixmap(
-            QPixmap(f":/dados/dado{self.__turno}s{self.__dado1 + 20}.png"),
-            QIcon.Normal,
-            QIcon.Off,
-        )
+        iconDado1Bonus2 = AuxStatic.iconoMenu(self.__turno, self.__dado1 + 20, "s")
         actionDado1Bonus2 = QAction(iconDado1Bonus2, "Primer dado + Bono por matar")
         actionDado1Bonus2.setFont(font)
-        iconDado2Bonus1 = QIcon()
-        iconDado2Bonus1.addPixmap(
-            QPixmap(f":/dados/dado{self.__turno}s{self.__dado2 + 10}.png"),
-            QIcon.Normal,
-            QIcon.Off,
-        )
+        iconDado2Bonus1 = AuxStatic.iconoMenu(self.__turno, self.__dado2 + 10, "s")
         actionDado2Bonus1 = QAction(iconDado2Bonus1, "Segundo dado + Bono por llegar")
         actionDado2Bonus1.setFont(font)
-        iconDado2Bonus2 = QIcon()
-        iconDado2Bonus2.addPixmap(
-            QPixmap(f":/dados/dado{self.__turno}s{self.__dado2 + 20}.png"),
-            QIcon.Normal,
-            QIcon.Off,
-        )
+        iconDado2Bonus2 = AuxStatic.iconoMenu(self.__turno, self.__dado2 + 20, "s")
         actionDado2Bonus2 = QAction(iconDado2Bonus2, "Segundo dado + Bono por matar")
         actionDado2Bonus2.setFont(font)
-        iconBonus1Bonus2 = QIcon()
-        iconBonus1Bonus2.addPixmap(
-            QPixmap(f":/dados/dado{self.__turno}s{30}.png"), QIcon.Normal, QIcon.Off
-        )
+        iconBonus1Bonus2 = AuxStatic.iconoMenu(self.__turno, 30, "s")
         actionBonus1Bonus2 = QAction(iconBonus1Bonus2, "Todos los bonos")
         actionBonus1Bonus2.setFont(font)
         if self.__disponibleDado1:
@@ -158,11 +112,11 @@ class Ventana(QMainWindow):
                 count += 1
         if self.__disponibleDado1 and self.__disponibleDado2:
             if self.estaEnCasa(sender):
-                if self.__dado1 + self.__dado2 == 5 and self.puedeSalir():
+                if sumDados == 5 and self.puedeSalir():
                     menu.addAction(actionDado1Dado2)
                     count += 1
             else:
-                if self.puedeMover(sender, self.__dado1 + self.__dado2):
+                if self.puedeMover(sender, sumDados):
                     menu.addAction(actionDado1Dado2)
                     count += 1
         if self.__disponibleDado1 and self.__disponibleBonusLlegar:

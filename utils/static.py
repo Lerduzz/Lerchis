@@ -1,7 +1,8 @@
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon, QPixmap, QFont
 
 
 class InitStatic:
+    @staticmethod
     def fichas(ui, cFunc):
         fichas = [
             ui.ficha00,
@@ -25,6 +26,7 @@ class InitStatic:
             f.clicked.connect(cFunc)
         return fichas
 
+    @staticmethod
     def casas(ui):
         return [
             [ui.ficha00, ui.ficha01, ui.ficha02, ui.ficha03],
@@ -33,6 +35,7 @@ class InitStatic:
             [ui.ficha30, ui.ficha31, ui.ficha32, ui.ficha33],
         ]
 
+    @staticmethod
     def caminos():
         return [
             [None, None],
@@ -93,6 +96,7 @@ class InitStatic:
             [None, None],
         ]
 
+    @staticmethod
     def posCaminos():
         return [
             (250, 0, 0),
@@ -153,6 +157,7 @@ class InitStatic:
             (400, 0, 0),
         ]
 
+    @staticmethod
     def metas():
         return [
             [
@@ -193,6 +198,7 @@ class InitStatic:
             ],
         ]
 
+    @staticmethod
     def posMetas():
         return [
             [
@@ -233,6 +239,7 @@ class InitStatic:
             ],
         ]
 
+    @staticmethod
     def rutas(caminos, metas):
         result = [[], [], [], []]
         for i in range(3, 56):
@@ -253,6 +260,7 @@ class InitStatic:
             result[i] += metas[i]
         return result
 
+    @staticmethod
     def excluir():
         return [
             0,
@@ -276,12 +284,15 @@ class InitStatic:
             59,
         ]
 
+    @staticmethod
     def bridges():
         return [0, 14, 28, 42]
 
+    @staticmethod
     def names():
         return ["ROJO", "VERDE", "AZUL", "NARANJA"]
 
+    @staticmethod
     def icons():
         result = [QIcon(), QIcon(), QIcon(), QIcon()]
         result[0].addPixmap(QPixmap(":/fichas/ficha0.png"), QIcon.Normal, QIcon.Off)
@@ -289,3 +300,19 @@ class InitStatic:
         result[2].addPixmap(QPixmap(":/fichas/ficha2.png"), QIcon.Normal, QIcon.Off)
         result[3].addPixmap(QPixmap(":/fichas/ficha3.png"), QIcon.Normal, QIcon.Off)
         return result
+
+
+class AuxStatic:
+    @staticmethod
+    def iconoMenu(t, v, s=""):
+        icon = QIcon()
+        icon.addPixmap(QPixmap(f":/dados/dado{t}{s}{v}.png"), QIcon.Normal, QIcon.Off)
+        return icon
+    
+    @staticmethod
+    def fontMenu():
+        font = QFont()
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        return font
