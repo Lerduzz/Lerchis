@@ -1,7 +1,7 @@
 import sys, time, random, qdarkstyle
 from PyQt5.QtCore import QObject, QPoint, QThread, pyqtSignal
 from PyQt5.QtGui import QResizeEvent, QIcon, QPixmap
-from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox, QListWidgetItem, QMenu, QAction
+from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem, QMenu, QAction
 from parchis_ui import Ui_VentanaJuego
 
 class DadosWorker(QObject):
@@ -153,54 +153,36 @@ class Ventana(QMainWindow):
     def abrirMenu(self, sender):
         menu = QMenu(self)
         count = 0
-
-        # DADO 1
         iconDado1 = QIcon()
         iconDado1.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado1}.png"), QIcon.Normal, QIcon.Off)
         actionDado1 = QAction(iconDado1, 'Primer dado')
-        # DADO 2
         iconDado2 = QIcon()
         iconDado2.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado2}.png"), QIcon.Normal, QIcon.Off)
         actionDado2 = QAction(iconDado2, 'Segundo dado')
-        # BONUS 1
         iconBonus1 = QIcon()
         iconBonus1.addPixmap(QPixmap(f":/dados/dado{self.__turno}s10.png"), QIcon.Normal, QIcon.Off)
         actionBonus1 = QAction(iconBonus1, 'Bono por llegar')
-        # BONUS 2
         iconBonus2 = QIcon()
         iconBonus2.addPixmap(QPixmap(f":/dados/dado{self.__turno}s20.png"), QIcon.Normal, QIcon.Off)
         actionBonus2 = QAction(iconBonus2, 'Bono por matar')
-
-        # DADO 1 + DADO 2
         iconDado1Dado2 = QIcon()
         iconDado1Dado2.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{self.__dado1 + self.__dado2}.png"), QIcon.Normal, QIcon.Off)
         actionDado1Dado2 = QAction(iconDado1Dado2, 'Todos los dados')
-
-        # DADO 1 + BONUS 1
         iconDado1Bonus1 = QIcon()
         iconDado1Bonus1.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{self.__dado1 + 10}.png"), QIcon.Normal, QIcon.Off)
         actionDado1Bonus1 = QAction(iconDado1Bonus1, 'Primer dado + Bono por llegar')
-        
-        # DADO 1 + BONUS 2
         iconDado1Bonus2 = QIcon()
         iconDado1Bonus2.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{self.__dado1 + 20}.png"), QIcon.Normal, QIcon.Off)
         actionDado1Bonus2 = QAction(iconDado1Bonus2, 'Primer dado + Bono por matar')
-
-        # DADO 2 + BONUS 1
         iconDado2Bonus1 = QIcon()
         iconDado2Bonus1.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{self.__dado2 + 10}.png"), QIcon.Normal, QIcon.Off)
         actionDado2Bonus1 = QAction(iconDado2Bonus1, 'Segundo dado + Bono por llegar')
-        
-        # DADO 2 + BONUS 2
         iconDado2Bonus2 = QIcon()
         iconDado2Bonus2.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{self.__dado2 + 20}.png"), QIcon.Normal, QIcon.Off)
         actionDado2Bonus2 = QAction(iconDado2Bonus2, 'Segundo dado + Bono por matar')
-        
-        # BONUS 1 + BONUS 2
         iconBonus1Bonus2 = QIcon()
         iconBonus1Bonus2.addPixmap(QPixmap(f":/dados/dado{self.__turno}s{30}.png"), QIcon.Normal, QIcon.Off)
         actionBonus1Bonus2 = QAction(iconBonus1Bonus2, 'Todos los bonos')
-
         if self.__disponibleDado1:
             if self.estaEnCasa(sender):
                 if self.__dado1 == 5 and self.puedeSalir():
@@ -210,7 +192,6 @@ class Ventana(QMainWindow):
                 if self.puedeMover(sender, self.__dado1):
                     menu.addAction(actionDado1)
                     count += 1        
-        
         if self.__disponibleDado2:
             if self.estaEnCasa(sender):
                 if self.__dado2 == 5 and self.puedeSalir():
@@ -220,17 +201,14 @@ class Ventana(QMainWindow):
                 if self.puedeMover(sender, self.__dado2):
                     menu.addAction(actionDado2)
                     count += 1
-
         if self.__disponibleBonusLlegar:
             if not self.estaEnCasa(sender) and self.puedeMover(sender, 10):
                 menu.addAction(actionBonus1)
                 count += 1
-
         if self.__disponibleBonusMatar:
             if not self.estaEnCasa(sender) and self.puedeMover(sender, 20):
                 menu.addAction(actionBonus2)
                 count += 1
-
         if self.__disponibleDado1 and self.__disponibleDado2:
             if self.estaEnCasa(sender):
                 if self.__dado1 + self.__dado2 == 5 and self.puedeSalir():
@@ -240,37 +218,31 @@ class Ventana(QMainWindow):
                 if self.puedeMover(sender, self.__dado1 + self.__dado2):
                     menu.addAction(actionDado1Dado2)
                     count += 1
-
         if self.__disponibleDado1 and self.__disponibleBonusLlegar:
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, self.__dado1 + 10):
                     menu.addAction(actionDado1Bonus1)
                     count += 1
-        
         if self.__disponibleDado1 and self.__disponibleBonusMatar:
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, self.__dado1 + 20):
                     menu.addAction(actionDado1Bonus2)
                     count += 1
-
         if self.__disponibleDado2 and self.__disponibleBonusLlegar:
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, self.__dado2 + 10):
                     menu.addAction(actionDado2Bonus1)
                     count += 1
-        
         if self.__disponibleDado2 and self.__disponibleBonusMatar:
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, self.__dado2 + 20):
                     menu.addAction(actionDado2Bonus2)
                     count += 1
-
         if self.__disponibleBonusLlegar and self.__disponibleBonusMatar:
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, 30):
                     menu.addAction(actionBonus1Bonus2)
                     count += 1
-
         if count > 0:
             pos = QPoint(sender.x() + sender.width(), sender.y())
             actionR = menu.exec_(self.mapToGlobal(pos))
@@ -305,7 +277,6 @@ class Ventana(QMainWindow):
             else:
                 if self.puedeMover(sender, self.__dado1):
                     jugadasValidas.append([1])     
-        
         if self.__disponibleDado2:
             if self.estaEnCasa(sender):
                 if self.__dado2 == 5 and self.puedeSalir():
@@ -313,15 +284,12 @@ class Ventana(QMainWindow):
             else:
                 if self.puedeMover(sender, self.__dado2):
                     jugadasValidas.append([2])
-
         if self.__disponibleBonusLlegar:
             if not self.estaEnCasa(sender) and self.puedeMover(sender, 10):
                 jugadasValidas.append([3])
-
         if self.__disponibleBonusMatar:
             if not self.estaEnCasa(sender) and self.puedeMover(sender, 20):
                 jugadasValidas.append([4])
-
         if self.__disponibleDado1 and self.__disponibleDado2:
             if self.estaEnCasa(sender):
                 if self.__dado1 + self.__dado2 == 5 and self.puedeSalir():
@@ -329,27 +297,22 @@ class Ventana(QMainWindow):
             else:
                 if self.puedeMover(sender, self.__dado1 + self.__dado2):
                     jugadasValidas.append([1, 2])
-
         if self.__disponibleDado1 and self.__disponibleBonusLlegar:
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, self.__dado1 + 10):
                     jugadasValidas.append([1, 3])
-        
         if self.__disponibleDado1 and self.__disponibleBonusMatar:
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, self.__dado1 + 20):
                     jugadasValidas.append([1, 4])
-
         if self.__disponibleDado2 and self.__disponibleBonusLlegar:
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, self.__dado2 + 10):
                     jugadasValidas.append([2, 3])
-        
         if self.__disponibleDado2 and self.__disponibleBonusMatar:
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, self.__dado2 + 20):
                     jugadasValidas.append([2, 4])
-
         if self.__disponibleBonusLlegar and self.__disponibleBonusMatar:
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, 30):
@@ -505,8 +468,6 @@ class Ventana(QMainWindow):
         self.__dadosTirados = True
         self.__disponibleDado1 = True
         self.__disponibleDado2 = True
-        self.ui.listHistorial.addItem(QListWidgetItem(self.__icons[self.__turno], f'{self.__names[self.__turno]} tira los dados y saca {s1}:{s2}.'))
-        self.ui.listHistorial.setCurrentRow(self.ui.listHistorial.count() - 1)
         if s1 == s2:
             if self.__cuentaDoble < 2:
                 self.__cuentaDoble += 1
@@ -843,15 +804,6 @@ class Ventana(QMainWindow):
         self.__reactivarWorker.finished.connect(self.prepararDados) 
         self.__reactivarThread.start()
 
-    def showCritical(self, title, text):
-        QMessageBox.critical(self, title, text)
-
-    def showWarning(self, title, text):
-        QMessageBox.warning(self, title, text)
-
-    def showInfo(self, title, text):
-        QMessageBox.information(self, title, text)
-
 
 app = QApplication([])
 app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt5'))
@@ -864,6 +816,8 @@ sys.exit(app.exec())
 # TODO: Si te queda una sola ficha y a esta le queda 6 movimientos o menos para entrar tiras con un solo dado.
 # TODO: La funcion de nueva partida deve devolver las fichas al inicio.
 # TODO: (Informativo) Agregarle las reglas que tengo escritas en el teléfono.
+# TODO: (Informativo) self.ui.listHistorial.addItem(QListWidgetItem(self.__icons[self.__turno], f'{self.__names[self.__turno]} tira los dados y saca {s1}:{s2}.'))
+#                     self.ui.listHistorial.setCurrentRow(self.ui.listHistorial.count() - 1)
 # TODO: (Opcional) Animar el movimiento de las fichas por el tablero.
 # TODO: (Opcional) Detectar victoria.
 # TODO: (Proximamente) Implementar la IA.
