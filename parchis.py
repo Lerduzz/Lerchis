@@ -136,7 +136,6 @@ class Ventana(QMainWindow):
         self.__icons[1].addPixmap(QPixmap(":/fichas/ficha1.png"), QIcon.Normal, QIcon.Off)
         self.__icons[2].addPixmap(QPixmap(":/fichas/ficha2.png"), QIcon.Normal, QIcon.Off)
         self.__icons[3].addPixmap(QPixmap(":/fichas/ficha3.png"), QIcon.Normal, QIcon.Off)
-        self.__names = ['Jugador rojo','Jugador verde','Jugador azul','Jugador naranja']
         self.__jugando = False
         self.__dadosTirados = False
         self.__disponibleDado1 = False
@@ -462,6 +461,7 @@ class Ventana(QMainWindow):
         self.ui.dado2.setStyleSheet(f'border-image: url(:/dados/dado{self.__turno}{s2}.png) 0 0 0 0 stretch stretch;')
 
     def onDadosGirados(self, s1, s2):
+        self.insertarMensaje(f'Tira los dados y saca [{s1}]:[{s2}]')
         self.__dado1 = s1
         self.__dado2 = s2
         self.mostrarDados(s1, s2)
@@ -596,13 +596,16 @@ class Ventana(QMainWindow):
                 if self.__disponibleDado1 and 1 in menuResp and self.__dado1 == 5:
                     if self.salirDeCasa(self.sender()):
                         self.__disponibleDado1 = False
+                        self.insertarMensaje('Saca una ficha con el primer dado')
                 elif self.__disponibleDado2 and 2 in menuResp and self.__dado2 == 5:
                     if self.salirDeCasa(self.sender()):
                         self.__disponibleDado2 = False
+                        self.insertarMensaje('Saca una ficha con el segundo dado')
                 elif self.__disponibleDado1 and self.__disponibleDado2 and 1 in menuResp and 2 in menuResp and self.__dado1 + self.__dado2 == 5:
                     if self.salirDeCasa(self.sender()):
                         self.__disponibleDado1 = False
                         self.__disponibleDado2 = False
+                        self.insertarMensaje('Saca una ficha con ambos dados')
         else:
             movio = False
             total = 0
@@ -804,6 +807,13 @@ class Ventana(QMainWindow):
         self.__reactivarWorker.finished.connect(self.prepararDados) 
         self.__reactivarThread.start()
 
+    def insertarMensaje(self, msg):
+        names = ['ROJO','VERDE','AZUL','NARANJA']
+        self.ui.listHistorial.addItem(
+            QListWidgetItem(self.__icons[self.__turno], f'[{names[self.__turno]}]: {msg}.')
+        )
+        self.ui.listHistorial.setCurrentRow(self.ui.listHistorial.count() - 1)
+
 
 app = QApplication([])
 app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt5'))
@@ -816,8 +826,6 @@ sys.exit(app.exec())
 # TODO: Si te queda una sola ficha y a esta le queda 6 movimientos o menos para entrar tiras con un solo dado.
 # TODO: La funcion de nueva partida deve devolver las fichas al inicio.
 # TODO: (Informativo) Agregarle las reglas que tengo escritas en el teléfono.
-# TODO: (Informativo) self.ui.listHistorial.addItem(QListWidgetItem(self.__icons[self.__turno], f'{self.__names[self.__turno]} tira los dados y saca {s1}:{s2}.'))
-#                     self.ui.listHistorial.setCurrentRow(self.ui.listHistorial.count() - 1)
 # TODO: (Opcional) Animar el movimiento de las fichas por el tablero.
 # TODO: (Opcional) Detectar victoria.
 # TODO: (Proximamente) Implementar la IA.
