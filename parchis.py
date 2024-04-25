@@ -131,6 +131,7 @@ class Ventana(QMainWindow):
             self.__rutas[i] += self.__metas[i]
         self.__excluir = [0, 6, 10, 14, 20, 24, 28, 34, 38, 42, 48, 52, 53, 54, 55, 56, 57, 58, 59]
         self.__bridges = [0, 14, 28, 42]
+        self.__names = ['ROJO','VERDE','AZUL','NARANJA']
         self.__icons = [QIcon(),QIcon(),QIcon(),QIcon()]
         self.__icons[0].addPixmap(QPixmap(":/fichas/ficha0.png"), QIcon.Normal, QIcon.Off)
         self.__icons[1].addPixmap(QPixmap(":/fichas/ficha1.png"), QIcon.Normal, QIcon.Off)
@@ -632,6 +633,8 @@ class Ventana(QMainWindow):
                         if self.__rutas[self.__turno][posI + total][j] == None and not self.hayPuenteEnMedio(posI, posI + total):
                             if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, j):
                                 self.relocateAll()
+                                mFicha = None
+                                llego = False
                                 if usadoDado1:
                                     self.__disponibleDado1 = False
                                 if usadoDado2:
@@ -645,8 +648,18 @@ class Ventana(QMainWindow):
                                     if j != jC and fM != None and not posI + total in self.__excluir and not self.esMia(fM):
                                         if self.matarFicha(fM):
                                             self.__disponibleBonusMatar = True
+                                            mFicha = fM
                                 if posI + total == len(self.__rutas[self.__turno]) - 1:
                                     self.__disponibleBonusLlegar = True
+                                    llego = True
+                                pL = 's' if total > 1 else ''
+                                if mFicha != None:
+                                    oFicha, iFicha = self.obtenerOwnerIndex(mFicha)                                    
+                                    self.insertarMensaje(f'Mata una ficha del jugador [{self.__names[oFicha]}] con {total} paso{pL}')
+                                elif llego:
+                                    self.insertarMensaje(f'Entra en la casilla de meta con {total} paso{pL}')
+                                else:
+                                    self.insertarMensaje(f'Camina un total de {total} paso{pL}')
         if not self.puedeJugar():
             if self.__repetirTirada:
                 self.__repetirTirada = False
@@ -808,9 +821,8 @@ class Ventana(QMainWindow):
         self.__reactivarThread.start()
 
     def insertarMensaje(self, msg):
-        names = ['ROJO','VERDE','AZUL','NARANJA']
         self.ui.listHistorial.addItem(
-            QListWidgetItem(self.__icons[self.__turno], f'[{names[self.__turno]}]: {msg}.')
+            QListWidgetItem(self.__icons[self.__turno], f'[{self.__names[self.__turno]}]: {msg}.')
         )
         self.ui.listHistorial.setCurrentRow(self.ui.listHistorial.count() - 1)
 
