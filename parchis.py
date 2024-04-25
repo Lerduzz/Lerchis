@@ -416,13 +416,11 @@ class Ventana(QMainWindow):
             if hasta <= pos:
                 break
             hayPuente = True
-            for j in range(len(self.__rutas[self.__turno][pos])):
-                if self.__rutas[self.__turno][pos][j] == None:
+            for cCel in self.__rutas[self.__turno][pos]:
+                if cCel == None:
                     hayPuente = False
                     break
-                owner, index = self.obtenerOwnerIndex(
-                    self.__rutas[self.__turno][pos][j]
-                )
+                owner = self.obtenerOwnerIndex(cCel)[0]
                 if owner != posOwner:
                     hayPuente = False
                     break
@@ -504,7 +502,6 @@ class Ventana(QMainWindow):
                         self.__disponibleDado2 = False
                         self.insertarMensaje("Saca una ficha con ambos dados")
         else:
-            movio = False
             total = 0
             usadoDado1 = False
             usadoDado2 = False
