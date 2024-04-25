@@ -1,7 +1,7 @@
 import sys
 import qdarkstyle
-from PyQt5.QtCore import QPoint, QThread
-from PyQt5.QtGui import QResizeEvent
+from PyQt5.QtCore import QPoint, QThread, Qt
+from PyQt5.QtGui import QResizeEvent, QKeyEvent
 from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem, QMenu, QAction
 from parchis_ui import Ui_VentanaJuego
 from workers.dados import DadosWorker, ReactivarWorker
@@ -47,6 +47,13 @@ class Ventana(QMainWindow):
         super().resizeEvent(e)
         self.resizeAll()
         self.relocateAll()
+
+    def keyPressEvent(self, e: QKeyEvent):
+        if e.key() == Qt.Key.Key_F11:
+            if self.isFullScreen():
+                self.showNormal()
+            else:
+                self.showFullScreen()
 
     def abrirMenu(self, sender):
         menu = QMenu(self)
