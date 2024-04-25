@@ -286,10 +286,17 @@ class Ventana(QMainWindow):
         enJuego = 4 - self.contarFichas(self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1])
         dadoSolo = 0
         if enJuego == 1:
-            if self.sender() == self.ui.dado1:
-                dadoSolo = 1
-            if self.sender() == self.ui.dado2:
-                dadoSolo = 2
+            rectaFinal = False
+            metaIndex = len(self.__rutas[self.__turno]) - 1
+            for i in range(metaIndex - 6, metaIndex):
+                for f in self.__rutas[self.__turno][i]:
+                    if f != None and self.esMia(f):
+                        rectaFinal = True
+            if rectaFinal:
+                if self.sender() == self.ui.dado1:
+                    dadoSolo = 1
+                if self.sender() == self.ui.dado2:
+                    dadoSolo = 2
         self.ui.dado1.setEnabled(False)
         self.ui.dado2.setEnabled(False)
         self.__dadosThread = QThread()
