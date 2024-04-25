@@ -232,7 +232,11 @@ class Ventana(QMainWindow):
                 count += 1
 
         if self.__disponibleDado1 and self.__disponibleDado2:
-            if not self.estaEnCasa(sender):
+            if self.estaEnCasa(sender):
+                if self.__dado1 + self.__dado2 == 5 and self.puedeSalir():
+                    menu.addAction(actionDado1Dado2)
+                    count += 1
+            else:
                 if self.puedeMover(sender, self.__dado1 + self.__dado2):
                     menu.addAction(actionDado1Dado2)
                     count += 1
@@ -523,8 +527,8 @@ class Ventana(QMainWindow):
         for i in range(self.__turno * 4, self.__turno * 4 + 4):
             ficha = self.__fichas[i]
             if self.estaEnCasa(ficha):
-                if (self.__disponibleDado1 and self.__dado1 == 5) or (self.__disponibleDado2 and self.__dado2 == 5):
-                    if self.puedeSalir():
+                if self.puedeSalir():
+                    if (self.__disponibleDado1 and self.__dado1 == 5) or (self.__disponibleDado2 and self.__dado2 == 5) or (self.__disponibleDado1 and self.__disponibleDado2 and self.__dado1 + self.__dado2 == 5):
                         return True
             else:
                 mData = [(self.__disponibleDado1,self.__dado1),(self.__disponibleDado2,self.__dado2),(self.__disponibleBonusLlegar,10),(self.__disponibleBonusMatar,20)]
@@ -623,20 +627,19 @@ class Ventana(QMainWindow):
             menuResp = self.abrirMenu(self.sender())
         if len(menuResp) == 0:
             return
-        mover = True
         if self.estaEnCasa(self.sender()):
-            salio = False
-            if self.__disponibleDado1 and 1 in menuResp and self.__dado1 == 5:
-                if self.salirDeCasa(self.sender()):
-                    self.__disponibleDado1 = False
-                    salio = True
-            if not salio and self.__disponibleDado2 and 2 in menuResp and self.__dado2 == 5:
-                if self.salirDeCasa(self.sender()):
-                    self.__disponibleDado2 = False
-                    salio = True
-            if not salio:
-                mover = False
-        if mover:
+            if self.puedeSalir():
+                if self.__disponibleDado1 and 1 in menuResp and self.__dado1 == 5:
+                    if self.salirDeCasa(self.sender()):
+                        self.__disponibleDado1 = False
+                elif self.__disponibleDado2 and 2 in menuResp and self.__dado2 == 5:
+                    if self.salirDeCasa(self.sender()):
+                        self.__disponibleDado2 = False
+                elif self.__disponibleDado1 and self.__disponibleDado2 and 1 in menuResp and 2 in menuResp and self.__dado1 + self.__dado2 == 5:
+                    if self.salirDeCasa(self.sender()):
+                        self.__disponibleDado1 = False
+                        self.__disponibleDado2 = False
+        else:
             movio = False
             total = 0
             usadoDado1 = False
