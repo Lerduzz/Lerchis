@@ -1,104 +1,11 @@
-import sys, time, random, qdarkstyle
+import sys, qdarkstyle
 from PyQt5.QtCore import QObject, QPoint, QThread, pyqtSignal
 from PyQt5.QtGui import QResizeEvent, QIcon, QPixmap, QFont
-from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem, QMenu, QAction, QProxyStyle, QStyle
+from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem, QMenu, QAction
 from parchis_ui import Ui_VentanaJuego
-
-class DadosWorker(QObject):
-    finished = pyqtSignal(int, int)
-    progress = pyqtSignal(int, int)
-
-    def __init__(self, s1, s2):
-        super().__init__()
-        self.__s1 = s1
-        self.__s2 = s2
-        self.__r1 = random.randint(1, 6)
-        self.__r2 = random.randint(1, 6)
-
-    def run(self):
-        d1C = 0
-        d2C = 0
-        alt = random.randint(1, 6)
-        flag = 0
-        skip = random.randint(1, 2)
-        m1 = random.randint(2, 4)
-        m2 = random.randint(2, 4)
-        while d1C < m1 or d2C < m2:
-            if alt <= 3:
-                if flag >= skip:
-                    d1C += 1 if d1C < m1 and self.__s1 == self.__r1 else 0
-                    self.__s1 += 1 if d1C < m1 else 0
-                    self.__s1 = 1 if self.__s1 > 6 else self.__s1
-                    flag = 0
-                else:
-                    flag += 1
-            else:
-                d1C += 1 if d1C < m1 and self.__s1 == self.__r1 else 0
-                self.__s1 += 1 if d1C < m1 else 0
-                self.__s1 = 1 if self.__s1 > 6 else self.__s1
-            if alt >= 4:
-                if flag >= skip:
-                    d2C += 1 if d2C < m2 and self.__s2 == self.__r2 else 0
-                    self.__s2 += 1 if d2C < m2 else 0
-                    self.__s2 = 1 if self.__s2 > 6 else self.__s2
-                    flag = 0
-                else:
-                    flag += 1
-            else:
-                d2C += 1 if d2C < m2 and self.__s2 == self.__r2 else 0
-                self.__s2 += 1 if d2C < m2 else 0
-                self.__s2 = 1 if self.__s2 > 6 else self.__s2
-            self.progress.emit(self.__s1, self.__s2)
-            time.sleep(0.01)
-        self.finished.emit(self.__r1, self.__r2)
-
-
-class TurnoWorker(QObject):
-    started = pyqtSignal(int)
-    finished = pyqtSignal(int)
-    progress = pyqtSignal(int)
-
-    def __init__(self, start):
-        super().__init__()
-        self.__max = start
-        self.__value = 0
-        self.__interval = 0.9
-
-    def run(self):
-        self.started.emit(self.__max)
-        while self.__value < self.__max:
-            self.progress.emit(self.__value)
-            self.__value += 1
-            time.sleep(self.__interval)
-        self.finished.emit(self.__value)
-
-    def faster(self):
-        self.__interval = 0.025
-
-
-class ReactivarWorker(QObject):
-    finished = pyqtSignal()
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        count = 0
-        while count < 5:
-            time.sleep(0.25)
-            count += 1
-        self.finished.emit()
-
-
-class EstiloIconos(QProxyStyle):
-    def __init__(self, size):
-        super().__init__()
-        self.__size = size
-
-    def pixelMetric(self, metric, option = 0, widget = 0):
-        if metric == QStyle.PM_SmallIconSize:
-            return self.__size
-        return super().pixelMetric(metric, option, widget)
+from workers.dados import DadosWorker, ReactivarWorker
+from workers.turno import TurnoWorker
+from utils.utils import EstiloIconos, Utils
 
 
 class Ventana(QMainWindow):
@@ -371,7 +278,7 @@ class Ventana(QMainWindow):
                 x, y, o = self.__posCaminos[i]
                 for j in range(len(self.__caminos[i])):
                     if self.__caminos[i][j] != None:
-                        xR, yR = self.calcularPosicionCasilla(x, y, o, j, h, hCasilla, hFicha)
+                        xR, yR = Utils.calcularPosicionCasilla(x, y, o, j, h, hCasilla, hFicha)
                         self.__caminos[i][j].move(xR, yR)
         for i in range(len(self.__metas)):
             if i < len(self.__posMetas):
@@ -380,94 +287,8 @@ class Ventana(QMainWindow):
                         x, y, o = self.__posMetas[i][j]
                         for k in range(len(self.__metas[i][j])):
                             if self.__metas[i][j][k] != None:
-                                xR, yR = self.calcularPosicionCasilla(x, y, o, k, h, hCasilla, hFicha)
+                                xR, yR = Utils.calcularPosicionCasilla(x, y, o, k, h, hCasilla, hFicha)
                                 self.__metas[i][j][k].move(xR, yR)
-
-    def calcularPosicionCasilla(self, x, y, o, i, h, hC, hF):
-        dX = x * h // 950
-        dY = y * h // 950
-        xR, yR = (dX, dY)
-        dP1 = hC // 2 - hF - hF // 10
-        dP2 = hC // 2 + hF // 10
-        if o == 0:
-            xR = dX + dP1 if i == 0 else dX + dP2
-            yR = dY
-        elif o == 1:
-            xR = dX
-            yR = dY + dP1 if i == 0 else dY + dP2        
-        elif o == 2:
-            xR = dX + hC // 2 - hF // 4 if i == 0 else dX + hC // 2 + hF // 2 + hF // 10
-            yR = dY if i == 0 else dY + hF // 2
-        elif o == 3:
-            xR = dX + hF if i == 0 else dX + hF * 2 - hF // 3
-            yR = dY + hF if i == 0 else dY + hF * 2 - hF // 3
-        elif o == 4:
-            xR = dX if i == 0 else dX + hF // 2
-            yR = dY + hC // 2 - hF // 4 if i == 0 else dY + hC // 2 + hF // 2 + hF // 10        
-        elif o == 5:
-            xR = dX if i == 0 else dX + hF // 2
-            yR = dY - hF - hC // 2 + hF // 4 if i == 0 else dY - hF - hC // 2 - hF // 2 - hF // 10
-        elif o == 6:
-            xR = dX + hF if i == 0 else dX + hF * 2 - hF // 3
-            yR = dY - hF * 2 if i == 0 else dY - hF * 3 + hF // 3
-        elif o == 7:
-            xR = dX + hC // 2 - hF // 4 if i == 0 else dX + hC // 2 + hF // 2 + hF // 10
-            yR = dY - hF if i == 0 else dY - hF - hF // 2        
-        elif o == 8:
-            xR = dX - hF - hC // 2 + hF // 4 if i == 0 else dX - hF - hC // 2 - hF // 2 - hF // 10
-            yR = dY - hF if i == 0 else dY - hF - hF // 2
-        elif o == 9:
-            xR = dX - hF * 2 if i == 0 else dX - hF * 3 + hF // 3
-            yR = dY - hF * 2 if i == 0 else dY - hF * 3 + hF // 3
-        elif o == 10:
-            xR = dX - hF if i == 0 else dX - hF - hF // 2
-            yR = dY - hF - hC // 2 + hF // 4 if i == 0 else dY - hF - hC // 2 - hF // 2 - hF // 10
-        elif o == 11:
-            xR = dX - hF if i == 0 else dX - hF - hF // 2
-            yR = dY + hC // 2 - hF // 4 if i == 0 else dY + hC // 2 + hF // 2 + hF // 10
-        elif o == 12:
-            xR = dX - hF * 2 if i == 0 else dX - hF * 3 + hF // 3
-            yR = dY + hF if i == 0 else dY + hF * 2 - hF // 3
-        elif o == 13:
-            xR = dX - hF - hC // 2 + hF // 4 if i == 0 else dX - hF - hC // 2 - hF // 2 - hF // 10
-            yR = dY if i == 0 else dY + hF // 2
-        elif o == 14:
-            xR = dX - hF if i == 0 or i == 1 else dX
-            yR = dY - hF if i == 0 or i == 3 else dY
-            if i == 0:
-                xR -= hF * 3 // 4
-            if i == 3:
-                xR += hF * 3 // 4
-            if i == 1 or i == 2:
-                yR -= hF // 3
-        elif o == 15:
-            xR = dX - hF if i == 0 or i == 1 else dX
-            yR = dY - hF if i == 0 or i == 3 else dY
-            if i == 0:
-                yR -= hF * 3 // 4
-            if i == 1:
-                yR += hF * 3 // 4
-            if i == 2 or i == 3:
-                xR -= hF // 3
-        elif o == 16:
-            xR = dX - hF if i == 0 or i == 1 else dX
-            yR = dY - hF if i == 0 or i == 3 else dY
-            if i == 1:
-                xR -= hF * 3 // 4
-            if i == 2:
-                xR += hF * 3 // 4
-            if i == 0 or i == 3:
-                yR += hF // 3
-        elif o == 17:
-            xR = dX - hF if i == 0 or i == 1 else dX
-            yR = dY - hF if i == 0 or i == 3 else dY
-            if i == 3:
-                yR -= hF * 3 // 4
-            if i == 2:
-                yR += hF * 3 // 4
-            if i == 0 or i == 1:
-                xR += hF // 3
-        return (xR, yR)
 
     def tirarDados(self):
         self.ui.dado1.setEnabled(False)
@@ -659,7 +480,7 @@ class Ventana(QMainWindow):
                 if posI + total < len(self.__rutas[self.__turno]):
                     for j in range(len(self.__rutas[self.__turno][posI + total])):
                         if self.__rutas[self.__turno][posI + total][j] == None and not self.hayPuenteEnMedio(posI, posI + total):
-                            if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, j):
+                            if Utils.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, j):
                                 self.relocateAll()
                                 mFicha = None
                                 llego = False
@@ -714,11 +535,11 @@ class Ventana(QMainWindow):
         s1 = self.__rutas[self.__turno][0][0]
         s2 = self.__rutas[self.__turno][0][1]
         if s1 == None:
-            if self.moverFicha(self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 0):
+            if Utils.moverFicha(self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 0):
                 self.relocateAll()
                 return True
         elif s2 == None:
-            if self.moverFicha(self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 1):
+            if Utils.moverFicha(self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 1):
                 self.relocateAll()
                 return True
         return False
@@ -726,7 +547,7 @@ class Ventana(QMainWindow):
     def matarFicha(self, ficha):
         posI, posJ = self.obtenerPosRuta(ficha)
         owner, index = self.obtenerOwnerIndex(ficha)
-        if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__casas, owner, index):
+        if Utils.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__casas, owner, index):
             self.relocateAll()
             return True
         return False
@@ -799,14 +620,6 @@ class Ventana(QMainWindow):
         self.ui.btnNuevaPartida.setEnabled(True)
         if self.__contandoTurno:
             self.__turnoWorker.faster()
-
-    def moverFicha(self, desde, iD, jD, hasta, iH, jH):
-        if desde[iD][jD] == None or hasta[iH][jH] != None:
-            return False
-        temp = hasta[iH][jH]
-        hasta[iH][jH] = desde[iD][jD]
-        desde[iD][jD] = temp
-        return True
 
     def iniciarContadorTurno(self, start):
         if not self.__contandoTurno:
