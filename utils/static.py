@@ -1,0 +1,291 @@
+from PyQt5.QtGui import QIcon, QPixmap
+
+
+class InitStatic:
+    def fichas(ui, cFunc):
+        fichas = [
+            ui.ficha00,
+            ui.ficha01,
+            ui.ficha02,
+            ui.ficha03,
+            ui.ficha10,
+            ui.ficha11,
+            ui.ficha12,
+            ui.ficha13,
+            ui.ficha20,
+            ui.ficha21,
+            ui.ficha22,
+            ui.ficha23,
+            ui.ficha30,
+            ui.ficha31,
+            ui.ficha32,
+            ui.ficha33,
+        ]
+        for f in fichas:
+            f.clicked.connect(cFunc)
+        return fichas
+
+    def casas(ui):
+        return [
+            [ui.ficha00, ui.ficha01, ui.ficha02, ui.ficha03],
+            [ui.ficha10, ui.ficha11, ui.ficha12, ui.ficha13],
+            [ui.ficha20, ui.ficha21, ui.ficha22, ui.ficha23],
+            [ui.ficha30, ui.ficha31, ui.ficha32, ui.ficha33],
+        ]
+
+    def caminos():
+        return [
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+            [None, None],
+        ]
+
+    def posCaminos():
+        return [
+            (250, 0, 0),
+            (250, 50, 0),
+            (250, 100, 0),
+            (250, 150, 0),
+            (250, 200, 0),
+            (250, 250, 2),
+            (250, 250, 3),
+            (250, 250, 4),
+            (200, 250, 1),
+            (150, 250, 1),
+            (100, 250, 1),
+            (50, 250, 1),
+            (0, 250, 1),
+            (0, 400, 1),
+            (0, 550, 1),
+            (50, 550, 1),
+            (100, 550, 1),
+            (150, 550, 1),
+            (200, 550, 1),
+            (250, 700, 5),
+            (250, 700, 6),
+            (250, 700, 7),
+            (250, 700, 0),
+            (250, 750, 0),
+            (250, 800, 0),
+            (250, 850, 0),
+            (250, 900, 0),
+            (400, 900, 0),
+            (550, 900, 0),
+            (550, 850, 0),
+            (550, 800, 0),
+            (550, 750, 0),
+            (550, 700, 0),
+            (700, 700, 8),
+            (700, 700, 9),
+            (700, 700, 10),
+            (700, 550, 1),
+            (750, 550, 1),
+            (800, 550, 1),
+            (850, 550, 1),
+            (900, 550, 1),
+            (900, 400, 1),
+            (900, 250, 1),
+            (850, 250, 1),
+            (800, 250, 1),
+            (750, 250, 1),
+            (700, 250, 1),
+            (700, 250, 11),
+            (700, 250, 12),
+            (700, 250, 13),
+            (550, 200, 0),
+            (550, 150, 0),
+            (550, 100, 0),
+            (550, 50, 0),
+            (550, 0, 0),
+            (400, 0, 0),
+        ]
+
+    def metas():
+        return [
+            [
+                [None, None],
+                [None, None],
+                [None, None],
+                [None, None],
+                [None, None],
+                [None, None],
+                [None, None, None, None],
+            ],
+            [
+                [None, None],
+                [None, None],
+                [None, None],
+                [None, None],
+                [None, None],
+                [None, None],
+                [None, None, None, None],
+            ],
+            [
+                [None, None],
+                [None, None],
+                [None, None],
+                [None, None],
+                [None, None],
+                [None, None],
+                [None, None, None, None],
+            ],
+            [
+                [None, None],
+                [None, None],
+                [None, None],
+                [None, None],
+                [None, None],
+                [None, None],
+                [None, None, None, None],
+            ],
+        ]
+
+    def posMetas():
+        return [
+            [
+                (400, 50, 0),
+                (400, 100, 0),
+                (400, 150, 0),
+                (400, 200, 0),
+                (400, 250, 0),
+                (400, 300, 0),
+                (475, 400, 14),
+            ],
+            [
+                (50, 400, 1),
+                (100, 400, 1),
+                (150, 400, 1),
+                (200, 400, 1),
+                (250, 400, 1),
+                (300, 400, 1),
+                (400, 475, 15),
+            ],
+            [
+                (400, 850, 0),
+                (400, 800, 0),
+                (400, 750, 0),
+                (400, 700, 0),
+                (400, 650, 0),
+                (400, 600, 0),
+                (475, 550, 16),
+            ],
+            [
+                (850, 400, 1),
+                (800, 400, 1),
+                (750, 400, 1),
+                (700, 400, 1),
+                (650, 400, 1),
+                (600, 400, 1),
+                (550, 475, 17),
+            ],
+        ]
+
+    def rutas(caminos, metas):
+        result = [[], [], [], []]
+        for i in range(3, 56):
+            result[0].append(caminos[i])
+        for i in range(17, 56):
+            result[1].append(caminos[i])
+        for i in range(0, 14):
+            result[1].append(caminos[i])
+        for i in range(31, 56):
+            result[2].append(caminos[i])
+        for i in range(0, 28):
+            result[2].append(caminos[i])
+        for i in range(45, 56):
+            result[3].append(caminos[i])
+        for i in range(0, 42):
+            result[3].append(caminos[i])
+        for i in range(4):
+            result[i] += metas[i]
+        return result
+
+    def excluir():
+        return [
+            0,
+            6,
+            10,
+            14,
+            20,
+            24,
+            28,
+            34,
+            38,
+            42,
+            48,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+        ]
+
+    def bridges():
+        return [0, 14, 28, 42]
+
+    def names():
+        return ["ROJO", "VERDE", "AZUL", "NARANJA"]
+
+    def icons():
+        result = [QIcon(), QIcon(), QIcon(), QIcon()]
+        result[0].addPixmap(QPixmap(":/fichas/ficha0.png"), QIcon.Normal, QIcon.Off)
+        result[1].addPixmap(QPixmap(":/fichas/ficha1.png"), QIcon.Normal, QIcon.Off)
+        result[2].addPixmap(QPixmap(":/fichas/ficha2.png"), QIcon.Normal, QIcon.Off)
+        result[3].addPixmap(QPixmap(":/fichas/ficha3.png"), QIcon.Normal, QIcon.Off)
+        return result
