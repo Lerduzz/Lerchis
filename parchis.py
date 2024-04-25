@@ -3,44 +3,8 @@ from PyQt5.QtCore import QObject, QPoint, QThread, pyqtSignal
 from PyQt5.QtGui import QResizeEvent, QIcon, QPixmap, QFont
 from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem, QMenu, QAction, QProxyStyle, QStyle
 from parchis_ui import Ui_VentanaJuego
-from workers.dados import DadosWorker
-
-class TurnoWorker(QObject):
-    started = pyqtSignal(int)
-    finished = pyqtSignal(int)
-    progress = pyqtSignal(int)
-
-    def __init__(self, start):
-        super().__init__()
-        self.__max = start
-        self.__value = 0
-        self.__interval = 0.9
-
-    def run(self):
-        self.started.emit(self.__max)
-        while self.__value < self.__max:
-            self.progress.emit(self.__value)
-            self.__value += 1
-            time.sleep(self.__interval)
-        self.finished.emit(self.__value)
-
-    def faster(self):
-        self.__interval = 0.025
-
-
-class ReactivarWorker(QObject):
-    finished = pyqtSignal()
-
-    def __init__(self):
-        super().__init__()
-
-    def run(self):
-        count = 0
-        while count < 5:
-            time.sleep(0.25)
-            count += 1
-        self.finished.emit()
-
+from workers.dados import DadosWorker, ReactivarWorker
+from workers.turno import TurnoWorker
 
 class EstiloIconos(QProxyStyle):
     def __init__(self, size):

@@ -48,3 +48,17 @@ class DadosWorker(QObject):
             self.progress.emit(self.__s1, self.__s2)
             time.sleep(0.01)
         self.finished.emit(self.__r1, self.__r2)
+
+
+class ReactivarWorker(QObject):
+    finished = pyqtSignal()
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        count = 0
+        while count < 5:
+            time.sleep(0.25)
+            count += 1
+        self.finished.emit()
