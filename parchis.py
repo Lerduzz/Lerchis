@@ -276,6 +276,7 @@ class Ventana(QMainWindow):
                                 self.__metas[i][j][k].move(xR, yR)
 
     def tirarDados(self):
+        # TODO: Detectar si te queda una sola ficha y se encuentra en la recta final.
         self.ui.dado1.setEnabled(False)
         self.ui.dado2.setEnabled(False)
         self.__dadosThread = QThread()
@@ -303,8 +304,8 @@ class Ventana(QMainWindow):
         self.__dado2 = s2
         self.mostrarDados(s1, s2)
         self.__dadosTirados = True
-        self.__disponibleDado1 = True
-        self.__disponibleDado2 = True
+        self.__disponibleDado1 = self.__dado1 > 0
+        self.__disponibleDado2 = self.__dado2 > 0
         if s1 == s2:
             if self.__cuentaDoble < 2:
                 self.__cuentaDoble += 1
