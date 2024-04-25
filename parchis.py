@@ -1,20 +1,11 @@
-import sys, time, qdarkstyle
+import sys, qdarkstyle
 from PyQt5.QtCore import QObject, QPoint, QThread, pyqtSignal
 from PyQt5.QtGui import QResizeEvent, QIcon, QPixmap, QFont
-from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem, QMenu, QAction, QProxyStyle, QStyle
+from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem, QMenu, QAction
 from parchis_ui import Ui_VentanaJuego
 from workers.dados import DadosWorker, ReactivarWorker
 from workers.turno import TurnoWorker
-
-class EstiloIconos(QProxyStyle):
-    def __init__(self, size):
-        super().__init__()
-        self.__size = size
-
-    def pixelMetric(self, metric, option = 0, widget = 0):
-        if metric == QStyle.PM_SmallIconSize:
-            return self.__size
-        return super().pixelMetric(metric, option, widget)
+from utils.utils import EstiloIconos
 
 
 class Ventana(QMainWindow):
