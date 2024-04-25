@@ -12,6 +12,14 @@ class EstiloIconos(QProxyStyle):
 
 
 class Utils:
+    def moverFicha(desde, iD, jD, hasta, iH, jH):
+        if desde[iD][jD] == None or hasta[iH][jH] != None:
+            return False
+        temp = hasta[iH][jH]
+        hasta[iH][jH] = desde[iD][jD]
+        desde[iD][jD] = temp
+        return True
+
     def calcularPosicionCasilla(x, y, o, i, h, hC, hF):
         dX = x * h // 950
         dY = y * h // 950

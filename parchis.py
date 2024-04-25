@@ -480,7 +480,7 @@ class Ventana(QMainWindow):
                 if posI + total < len(self.__rutas[self.__turno]):
                     for j in range(len(self.__rutas[self.__turno][posI + total])):
                         if self.__rutas[self.__turno][posI + total][j] == None and not self.hayPuenteEnMedio(posI, posI + total):
-                            if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, j):
+                            if Utils.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__rutas[self.__turno], posI + total, j):
                                 self.relocateAll()
                                 mFicha = None
                                 llego = False
@@ -535,11 +535,11 @@ class Ventana(QMainWindow):
         s1 = self.__rutas[self.__turno][0][0]
         s2 = self.__rutas[self.__turno][0][1]
         if s1 == None:
-            if self.moverFicha(self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 0):
+            if Utils.moverFicha(self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 0):
                 self.relocateAll()
                 return True
         elif s2 == None:
-            if self.moverFicha(self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 1):
+            if Utils.moverFicha(self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 1):
                 self.relocateAll()
                 return True
         return False
@@ -547,7 +547,7 @@ class Ventana(QMainWindow):
     def matarFicha(self, ficha):
         posI, posJ = self.obtenerPosRuta(ficha)
         owner, index = self.obtenerOwnerIndex(ficha)
-        if self.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__casas, owner, index):
+        if Utils.moverFicha(self.__rutas[self.__turno], posI, posJ, self.__casas, owner, index):
             self.relocateAll()
             return True
         return False
@@ -620,14 +620,6 @@ class Ventana(QMainWindow):
         self.ui.btnNuevaPartida.setEnabled(True)
         if self.__contandoTurno:
             self.__turnoWorker.faster()
-
-    def moverFicha(self, desde, iD, jD, hasta, iH, jH):
-        if desde[iD][jD] == None or hasta[iH][jH] != None:
-            return False
-        temp = hasta[iH][jH]
-        hasta[iH][jH] = desde[iD][jD]
-        desde[iD][jD] = temp
-        return True
 
     def iniciarContadorTurno(self, start):
         if not self.__contandoTurno:
