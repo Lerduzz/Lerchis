@@ -644,6 +644,16 @@ class Ventana(QMainWindow):
                 if numSaltos >= 4:
                     terminar = True
                     break
+        else:
+            enMeta = Utils.contarFichas(self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1])
+            numSaltos = 0
+            while enMeta == 4:
+                self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
+                enMeta = Utils.contarFichas(self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1])
+                numSaltos += 1
+                if numSaltos >= 4:
+                    terminar = True
+                    break
         if terminar:
             self.terminarPartida()
         else: 
