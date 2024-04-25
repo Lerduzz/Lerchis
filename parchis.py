@@ -678,15 +678,3 @@ app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt5'))
 application = Ventana()
 application.show()
 sys.exit(app.exec())
-
-# TODO: Al comenzar una partida nueva hacer que el jugador que inicia sea aleatorio (y se establezca su turno).
-# TODO: Si solo una de tus fichas se puede mover y no hay jugada esrtategica (O sea que puede caminar todas las cantidades individuales y en ninguna come): moverla automaticamente.
-# TODO: Saltarse el turno del que termina (En caso de que se quiera continuar la partida luego de que gane uno).
-# TODO: Si te queda una sola ficha y a esta le queda 6 movimientos o menos para entrar tiras con un solo dado.
-# TODO: La funcion de nueva partida deve devolver las fichas al inicio.
-# TODO: (Informativo) Agregarle las reglas que tengo escritas en el teléfono.
-# TODO: (REGLA OPCIONAL) Hacer que si te cae doble tengas que abrir el puente obligatoriamente.
-# TODO: (Opcional) Animar el movimiento de las fichas por el tablero.
-# TODO: (Opcional) Detectar victoria.
-# TODO: (Proximamente) Implementar la IA.
-# TODO: (Proximamente) Implementar modo online.
