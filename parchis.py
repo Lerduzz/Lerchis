@@ -54,6 +54,9 @@ class Ventana(QMainWindow):
                 self.showNormal()
             else:
                 self.showFullScreen()
+        elif e.key() == Qt.Key.Key_Escape:
+            if self.isFullScreen() or self.isMaximized():
+                self.showNormal()
 
     def abrirMenu(self, sender):
         menu = QMenu(self)
