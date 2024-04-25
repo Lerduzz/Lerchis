@@ -25,16 +25,13 @@ class Ventana(QMainWindow):
         self.__cuentaDoble = 0
         self.__repetirTirada = False
         self.__fichas = InitStatic.fichas(self.ui, self.jugarFicha)
-        self.__casas = InitStatic.casas(self.ui)
-        self.__caminos = InitStatic.caminos()
         self.__posCaminos = InitStatic.posCaminos()
-        self.__metas = InitStatic.metas()
         self.__posMetas = InitStatic.posMetas()
-        self.__rutas = InitStatic.rutas(self.__caminos, self.__metas)
         self.__excluir = InitStatic.excluir()
         self.__bridges = InitStatic.bridges()
         self.__names = InitStatic.names()
         self.__icons = InitStatic.icons()
+        self.restablecerTablero()
         self.__jugando = False
         self.__dadosTirados = False
         self.__disponibleDado1 = False
@@ -42,6 +39,13 @@ class Ventana(QMainWindow):
         self.__disponibleBonusMatar = False
         self.__disponibleBonusLlegar = False
         self.__contandoTurno = False
+
+    def restablecerTablero(self):
+        self.__casas = InitStatic.casas(self.ui)
+        self.__caminos = InitStatic.caminos()
+        self.__metas = InitStatic.metas()
+        self.__rutas = InitStatic.rutas(self.__caminos, self.__metas)
+        self.relocateAll()
 
     def resizeEvent(self, e: QResizeEvent) -> None:
         super().resizeEvent(e)
@@ -694,9 +698,11 @@ class Ventana(QMainWindow):
 
     def nuevaPartida(self):
         self.ui.btnNuevaPartida.setEnabled(False)
+        self.restablecerTablero()
         self.__dado1 = 0
         self.__dado2 = 0
         self.__turno = 0
+        self.mostrarDados(0, 0)
         self.__cuentaDoble = 0
         self.__repetirTirada = False
         self.__jugando = True
