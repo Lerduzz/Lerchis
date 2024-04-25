@@ -484,9 +484,11 @@ class Ventana(QMainWindow):
         if not self.puedeJugar():
             if self.__repetirTirada:
                 self.iniciarReactivadorDados()
+                self.insertarMensaje('Sin movimientos disponibles, vuelve a tirar los dados')
             else:
                 if self.__contandoTurno:
                     self.__turnoWorker.faster()
+                self.insertarMensaje('Sin movimientos disponibles, terminando turno')
 
     def puedeJugar(self):
         for i in range(self.__turno * 4, self.__turno * 4 + 4):
