@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Juego de Parchis | Creado con Python y PyQt | v0.7.1 Beta</string>
+   <string>Lerchis</string>
   </property>
   <property name="windowIcon">
    <iconset resource="parchis.qrc">
