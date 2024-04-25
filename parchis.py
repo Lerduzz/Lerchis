@@ -824,7 +824,11 @@ class Ventana(QMainWindow):
         self.ui.listHistorial.addItem(
             QListWidgetItem(self.__icons[self.__turno], f'[{self.__names[self.__turno]}]: {msg}.')
         )
-        self.ui.listHistorial.setCurrentRow(self.ui.listHistorial.count() - 1)
+        count = self.ui.listHistorial.count()
+        while count > 1024:
+            self.ui.listHistorial.takeItem(0)
+            count = self.ui.listHistorial.count()
+        self.ui.listHistorial.setCurrentRow(count - 1)
 
 
 app = QApplication([])
