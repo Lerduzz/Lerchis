@@ -618,8 +618,8 @@ class Ventana(QMainWindow):
         menuResp = self.detectarJugadaAutomatica(self.sender())
         if menuResp == None:
             menuResp = self.abrirMenu(self.sender())
-        if len(menuResp) == 0:
-            return
+            if not self.__jugando or not self.__dadosTirados or not self.esMia(self.sender()) or len(menuResp) == 0:
+                return
         if self.estaEnCasa(self.sender()):
             if self.puedeSalir():
                 if self.__disponibleDado1 and 1 in menuResp and self.__dado1 == 5:
@@ -734,7 +734,7 @@ class Ventana(QMainWindow):
     def cambioDeTurno(self):
         if not self.__jugando:
             return
-        self.insertarMensaje('>>>=====> TURNO TERMINADO <=====<<<')
+        self.insertarMensaje('>>>========>> TURNO TERMINADO')
         self.__cuentaDoble = 0
         self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
         estados = [self.ui.checkPlayer0.isChecked(), self.ui.checkPlayer1.isChecked(), self.ui.checkPlayer2.isChecked(), self.ui.checkPlayer3.isChecked()]
@@ -866,7 +866,7 @@ application = Ventana()
 application.show()
 sys.exit(app.exec())
 
-# TODO: (URGENTE) Puede que haya problema si tienes el menu abierto y se agota el tiempo de tu turno.
+# TODO: Al comenzar una partida nueva hacer que el jugador que inicia sea aleatorio (y se establezca su turno).
 # TODO: Si solo una de tus fichas se puede mover y no hay jugada esrtategica (O sea que puede caminar todas las cantidades individuales y en ninguna come): moverla automaticamente.
 # TODO: Saltarse el turno del que termina (En caso de que se quiera continuar la partida luego de que gane uno).
 # TODO: Si te queda una sola ficha y a esta le queda 6 movimientos o menos para entrar tiras con un solo dado.
