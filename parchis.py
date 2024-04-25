@@ -91,9 +91,13 @@ class ReactivarWorker(QObject):
 
 
 class EstiloIconos(QProxyStyle):
+    def __init__(self, size):
+        super().__init__()
+        self.__size = size
+
     def pixelMetric(self, metric, option = 0, widget = 0):
-        if metric == QStyle.PM_SmallIconSize and (widget == None or isinstance(widget, QMenu)):
-            return 40
+        if metric == QStyle.PM_SmallIconSize:
+            return self.__size
         return super().pixelMetric(metric, option, widget)
 
 
@@ -159,12 +163,13 @@ class Ventana(QMainWindow):
 
     def abrirMenu(self, sender):
         menu = QMenu(self)
+        menu.setStyle(EstiloIconos(sender.width()))
         count = 0
         iconDado1 = QIcon()
         iconDado1.addPixmap(QPixmap(f":/dados/dado{self.__turno}{self.__dado1}.png"), QIcon.Normal, QIcon.Off)
         actionDado1 = QAction(iconDado1, 'Primer dado')
         font = QFont()
-        font.setPointSize(12)
+        font.setPointSize(14)
         font.setBold(True)
         font.setWeight(75)
         actionDado1.setFont(font)
@@ -857,11 +862,11 @@ class Ventana(QMainWindow):
 
 app = QApplication([])
 app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt5'))
-app.setStyle(EstiloIconos())
 application = Ventana()
 application.show()
 sys.exit(app.exec())
 
+# TODO: (URGENTE) Puede que haya problema si tienes el menu abierto y se agota el tiempo de tu turno.
 # TODO: Si solo una de tus fichas se puede mover y no hay jugada esrtategica (O sea que puede caminar todas las cantidades individuales y en ninguna come): moverla automaticamente.
 # TODO: Saltarse el turno del que termina (En caso de que se quiera continuar la partida luego de que gane uno).
 # TODO: Si te queda una sola ficha y a esta le queda 6 movimientos o menos para entrar tiras con un solo dado.

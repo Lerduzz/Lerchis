@@ -268,7 +268,7 @@ class Ui_VentanaJuego(object):
 
     def retranslateUi(self, VentanaJuego):
         _translate = QtCore.QCoreApplication.translate
-        VentanaJuego.setWindowTitle(_translate("VentanaJuego", "Juego de Parchis | Creado con Python y PyQt | v0.7.1 Beta"))
+        VentanaJuego.setWindowTitle(_translate("VentanaJuego", "Lerchis"))
         self.cajaJugar.setTitle(_translate("VentanaJuego", "Jugar"))
         self.checkPlayer0.setText(_translate("VentanaJuego", "Rojo"))
         self.checkPlayer1.setText(_translate("VentanaJuego", "Verde"))
