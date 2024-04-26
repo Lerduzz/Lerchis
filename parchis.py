@@ -35,7 +35,7 @@ class Ventana(QMainWindow):
         self.__icons = InitStatic.icons()
         self.restablecerTablero()
         self.__jugando = False
-        self.__dadosTirados = False
+        self.__dadosT = False
         self.__disponibleDado1 = False
         self.__disponibleDado2 = False
         self.__disponibleBono2 = False
@@ -65,16 +65,19 @@ class Ventana(QMainWindow):
                 self.showNormal()
 
     def fichaClicEvent(self):
-        # Comprobar que estes jugando, que hayas girado los dados y que la ficha sea tuya.
-        # Comprobar si la ficha se puede mover.
-        # JUGAR AUTOMATICAMENTE: Sacar la ficha (¿y caminarla?) o caminarla el mayor numero de pasos posibles.
-        print("Ficha clic")
-        pass
-
+        if not Utils.puedeUsarFicha(self, self.__jugando, self.__dadosT, self.sender()):
+            return
+        if self.estaEnCasa(self.sender()):
+            if self.puedeSalir():
+                # TODO: Sacar ficha.
+                pass
+            else:
+                return
+        # TODO: Mover cuando no esta en casa.
+        
     def fichaClicDerEvent(self):
-        # Comprobar que estes jugando, que hayas girado los dados y que la ficha sea tuya.
-        # Comprobar si la ficha se puede mover.
-        # Mostrar el menu con los posibles movimientos...
+        if not Utils.puedeUsarFicha(self, self.__jugando, self.__dadosT, self.sender()):
+            return
         mov = Utils.crearMenuContextual(
             self,
             self.sender(),
@@ -86,7 +89,21 @@ class Ventana(QMainWindow):
             self.__disponibleBono1,
             self.__disponibleBono2,
         )
-        # ...y mover en consecuencia.
+        # TODO: Mover o sacar la ficha.
+
+    def estaEnCasa(self, ficha):
+        for fC in self.__casas[self.__turno]:
+            if fC != None and ficha != None and fC == ficha:
+                return True
+        return False
+
+    def puedeSalir(self):
+        if self.__dado1 == 5 or self.__dado2 == 5 or self.__dado1 + self.__dado2 == 5:
+            s1 = self.__rutas[self.__turno][0][0]
+            s2 = self.__rutas[self.__turno][0][1]
+            if not (s1 != None and s2 != None and self.esMia(s1) and self.esMia(s2)):
+                return True
+        return False
 
     def detectarJugadaAutomatica(self, sender):
         jugadasValidas = []
@@ -227,7 +244,7 @@ class Ventana(QMainWindow):
         self.__dado1 = s1
         self.__dado2 = s2
         self.mostrarDados(s1, s2)
-        self.__dadosTirados = True
+        self.__dadosT = True
         self.__disponibleDado1 = self.__dado1 > 0
         self.__disponibleDado2 = self.__dado2 > 0
         if s1 == s2:
@@ -302,15 +319,6 @@ class Ventana(QMainWindow):
                 return True
         return False
 
-    def puedeSalir(self):
-        s1 = self.__rutas[self.__turno][0][0]
-        s2 = self.__rutas[self.__turno][0][1]
-        return (
-            False
-            if s1 != None and s2 != None and self.esMia(s1) and self.esMia(s2)
-            else True
-        )
-
     def hayPuenteEnMedio(self, desde, hasta):
         for i in range(len(self.__bridges)):
             pos = self.__bridges[i]
@@ -356,12 +364,6 @@ class Ventana(QMainWindow):
             owner += 1
         return (owner, index)
 
-    def estaEnCasa(self, ficha):
-        for fC in self.__casas[self.__turno]:
-            if fC != None and ficha != None and fC == ficha:
-                return True
-        return False
-
     def esMia(self, ficha):
         for i in range(self.__turno * 4, self.__turno * 4 + 4):
             if ficha == self.__fichas[i]:
@@ -369,18 +371,14 @@ class Ventana(QMainWindow):
         return False
 
     def jugarFicha(self):
-        if (
-            not self.__jugando
-            or not self.__dadosTirados
-            or not self.esMia(self.sender())
-        ):
+        if not self.__jugando or not self.__dadosT or not self.esMia(self.sender()):
             return
         menuResp = self.detectarJugadaAutomatica(self.sender())
         if menuResp == None:
             menuResp = self.abrirMenu(self.sender())
             if (
                 not self.__jugando
-                or not self.__dadosTirados
+                or not self.__dadosT
                 or not self.esMia(self.sender())
                 or len(menuResp) == 0
             ):
@@ -584,7 +582,7 @@ class Ventana(QMainWindow):
         self.mostrarDados(0, 0)
         self.ui.dado1.setEnabled(True)
         self.ui.dado2.setEnabled(True)
-        self.__dadosTirados = False
+        self.__dadosT = False
         self.__disponibleDado1 = False
         self.__disponibleDado2 = False
         self.__disponibleBono1 = False
@@ -609,7 +607,7 @@ class Ventana(QMainWindow):
         self.__cuentaDoble = 0
         self.__repetirTirada = False
         self.__jugando = True
-        self.__dadosTirados = False
+        self.__dadosT = False
         self.ui.dado1.setEnabled(True)
         self.ui.dado2.setEnabled(True)
         self.ui.checkPlayer0.setEnabled(False)
@@ -624,7 +622,7 @@ class Ventana(QMainWindow):
         self.__cuentaDoble = 0
         self.__repetirTirada = False
         self.__jugando = False
-        self.__dadosTirados = False
+        self.__dadosT = False
         self.ui.dado1.setEnabled(False)
         self.ui.dado2.setEnabled(False)
         if self.__contandoTurno:

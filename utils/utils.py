@@ -9,7 +9,6 @@ from PyQt5.QtWidgets import (
     QToolButton,
 )
 from utils.static import AuxStatic
-from parchis_ui import Ui_VentanaJuego
 
 
 class EstiloIconos(QProxyStyle):
@@ -148,7 +147,7 @@ class Utils:
 
     @staticmethod
     def crearMenuContextual(
-        parent: Ui_VentanaJuego,
+        parent,
         sender: QToolButton,
         turno: int,
         dado1: int,
@@ -277,3 +276,9 @@ class Utils:
             elif actionR == actionBonus1Bonus2:
                 return [3, 4]
         return []
+
+    @staticmethod
+    def puedeUsarFicha(
+        parent, jugando: bool, tirados: bool, sender: QToolButton
+    ):
+        return jugando and tirados and parent.esMia(sender)
