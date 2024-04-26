@@ -23,3 +23,6 @@ class TurnoWorker(QObject):
 
     def faster(self):
         self.__interval = 0.025
+
+    def isFast(self) -> float:
+        return self.__interval == 0.025
