@@ -204,57 +204,6 @@ class Ventana(QMainWindow):
             if ficha == self.__fichas[i]:
                 return True
         return False
-    
-    def detectarJugadaAutomatica(self, sender):
-        jugadasValidas = []
-        if self.__dado1 > 0:
-            if self.estaEnCasa(sender):
-                if self.__dado1 == 5 and self.puedeSalir():
-                    jugadasValidas.append([1])
-            else:
-                if self.puedeMover(sender, self.__dado1):
-                    jugadasValidas.append([1])
-        if self.__dado2 > 0:
-            if self.estaEnCasa(sender):
-                if self.__dado2 == 5 and self.puedeSalir():
-                    jugadasValidas.append([2])
-            else:
-                if self.puedeMover(sender, self.__dado2):
-                    jugadasValidas.append([2])
-        if self.__disponibleBono1:
-            if not self.estaEnCasa(sender) and self.puedeMover(sender, 10):
-                jugadasValidas.append([3])
-        if self.__disponibleBono2:
-            if not self.estaEnCasa(sender) and self.puedeMover(sender, 20):
-                jugadasValidas.append([4])
-        if self.__dado1 > 0 and self.__dado2 > 0:
-            if self.estaEnCasa(sender):
-                if self.__dado1 + self.__dado2 == 5 and self.puedeSalir():
-                    jugadasValidas.append([1, 2])
-            else:
-                if self.puedeMover(sender, self.__dado1 + self.__dado2):
-                    jugadasValidas.append([1, 2])
-        if self.__dado1 > 0 and self.__disponibleBono1:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, self.__dado1 + 10):
-                    jugadasValidas.append([1, 3])
-        if self.__dado1 > 0 and self.__disponibleBono2:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, self.__dado1 + 20):
-                    jugadasValidas.append([1, 4])
-        if self.__dado2 > 0 and self.__disponibleBono1:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, self.__dado2 + 10):
-                    jugadasValidas.append([2, 3])
-        if self.__dado2 > 0 and self.__disponibleBono2:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, self.__dado2 + 20):
-                    jugadasValidas.append([2, 4])
-        if self.__disponibleBono1 and self.__disponibleBono2:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, 30):
-                    jugadasValidas.append([3, 4])
-        return jugadasValidas[0] if len(jugadasValidas) == 1 else None
 
     def tirarDados(self):
         enJuego = 4 - Utils.contarFichas(
@@ -408,8 +357,16 @@ class Ventana(QMainWindow):
     def jugarFicha(self):
         if not self.__jugando or not self.__dadosT or not self.esMia(self.sender()):
             return
-        menuResp = self.detectarJugadaAutomatica(self.sender())
-        if menuResp == None:
+        menuResp = Utils.cargarJugadasPosibles(
+            self,
+            self.sender(),
+            self.__dado1,
+            self.__dado2,
+            self.__disponibleBono1,
+            self.__disponibleBono2,
+        )
+        menuResp = menuResp[0] if len(menuResp) == 1 else []
+        if len(menuResp) == 0:
             menuResp = self.abrirMenu(self.sender())
             if (
                 not self.__jugando

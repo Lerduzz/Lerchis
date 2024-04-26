@@ -278,7 +278,64 @@ class Utils:
         return []
 
     @staticmethod
-    def puedeUsarFicha(
-        parent, jugando: bool, tirados: bool, sender: QToolButton
+    def cargarJugadasPosibles(
+        parent,
+        sender: QToolButton,
+        dado1: int,
+        dado2: int,
+        bono1Disp: bool,
+        bono2Disp: bool,
     ):
+        posibles = []
+        if dado1 > 0:
+            if parent.estaEnCasa(sender):
+                if dado1 == 5 and parent.puedeSalir():
+                    posibles.append([1])
+            else:
+                if parent.puedeMover(sender, dado1):
+                    posibles.append([1])
+        if dado2 > 0:
+            if parent.estaEnCasa(sender):
+                if dado2 == 5 and parent.puedeSalir():
+                    posibles.append([2])
+            else:
+                if parent.puedeMover(sender, dado2):
+                    posibles.append([2])
+        if bono1Disp:
+            if not parent.estaEnCasa(sender) and parent.puedeMover(sender, 10):
+                posibles.append([3])
+        if bono2Disp:
+            if not parent.estaEnCasa(sender) and parent.puedeMover(sender, 20):
+                posibles.append([4])
+        if dado1 > 0 and dado2 > 0:
+            if parent.estaEnCasa(sender):
+                if dado1 + dado2 == 5 and parent.puedeSalir():
+                    posibles.append([1, 2])
+            else:
+                if parent.puedeMover(sender, dado1 + dado2):
+                    posibles.append([1, 2])
+        if dado1 > 0 and bono1Disp:
+            if not parent.estaEnCasa(sender):
+                if parent.puedeMover(sender, dado1 + 10):
+                    posibles.append([1, 3])
+        if dado1 > 0 and bono2Disp:
+            if not parent.estaEnCasa(sender):
+                if parent.puedeMover(sender, dado1 + 20):
+                    posibles.append([1, 4])
+        if dado2 > 0 and bono1Disp:
+            if not parent.estaEnCasa(sender):
+                if parent.puedeMover(sender, dado2 + 10):
+                    posibles.append([2, 3])
+        if dado2 > 0 and bono2Disp:
+            if not parent.estaEnCasa(sender):
+                if parent.puedeMover(sender, dado2 + 20):
+                    posibles.append([2, 4])
+        if bono1Disp and bono2Disp:
+            if not parent.estaEnCasa(sender):
+                if parent.puedeMover(sender, 30):
+                    posibles.append([3, 4])
+        return posibles
+
+    @staticmethod
+    def puedeUsarFicha(parent, jugando: bool, tirados: bool, sender: QToolButton):
         return jugando and tirados and parent.esMia(sender)
