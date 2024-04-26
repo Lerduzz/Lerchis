@@ -104,6 +104,37 @@ class Ventana(QMainWindow):
             if not (s1 != None and s2 != None and self.esMia(s1) and self.esMia(s2)):
                 return True
         return False
+    
+    def salirDeCasa(self, ficha):
+        pos = 0
+        for i in range(4):
+            if ficha == self.__casas[self.__turno][i]:
+                pos = i
+                break
+        s1 = self.__rutas[self.__turno][0][0]
+        s2 = self.__rutas[self.__turno][0][1]
+        if s1 != None and s2 != None:
+            if s1 != None and not self.esMia(s1):
+                if self.matarFicha(s1):
+                    self.__disponibleBono2 = True
+            if s2 != None and not self.esMia(s2):
+                if self.matarFicha(s2):
+                    self.__disponibleBono2 = True
+        s1 = self.__rutas[self.__turno][0][0]
+        s2 = self.__rutas[self.__turno][0][1]
+        if s1 == None:
+            if Utils.moverFicha(
+                self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 0
+            ):
+                self.relocateAll()
+                return True
+        elif s2 == None:
+            if Utils.moverFicha(
+                self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 1
+            ):
+                self.relocateAll()
+                return True
+        return False
 
     def detectarJugadaAutomatica(self, sender):
         jugadasValidas = []
@@ -485,37 +516,6 @@ class Ventana(QMainWindow):
             else:
                 if self.__contandoTurno:
                     self.__turnoWorker.faster()
-
-    def salirDeCasa(self, ficha):
-        pos = 0
-        for i in range(4):
-            if ficha == self.__casas[self.__turno][i]:
-                pos = i
-                break
-        s1 = self.__rutas[self.__turno][0][0]
-        s2 = self.__rutas[self.__turno][0][1]
-        if s1 != None and s2 != None:
-            if s1 != None and not self.esMia(s1):
-                if self.matarFicha(s1):
-                    self.__disponibleBono2 = True
-            if s2 != None and not self.esMia(s2):
-                if self.matarFicha(s2):
-                    self.__disponibleBono2 = True
-        s1 = self.__rutas[self.__turno][0][0]
-        s2 = self.__rutas[self.__turno][0][1]
-        if s1 == None:
-            if Utils.moverFicha(
-                self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 0
-            ):
-                self.relocateAll()
-                return True
-        elif s2 == None:
-            if Utils.moverFicha(
-                self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 1
-            ):
-                self.relocateAll()
-                return True
-        return False
 
     def matarFicha(self, ficha):
         posI, posJ = self.obtenerPosRuta(ficha)
