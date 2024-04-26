@@ -187,6 +187,24 @@ class Ventana(QMainWindow):
                 if self.matarFicha(s2):
                     self.__disponibleBono2 = True
 
+    def obtenerOwnerIndex(self, ficha):
+        index = 0
+        for i in range(len(self.__fichas)):
+            if self.__fichas[i] == ficha:
+                index = i
+                break
+        owner = 0
+        while index >= 4:
+            index -= 4
+            owner += 1
+        return (owner, index)
+
+    def esMia(self, ficha):
+        for i in range(self.__turno * 4, self.__turno * 4 + 4):
+            if ficha == self.__fichas[i]:
+                return True
+        return False
+    
     def detectarJugadaAutomatica(self, sender):
         jugadasValidas = []
         if self.__dado1 > 0:
@@ -386,24 +404,6 @@ class Ventana(QMainWindow):
                     posJ = j
                     break
         return (posI, posJ)
-
-    def obtenerOwnerIndex(self, ficha):
-        index = 0
-        for i in range(len(self.__fichas)):
-            if self.__fichas[i] == ficha:
-                index = i
-                break
-        owner = 0
-        while index >= 4:
-            index -= 4
-            owner += 1
-        return (owner, index)
-
-    def esMia(self, ficha):
-        for i in range(self.__turno * 4, self.__turno * 4 + 4):
-            if ficha == self.__fichas[i]:
-                return True
-        return False
 
     def jugarFicha(self):
         if not self.__jugando or not self.__dadosT or not self.esMia(self.sender()):
