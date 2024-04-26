@@ -75,6 +75,8 @@ class Ventana(QMainWindow):
                     else:
                         self.__dado1 = 0
                         self.__dado2 = 0
+                else:
+                    return
             else:
                 return
         # TODO: Mover cuando no esta en casa.
@@ -89,7 +91,7 @@ class Ventana(QMainWindow):
             self.__dado1,
             self.__dado2,
             self.__dado1 > 0,
-            self.__disponibleDado2,
+            self.__dado2 > 0,
             self.__disponibleBono1,
             self.__disponibleBono2,
         )
@@ -147,7 +149,7 @@ class Ventana(QMainWindow):
             else:
                 if self.puedeMover(sender, self.__dado1):
                     jugadasValidas.append([1])
-        if self.__disponibleDado2:
+        if self.__dado2 > 0:
             if self.estaEnCasa(sender):
                 if self.__dado2 == 5 and self.puedeSalir():
                     jugadasValidas.append([2])
@@ -160,7 +162,7 @@ class Ventana(QMainWindow):
         if self.__disponibleBono2:
             if not self.estaEnCasa(sender) and self.puedeMover(sender, 20):
                 jugadasValidas.append([4])
-        if self.__dado1 > 0 and self.__disponibleDado2:
+        if self.__dado1 > 0 and self.__dado2 > 0:
             if self.estaEnCasa(sender):
                 if self.__dado1 + self.__dado2 == 5 and self.puedeSalir():
                     jugadasValidas.append([1, 2])
@@ -175,11 +177,11 @@ class Ventana(QMainWindow):
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, self.__dado1 + 20):
                     jugadasValidas.append([1, 4])
-        if self.__disponibleDado2 and self.__disponibleBono1:
+        if self.__dado2 > 0 and self.__disponibleBono1:
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, self.__dado2 + 10):
                     jugadasValidas.append([2, 3])
-        if self.__disponibleDado2 and self.__disponibleBono2:
+        if self.__dado2 > 0 and self.__disponibleBono2:
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, self.__dado2 + 20):
                     jugadasValidas.append([2, 4])
@@ -278,7 +280,6 @@ class Ventana(QMainWindow):
         self.__dado2 = s2
         self.mostrarDados(s1, s2)
         self.__dadosT = True
-        self.__disponibleDado2 = self.__dado2 > 0
         if s1 == s2:
             if self.__cuentaDoble < 2:
                 self.__cuentaDoble += 1
@@ -309,10 +310,10 @@ class Ventana(QMainWindow):
                 if self.puedeSalir():
                     if (
                         (self.__dado1 > 0 and self.__dado1 == 5)
-                        or (self.__disponibleDado2 and self.__dado2 == 5)
+                        or (self.__dado2 > 0 and self.__dado2 == 5)
                         or (
                             self.__dado1 > 0
-                            and self.__disponibleDado2
+                            and self.__dado2 > 0
                             and self.__dado1 + self.__dado2 == 5
                         )
                     ):
@@ -320,7 +321,7 @@ class Ventana(QMainWindow):
             else:
                 mData = [
                     (self.__dado1 > 0, self.__dado1),
-                    (self.__disponibleDado2, self.__dado2),
+                    (self.__dado2 > 0, self.__dado2),
                     (self.__disponibleBono1, 10),
                     (self.__disponibleBono2, 20),
                 ]
@@ -421,20 +422,20 @@ class Ventana(QMainWindow):
                     if self.salirDeCasa(self.sender()):
                         self.__dado1 = 0
                         self.insertarMensaje("Saca una ficha con el primer dado")
-                elif self.__disponibleDado2 and 2 in menuResp and self.__dado2 == 5:
+                elif self.__dado2 > 0 and 2 in menuResp and self.__dado2 == 5:
                     if self.salirDeCasa(self.sender()):
-                        self.__disponibleDado2 = False
+                        self.__dado2 = 0
                         self.insertarMensaje("Saca una ficha con el segundo dado")
                 elif (
                     self.__dado1 > 0
-                    and self.__disponibleDado2
+                    and self.__dado2 > 0
                     and 1 in menuResp
                     and 2 in menuResp
                     and self.__dado1 + self.__dado2 == 5
                 ):
                     if self.salirDeCasa(self.sender()):
                         self.__dado1 = 0
-                        self.__disponibleDado2 = False
+                        self.__dado2 = 0
                         self.insertarMensaje("Saca una ficha con ambos dados")
         else:
             total = 0
@@ -445,7 +446,7 @@ class Ventana(QMainWindow):
             if self.__dado1 > 0 and 1 in menuResp:
                 total += self.__dado1
                 usadoDado1 = True
-            if self.__disponibleDado2 and 2 in menuResp:
+            if self.__dado2 > 0 and 2 in menuResp:
                 total += self.__dado2
                 usadoDado2 = True
             if self.__disponibleBono1 and 3 in menuResp:
@@ -475,7 +476,7 @@ class Ventana(QMainWindow):
                                 if usadoDado1:
                                     self.__dado1 = 0
                                 if usadoDado2:
-                                    self.__disponibleDado2 = False
+                                    self.__dado2 = 0
                                 if usadoBonus1:
                                     self.__disponibleBono1 = False
                                 if usadoBonus2:
@@ -585,7 +586,7 @@ class Ventana(QMainWindow):
         self.ui.dado2.setEnabled(True)
         self.__dadosT = False
         self.__dado1 = 0
-        self.__disponibleDado2 = False
+        self.__dado2 = 0
         self.__disponibleBono1 = False
         self.__disponibleBono2 = False
 
