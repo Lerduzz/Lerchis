@@ -40,6 +40,7 @@ class Ventana(QMainWindow):
         self.__disponibleBono1 = False
         self.__disponibleBono2 = False
         self.__contandoTurno = False
+        self.__reactivandoDados = False
 
     def restablecerTablero(self):
         self.__casas = InitStatic.casas(self.ui)
@@ -463,6 +464,7 @@ class Ventana(QMainWindow):
         self.__dado2 = 0
         self.__disponibleBono1 = False
         self.__disponibleBono2 = False
+        self.__reactivandoDados = False
 
     def virarMasAdelantada(self):
         for i in range(len(self.__rutas[self.__turno]) - 2, -1, -1):
@@ -537,7 +539,7 @@ class Ventana(QMainWindow):
         if value >= 0 and value <= self.ui.progressTiempo.maximum():
             self.ui.progressTiempo.setValue(value)
             self.ui.lblTiempo.setText(str(self.ui.progressTiempo.maximum() - value))
-        if self.__dadosT and not self.__turnoWorker.isFast() and not self.puedeJugar():
+        if self.__dadosT and not self.__turnoWorker.isFast() and not self.__reactivandoDados and not self.puedeJugar():
             if self.__repetirTirada:
                 self.__repetirTirada = False
                 self.iniciarReactivadorDados()
@@ -551,6 +553,7 @@ class Ventana(QMainWindow):
         self.cambioDeTurno()
 
     def iniciarReactivadorDados(self):
+        self.__reactivandoDados = True
         self.__reactivarThread = QThread()
         self.__reactivarWorker = ReactivarWorker()
         self.__reactivarWorker.moveToThread(self.__reactivarThread)
