@@ -65,20 +65,8 @@ class Ventana(QMainWindow):
     def fichaClicEvent(self):
         if not Utils.puedeUsarFicha(self, self.__jugando, self.__dadosT, self.sender()):
             return
-        if self.estaEnCasa(self.sender()):
-            if self.puedeSalir():
-                if self.salirDeCasa(self.sender()):
-                    if self.__dado1 == 5:
-                        self.__dado1 = 0
-                    elif self.__dado2 == 5:
-                        self.__dado2 = 0
-                    else:
-                        self.__dado1 = 0
-                        self.__dado2 = 0
-                else:
-                    return
-            else:
-                return
+        if self.intentaSalirDeCasa(self.sender()):
+            return
         # TODO: Mover cuando no esta en casa.
 
     def fichaClicDerEvent(self):
@@ -96,6 +84,20 @@ class Ventana(QMainWindow):
             self.__disponibleBono2,
         )
         # TODO: Mover o sacar la ficha.
+
+    def intentaSalirDeCasa(self, ficha):
+        if self.estaEnCasa(ficha):
+            if self.puedeSalir():
+                if self.salirDeCasa(ficha):
+                    if self.__dado1 == 5:
+                        self.__dado1 = 0
+                    elif self.__dado2 == 5:
+                        self.__dado2 = 0
+                    else:
+                        self.__dado1 = 0
+                        self.__dado2 = 0
+                    return True
+        return False
 
     def estaEnCasa(self, ficha):
         for fC in self.__casas[self.__turno]:
