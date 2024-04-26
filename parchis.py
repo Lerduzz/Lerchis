@@ -112,10 +112,25 @@ class Ventana(QMainWindow):
             return
         if self.intentaSalirDeCasa(self.sender()):
             return
-        # TODO: Mover cuando no esta en casa.
+        movs = Utils.cargarJugadasPosibles(
+            self,
+            self.sender(),
+            self.__dado1,
+            self.__dado2,
+            self.__disponibleBono1,
+            self.__disponibleBono2,
+        )
+        if len(movs) == 0:
+            return
+        if len(movs) == 1:
+            self.moverFichaDirecto(self.sender(), movs[0])
+            return
+        # TODO: self.moverFichaDirecto(self.sender(), self.mayorDistancia(movs))
 
     def fichaClicDerEvent(self):
         if not Utils.puedeUsarFicha(self, self.__jugando, self.__dadosT, self.sender()):
+            return
+        if self.intentaSalirDeCasa(self.sender()):
             return
         mov = Utils.crearMenuContextual(
             self,
@@ -128,7 +143,9 @@ class Ventana(QMainWindow):
             self.__disponibleBono1,
             self.__disponibleBono2,
         )
-        # TODO: Mover o sacar la ficha.
+        if len(mov) == 0:
+            return
+        self.moverFichaDirecto(self.sender(), mov)
 
     def intentaSalirDeCasa(self, ficha):
         if self.estaEnCasa(ficha):
@@ -143,6 +160,54 @@ class Ventana(QMainWindow):
                         self.__dado2 = 0
                     return True
         return False
+
+    def moverFichaDirecto(self, ficha, mov):
+        total = 0
+        total += self.__dado1 if self.__dado1 > 0 and 1 in mov else 0
+        total += self.__dado2 if self.__dado2 > 0 and 2 in mov else 0
+        total += 10 if self.__disponibleBono1 and 3 in mov else 0
+        total += 20 if self.__disponibleBono2 and 4 in mov else 0
+        if total == 0:
+            return
+        posI, posJ = self.obtenerPosRuta(ficha)
+        if posI + total >= len(self.__rutas[self.__turno]):
+            return
+        for j in range(len(self.__rutas[self.__turno][posI + total])):
+            dest = self.__rutas[self.__turno][posI + total][j]
+            if dest == None and not self.hayPuenteEnMedio(posI, posI + total):
+                if not Utils.moverFicha(
+                    self.__rutas[self.__turno],
+                    posI,
+                    posJ,
+                    self.__rutas[self.__turno],
+                    posI + total,
+                    j,
+                ):
+                    continue
+                self.relocateAll()
+                if 1 in mov:
+                    self.__dado1 = 0
+                if 2 in mov:
+                    self.__dado2 = 0
+                if 3 in mov:
+                    self.__disponibleBono1 = False
+                if 4 in mov:
+                    self.__disponibleBono2 = False
+                for jC in range(len(self.__rutas[self.__turno][posI + total])):
+                    fM = self.__rutas[self.__turno][posI + total][jC]
+                    if (
+                        j != jC
+                        and fM != None
+                        and not posI + total in self.__excluir
+                        and not self.esMia(fM)
+                    ):
+                        if self.matarFicha(fM):
+                            self.__disponibleBono2 = True
+                            break
+                if posI + total == len(self.__rutas[self.__turno]) - 1:
+                    self.__disponibleBono1 = True
+                break
+                
 
     def estaEnCasa(self, ficha):
         for fC in self.__casas[self.__turno]:
