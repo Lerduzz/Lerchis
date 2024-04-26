@@ -24,7 +24,7 @@ class Ventana(QMainWindow):
         self.__turno = 0
         self.__cuentaDoble = 0
         self.__repetirTirada = False
-        self.__fichas = InitStatic.fichas(self.ui, self.jugarFicha)
+        self.__fichas = InitStatic.fichas(self.ui, self.fichaClicEvent, self.fichaClicDerEvent)
         self.__posCaminos = InitStatic.posCaminos()
         self.__posMetas = InitStatic.posMetas()
         self.__excluir = InitStatic.excluir()
@@ -47,7 +47,7 @@ class Ventana(QMainWindow):
         self.__rutas = InitStatic.rutas(self.__caminos, self.__metas)
         self.relocateAll()
 
-    def resizeEvent(self, e: QResizeEvent) -> None:
+    def resizeEvent(self, e: QResizeEvent):
         super().resizeEvent(e)
         self.resizeAll()
         self.relocateAll()
@@ -61,6 +61,18 @@ class Ventana(QMainWindow):
         elif e.key() == Qt.Key.Key_Escape:
             if self.isFullScreen() or self.isMaximized():
                 self.showNormal()
+
+    def fichaClicEvent(self):
+        # Comprobar que estes jugando, que hayas girado los dados y que la ficha sea tuya.
+        # Comprobar si la ficha se puede mover.
+        # JUGAR AUTOMATICAMENTE: Sacar la ficha (¿y caminarla?) o caminarla el mayor numero de pasos posibles.
+        pass
+
+    def fichaClicDerEvent(self):
+        # Comprobar que estes jugando, que hayas girado los dados y que la ficha sea tuya.
+        # Comprobar si la ficha se puede mover.
+        # Mostrar el menu con los posibles movimientos y mover en consecuencia.
+        pass
 
     def abrirMenu(self, sender):
         menu = QMenu(self)
