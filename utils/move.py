@@ -173,3 +173,23 @@ class MoveUtils:
             if i == 0 or i == 1:
                 xR += hF // 3
         return (xR, yR)
+
+    @staticmethod
+    def mayorDistancia(movs: list, d1: int, d2: int) -> list:
+        movMax = 0
+        rowMax = movs[0]
+        for row in movs:
+            movCurrent = 0
+            for mov in row:
+                if mov == 1:
+                    movCurrent += d1
+                elif mov == 2:
+                    movCurrent += d2
+                elif mov == 3:
+                    movCurrent += 10
+                elif mov == 4:
+                    movCurrent += 20
+            if movCurrent > movMax:
+                movMax = movCurrent
+                rowMax = row
+        return rowMax

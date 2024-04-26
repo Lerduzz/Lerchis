@@ -138,7 +138,17 @@ class Ventana(QMainWindow):
                 self.__excluir,
             )
             return
-        # TODO: self.moverFichaDirecto(self.sender(), self.mayorDistancia(movs))
+        MoveUtils.moverFichaDirecto(
+            self,
+            self.sender(),
+            MoveUtils.mayorDistancia(movs, self.__dado1, self.__dado2),
+            self.__dado1,
+            self.__dado2,
+            self.__disponibleBono1,
+            self.__disponibleBono2,
+            self.__rutas[self.__turno],
+            self.__excluir,
+        )
 
     def fichaClicDerEvent(self):
         if not Utils.puedeUsarFicha(self, self.__jugando, self.__dadosT, self.sender()):
