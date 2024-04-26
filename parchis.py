@@ -197,12 +197,12 @@ class Ventana(QMainWindow):
             if self.puedeSalir():
                 if self.salirDeCasa(ficha):
                     if self.__dado1 == 5:
-                        self.__dado1 = 0
+                        self.dado1Usado()
                     elif self.__dado2 == 5:
-                        self.__dado2 = 0
+                        self.dado2Usado()
                     else:
-                        self.__dado1 = 0
-                        self.__dado2 = 0
+                        self.dado1Usado()
+                        self.dado2Usado()
                     return True
         return False
 
