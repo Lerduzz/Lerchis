@@ -192,6 +192,12 @@ class Ventana(QMainWindow):
     def bono2Usado(self):
         self.__disponibleBono2 = False
 
+    def activarBono1(self):
+        self.__disponibleBono1 = True
+
+    def activarBono2(self):
+        self.__disponibleBono2 = True
+
     def intentaSalirDeCasa(self, ficha):
         if self.estaEnCasa(ficha):
             if self.puedeSalir():
@@ -244,10 +250,10 @@ class Ventana(QMainWindow):
         if s1 != None and s2 != None:
             if s1 != None and not self.esMia(s1):
                 if self.matarFicha(s1):
-                    self.__disponibleBono2 = True
+                    self.activarBono2()
             if s2 != None and not self.esMia(s2):
                 if self.matarFicha(s2):
-                    self.__disponibleBono2 = True
+                    self.activarBono2()
 
     def obtenerOwnerIndex(self, ficha):
         index = 0
@@ -329,13 +335,9 @@ class Ventana(QMainWindow):
             if self.estaEnCasa(ficha):
                 if self.puedeSalir():
                     if (
-                        (self.__dado1 > 0 and self.__dado1 == 5)
-                        or (self.__dado2 > 0 and self.__dado2 == 5)
-                        or (
-                            self.__dado1 > 0
-                            and self.__dado2 > 0
-                            and self.__dado1 + self.__dado2 == 5
-                        )
+                        self.__dado1 == 5
+                        or self.__dado2 == 5
+                        or self.__dado1 + self.__dado2 == 5
                     ):
                         return True
             else:
@@ -362,7 +364,7 @@ class Ventana(QMainWindow):
     def puedeMover(self, ficha, pasos):
         if pasos <= 0:
             return False
-        posI, posJ = self.obtenerPosRuta(ficha)
+        posI = self.obtenerPosRuta(ficha)[0]
         if posI + pasos >= len(self.__rutas[self.__turno]):
             return False
         for j in range(len(self.__rutas[self.__turno][posI + pasos])):
