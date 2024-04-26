@@ -1,14 +1,13 @@
-from PyQt5.QtWidgets import QProxyStyle, QStyle, QMenu, QAction
+from PyQt5.QtWidgets import QProxyStyle, QStyle, QStyleOption, QMenu, QAction, QWidget
 from utils.static import AuxStatic
-from utils.utils import EstiloIconos
 
 
 class EstiloIconos(QProxyStyle):
-    def __init__(self, size):
+    def __init__(self, size: int):
         super().__init__()
         self.__size = size
 
-    def pixelMetric(self, metric, option=0, widget=0):
+    def pixelMetric(self, metric, option: QStyleOption | None, widget: QWidget | None) -> int:
         if metric == QStyle.PM_SmallIconSize:
             return self.__size
         return super().pixelMetric(metric, option, widget)
@@ -134,7 +133,7 @@ class Utils:
             if i == 0 or i == 1:
                 xR += hF // 3
         return (xR, yR)
-    
+
     @staticmethod
     def abrirMenu(self, sender):
         menu = QMenu(self)
