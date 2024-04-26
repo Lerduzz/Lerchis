@@ -124,7 +124,17 @@ class Ventana(QMainWindow):
         if len(movs) == 0:
             return
         if len(movs) == 1:
-            self.moverFichaDirecto(self.sender(), movs[0])
+            MoveUtils.moverFichaDirecto(
+                self,
+                self.sender(),
+                movs[0],
+                self.__dado1,
+                self.__dado2,
+                self.__disponibleBono1,
+                self.__disponibleBono2,
+                self.__rutas[self.__turno],
+                self.__excluir,
+            )
             return
         # TODO: self.moverFichaDirecto(self.sender(), self.mayorDistancia(movs))
 
@@ -146,7 +156,17 @@ class Ventana(QMainWindow):
         )
         if len(mov) == 0:
             return
-        self.moverFichaDirecto(self.sender(), mov)
+        MoveUtils.moverFichaDirecto(
+                self,
+                self.sender(),
+                mov,
+                self.__dado1,
+                self.__dado2,
+                self.__disponibleBono1,
+                self.__disponibleBono2,
+                self.__rutas[self.__turno],
+                self.__excluir,
+            )
 
     def intentaSalirDeCasa(self, ficha):
         if self.estaEnCasa(ficha):
