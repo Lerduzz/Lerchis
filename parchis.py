@@ -2,12 +2,12 @@ import sys
 import qdarkstyle
 from PyQt5.QtCore import QPoint, QThread, Qt
 from PyQt5.QtGui import QResizeEvent, QKeyEvent
-from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem, QMenu, QAction
+from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem
 from parchis_ui import Ui_VentanaJuego
 from workers.dados import DadosWorker, ReactivarWorker
 from workers.turno import TurnoWorker
-from utils.utils import EstiloIconos, Utils
-from utils.static import InitStatic, AuxStatic
+from utils.utils import Utils
+from utils.static import InitStatic
 
 
 class Ventana(QMainWindow):
@@ -66,134 +66,15 @@ class Ventana(QMainWindow):
         # Comprobar que estes jugando, que hayas girado los dados y que la ficha sea tuya.
         # Comprobar si la ficha se puede mover.
         # JUGAR AUTOMATICAMENTE: Sacar la ficha (¿y caminarla?) o caminarla el mayor numero de pasos posibles.
+        print('Ficha clic')
         pass
 
     def fichaClicDerEvent(self):
         # Comprobar que estes jugando, que hayas girado los dados y que la ficha sea tuya.
         # Comprobar si la ficha se puede mover.
         # Mostrar el menu con los posibles movimientos y mover en consecuencia.
+        print('Ficha clic der')
         pass
-
-    def abrirMenu(self, sender):
-        menu = QMenu(self)
-        font = AuxStatic.fontMenu()
-        menu.setStyle(EstiloIconos(sender.width()))
-        count = 0
-        iconDado1 = AuxStatic.iconoMenu(self.__turno, self.__dado1)
-        actionDado1 = QAction(iconDado1, "Primer dado")
-        actionDado1.setFont(font)
-        iconDado2 = AuxStatic.iconoMenu(self.__turno, self.__dado2)
-        actionDado2 = QAction(iconDado2, "Segundo dado")
-        actionDado2.setFont(font)
-        iconBonus1 = AuxStatic.iconoMenu(self.__turno, 10, "s")
-        actionBonus1 = QAction(iconBonus1, "Bono por llegar")
-        actionBonus1.setFont(font)
-        iconBonus2 = AuxStatic.iconoMenu(self.__turno, 20, "s")
-        actionBonus2 = QAction(iconBonus2, "Bono por matar")
-        actionBonus2.setFont(font)
-        sumDados = self.__dado1 + self.__dado2
-        iconDado1Dado2 = AuxStatic.iconoMenu(self.__turno, sumDados, "s")
-        actionDado1Dado2 = QAction(iconDado1Dado2, "Todos los dados")
-        actionDado1Dado2.setFont(font)
-        iconDado1Bonus1 = AuxStatic.iconoMenu(self.__turno, self.__dado1 + 10, "s")
-        actionDado1Bonus1 = QAction(iconDado1Bonus1, "Primer dado + Bono por llegar")
-        actionDado1Bonus1.setFont(font)
-        iconDado1Bonus2 = AuxStatic.iconoMenu(self.__turno, self.__dado1 + 20, "s")
-        actionDado1Bonus2 = QAction(iconDado1Bonus2, "Primer dado + Bono por matar")
-        actionDado1Bonus2.setFont(font)
-        iconDado2Bonus1 = AuxStatic.iconoMenu(self.__turno, self.__dado2 + 10, "s")
-        actionDado2Bonus1 = QAction(iconDado2Bonus1, "Segundo dado + Bono por llegar")
-        actionDado2Bonus1.setFont(font)
-        iconDado2Bonus2 = AuxStatic.iconoMenu(self.__turno, self.__dado2 + 20, "s")
-        actionDado2Bonus2 = QAction(iconDado2Bonus2, "Segundo dado + Bono por matar")
-        actionDado2Bonus2.setFont(font)
-        iconBonus1Bonus2 = AuxStatic.iconoMenu(self.__turno, 30, "s")
-        actionBonus1Bonus2 = QAction(iconBonus1Bonus2, "Todos los bonos")
-        actionBonus1Bonus2.setFont(font)
-        if self.__disponibleDado1:
-            if self.estaEnCasa(sender):
-                if self.__dado1 == 5 and self.puedeSalir():
-                    menu.addAction(actionDado1)
-                    count += 1
-            else:
-                if self.puedeMover(sender, self.__dado1):
-                    menu.addAction(actionDado1)
-                    count += 1
-        if self.__disponibleDado2:
-            if self.estaEnCasa(sender):
-                if self.__dado2 == 5 and self.puedeSalir():
-                    menu.addAction(actionDado2)
-                    count += 1
-            else:
-                if self.puedeMover(sender, self.__dado2):
-                    menu.addAction(actionDado2)
-                    count += 1
-        if self.__disponibleBonusLlegar:
-            if not self.estaEnCasa(sender) and self.puedeMover(sender, 10):
-                menu.addAction(actionBonus1)
-                count += 1
-        if self.__disponibleBonusMatar:
-            if not self.estaEnCasa(sender) and self.puedeMover(sender, 20):
-                menu.addAction(actionBonus2)
-                count += 1
-        if self.__disponibleDado1 and self.__disponibleDado2:
-            if self.estaEnCasa(sender):
-                if sumDados == 5 and self.puedeSalir():
-                    menu.addAction(actionDado1Dado2)
-                    count += 1
-            else:
-                if self.puedeMover(sender, sumDados):
-                    menu.addAction(actionDado1Dado2)
-                    count += 1
-        if self.__disponibleDado1 and self.__disponibleBonusLlegar:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, self.__dado1 + 10):
-                    menu.addAction(actionDado1Bonus1)
-                    count += 1
-        if self.__disponibleDado1 and self.__disponibleBonusMatar:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, self.__dado1 + 20):
-                    menu.addAction(actionDado1Bonus2)
-                    count += 1
-        if self.__disponibleDado2 and self.__disponibleBonusLlegar:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, self.__dado2 + 10):
-                    menu.addAction(actionDado2Bonus1)
-                    count += 1
-        if self.__disponibleDado2 and self.__disponibleBonusMatar:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, self.__dado2 + 20):
-                    menu.addAction(actionDado2Bonus2)
-                    count += 1
-        if self.__disponibleBonusLlegar and self.__disponibleBonusMatar:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, 30):
-                    menu.addAction(actionBonus1Bonus2)
-                    count += 1
-        if count > 0:
-            pos = QPoint(sender.x() + sender.width(), sender.y())
-            actionR = menu.exec_(self.mapToGlobal(pos))
-            if actionR == actionDado1:
-                return [1]
-            elif actionR == actionDado2:
-                return [2]
-            elif actionR == actionBonus1:
-                return [3]
-            elif actionR == actionBonus2:
-                return [4]
-            elif actionR == actionDado1Dado2:
-                return [1, 2]
-            elif actionR == actionDado1Bonus1:
-                return [1, 3]
-            elif actionR == actionDado1Bonus2:
-                return [1, 4]
-            elif actionR == actionDado2Bonus1:
-                return [2, 3]
-            elif actionR == actionDado2Bonus2:
-                return [2, 4]
-            elif actionR == actionBonus1Bonus2:
-                return [3, 4]
-        return []
 
     def detectarJugadaAutomatica(self, sender):
         jugadasValidas = []
