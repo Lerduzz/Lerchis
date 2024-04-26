@@ -112,7 +112,8 @@ class Ventana(QMainWindow):
     def fichaClicEvent(self):
         if not Utils.puedeUsarFicha(self, self.__jugando, self.__dadosT, self.sender()):
             return
-        if self.intentaSalirDeCasa(self.sender()):
+        self.intentaSalirDeCasa(self.sender())
+        if self.estaEnCasa(self.sender()):
             return
         movs = Utils.cargarJugadasPosibles(
             self,
@@ -538,7 +539,12 @@ class Ventana(QMainWindow):
         if value >= 0 and value <= self.ui.progressTiempo.maximum():
             self.ui.progressTiempo.setValue(value)
             self.ui.lblTiempo.setText(str(self.ui.progressTiempo.maximum() - value))
-        if self.__dadosT and not self.__turnoWorker.isFast() and not self.__reactivandoDados and not self.puedeJugar():
+        if (
+            self.__dadosT
+            and not self.__turnoWorker.isFast()
+            and not self.__reactivandoDados
+            and not self.puedeJugar()
+        ):
             if self.__repetirTirada:
                 self.__repetirTirada = False
                 self.iniciarReactivadorDados()
