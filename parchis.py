@@ -408,7 +408,6 @@ class Ventana(QMainWindow):
         if not self.__jugando:
             self.onPartidaTerminada()
             return
-        self.insertarMensaje(">>>========>> TURNO TERMINADO")
         self.__cuentaDoble = 0
         self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
         estados = [
