@@ -47,13 +47,13 @@ class MoveUtils:
                     continue
                 parent.relocateAll()
                 if 1 in mov:
-                    d1 = 0
+                    parent.dado1Usado()
                 if 2 in mov:
-                    d2 = 0
+                    parent.dado2Usado()
                 if 3 in mov:
-                    b1 = False
+                    parent.bono1Usado()
                 if 4 in mov:
-                    b2 = False
+                    parent.bono2Usado()
                 for jC in range(len(ruta[posI + total])):
                     fM = ruta[posI + total][jC]
                     if (

@@ -157,16 +157,28 @@ class Ventana(QMainWindow):
         if len(mov) == 0:
             return
         MoveUtils.moverFichaDirecto(
-                self,
-                self.sender(),
-                mov,
-                self.__dado1,
-                self.__dado2,
-                self.__disponibleBono1,
-                self.__disponibleBono2,
-                self.__rutas[self.__turno],
-                self.__excluir,
-            )
+            self,
+            self.sender(),
+            mov,
+            self.__dado1,
+            self.__dado2,
+            self.__disponibleBono1,
+            self.__disponibleBono2,
+            self.__rutas[self.__turno],
+            self.__excluir,
+        )
+
+    def dado1Usado(self):
+        self.__dado1 = 0
+
+    def dado2Usado(self):
+        self.__dado2 = 0
+
+    def bono1Usado(self):
+        self.__disponibleBono1 = False
+
+    def bono2Usado(self):
+        self.__disponibleBono2 = False
 
     def intentaSalirDeCasa(self, ficha):
         if self.estaEnCasa(ficha):
@@ -660,6 +672,13 @@ class Ventana(QMainWindow):
         if value >= 0 and value <= self.ui.progressTiempo.maximum():
             self.ui.progressTiempo.setValue(value)
             self.ui.lblTiempo.setText(str(self.ui.progressTiempo.maximum() - value))
+        if self.__dadosT and not self.puedeJugar():
+            if self.__repetirTirada:
+                self.__repetirTirada = False
+                self.iniciarReactivadorDados()
+            else:
+                if self.__contandoTurno:
+                    self.__turnoWorker.faster()
 
     def onContadorTurnoFinished(self, value):
         self.onContadorTurnoProgress(value)
