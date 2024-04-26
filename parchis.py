@@ -1,6 +1,6 @@
 import sys
 import qdarkstyle
-from PyQt5.QtCore import QPoint, QThread, Qt
+from PyQt5.QtCore import QThread, Qt
 from PyQt5.QtGui import QResizeEvent, QKeyEvent
 from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem
 from parchis_ui import Ui_VentanaJuego
@@ -24,7 +24,9 @@ class Ventana(QMainWindow):
         self.__turno = 0
         self.__cuentaDoble = 0
         self.__repetirTirada = False
-        self.__fichas = InitStatic.fichas(self.ui, self.fichaClicEvent, self.fichaClicDerEvent)
+        self.__fichas = InitStatic.fichas(
+            self.ui, self.fichaClicEvent, self.fichaClicDerEvent
+        )
         self.__posCaminos = InitStatic.posCaminos()
         self.__posMetas = InitStatic.posMetas()
         self.__excluir = InitStatic.excluir()
@@ -36,8 +38,8 @@ class Ventana(QMainWindow):
         self.__dadosTirados = False
         self.__disponibleDado1 = False
         self.__disponibleDado2 = False
-        self.__disponibleBonusMatar = False
-        self.__disponibleBonusLlegar = False
+        self.__disponibleBono2 = False
+        self.__disponibleBono1 = False
         self.__contandoTurno = False
 
     def restablecerTablero(self):
@@ -66,15 +68,25 @@ class Ventana(QMainWindow):
         # Comprobar que estes jugando, que hayas girado los dados y que la ficha sea tuya.
         # Comprobar si la ficha se puede mover.
         # JUGAR AUTOMATICAMENTE: Sacar la ficha (¿y caminarla?) o caminarla el mayor numero de pasos posibles.
-        print('Ficha clic')
+        print("Ficha clic")
         pass
 
     def fichaClicDerEvent(self):
         # Comprobar que estes jugando, que hayas girado los dados y que la ficha sea tuya.
         # Comprobar si la ficha se puede mover.
-        # Mostrar el menu con los posibles movimientos y mover en consecuencia.
-        print('Ficha clic der')
-        pass
+        # Mostrar el menu con los posibles movimientos...
+        mov = Utils.crearMenuContextual(
+            self,
+            self.sender(),
+            self.__turno,
+            self.__dado1,
+            self.__dado2,
+            self.__disponibleDado1,
+            self.__disponibleDado2,
+            self.__disponibleBono1,
+            self.__disponibleBono2,
+        )
+        # ...y mover en consecuencia.
 
     def detectarJugadaAutomatica(self, sender):
         jugadasValidas = []
@@ -92,10 +104,10 @@ class Ventana(QMainWindow):
             else:
                 if self.puedeMover(sender, self.__dado2):
                     jugadasValidas.append([2])
-        if self.__disponibleBonusLlegar:
+        if self.__disponibleBono1:
             if not self.estaEnCasa(sender) and self.puedeMover(sender, 10):
                 jugadasValidas.append([3])
-        if self.__disponibleBonusMatar:
+        if self.__disponibleBono2:
             if not self.estaEnCasa(sender) and self.puedeMover(sender, 20):
                 jugadasValidas.append([4])
         if self.__disponibleDado1 and self.__disponibleDado2:
@@ -105,23 +117,23 @@ class Ventana(QMainWindow):
             else:
                 if self.puedeMover(sender, self.__dado1 + self.__dado2):
                     jugadasValidas.append([1, 2])
-        if self.__disponibleDado1 and self.__disponibleBonusLlegar:
+        if self.__disponibleDado1 and self.__disponibleBono1:
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, self.__dado1 + 10):
                     jugadasValidas.append([1, 3])
-        if self.__disponibleDado1 and self.__disponibleBonusMatar:
+        if self.__disponibleDado1 and self.__disponibleBono2:
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, self.__dado1 + 20):
                     jugadasValidas.append([1, 4])
-        if self.__disponibleDado2 and self.__disponibleBonusLlegar:
+        if self.__disponibleDado2 and self.__disponibleBono1:
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, self.__dado2 + 10):
                     jugadasValidas.append([2, 3])
-        if self.__disponibleDado2 and self.__disponibleBonusMatar:
+        if self.__disponibleDado2 and self.__disponibleBono2:
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, self.__dado2 + 20):
                     jugadasValidas.append([2, 4])
-        if self.__disponibleBonusLlegar and self.__disponibleBonusMatar:
+        if self.__disponibleBono1 and self.__disponibleBono2:
             if not self.estaEnCasa(sender):
                 if self.puedeMover(sender, 30):
                     jugadasValidas.append([3, 4])
@@ -260,8 +272,8 @@ class Ventana(QMainWindow):
                 mData = [
                     (self.__disponibleDado1, self.__dado1),
                     (self.__disponibleDado2, self.__dado2),
-                    (self.__disponibleBonusLlegar, 10),
-                    (self.__disponibleBonusMatar, 20),
+                    (self.__disponibleBono1, 10),
+                    (self.__disponibleBono2, 20),
                 ]
                 for i in range(len(mData)):
                     c, v = mData[i]
@@ -406,10 +418,10 @@ class Ventana(QMainWindow):
             if self.__disponibleDado2 and 2 in menuResp:
                 total += self.__dado2
                 usadoDado2 = True
-            if self.__disponibleBonusLlegar and 3 in menuResp:
+            if self.__disponibleBono1 and 3 in menuResp:
                 total += 10
                 usadoBonus1 = True
-            if self.__disponibleBonusMatar and 4 in menuResp:
+            if self.__disponibleBono2 and 4 in menuResp:
                 total += 20
                 usadoBonus2 = True
             if total > 0:
@@ -435,9 +447,9 @@ class Ventana(QMainWindow):
                                 if usadoDado2:
                                     self.__disponibleDado2 = False
                                 if usadoBonus1:
-                                    self.__disponibleBonusLlegar = False
+                                    self.__disponibleBono1 = False
                                 if usadoBonus2:
-                                    self.__disponibleBonusMatar = False
+                                    self.__disponibleBono2 = False
                                 for jC in range(
                                     len(self.__rutas[self.__turno][posI + total])
                                 ):
@@ -449,10 +461,10 @@ class Ventana(QMainWindow):
                                         and not self.esMia(fM)
                                     ):
                                         if self.matarFicha(fM):
-                                            self.__disponibleBonusMatar = True
+                                            self.__disponibleBono2 = True
                                             mFicha = fM
                                 if posI + total == len(self.__rutas[self.__turno]) - 1:
-                                    self.__disponibleBonusLlegar = True
+                                    self.__disponibleBono1 = True
                                     llego = True
                                 pL = "s" if total > 1 else ""
                                 if mFicha != None:
@@ -487,10 +499,10 @@ class Ventana(QMainWindow):
         if s1 != None and s2 != None:
             if s1 != None and not self.esMia(s1):
                 if self.matarFicha(s1):
-                    self.__disponibleBonusMatar = True
+                    self.__disponibleBono2 = True
             if s2 != None and not self.esMia(s2):
                 if self.matarFicha(s2):
-                    self.__disponibleBonusMatar = True
+                    self.__disponibleBono2 = True
         s1 = self.__rutas[self.__turno][0][0]
         s2 = self.__rutas[self.__turno][0][1]
         if s1 == None:
@@ -575,8 +587,8 @@ class Ventana(QMainWindow):
         self.__dadosTirados = False
         self.__disponibleDado1 = False
         self.__disponibleDado2 = False
-        self.__disponibleBonusLlegar = False
-        self.__disponibleBonusMatar = False
+        self.__disponibleBono1 = False
+        self.__disponibleBono2 = False
 
     def virarMasAdelantada(self):
         for i in range(len(self.__rutas[self.__turno]) - 2, -1, -1):
