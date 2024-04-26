@@ -63,10 +63,10 @@ class MoveUtils:
                         and not parent.esMia(fM)
                     ):
                         if parent.matarFicha(fM):
-                            b2 = True
+                            parent.activarBono2()
                             break
                 if posI + total == len(ruta) - 1:
-                    b1 = True
+                    parent.activarBono1()
                 break
 
     @staticmethod
