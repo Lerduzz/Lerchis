@@ -52,6 +52,51 @@ class Ventana(QMainWindow):
         self.resizeAll()
         self.relocateAll()
 
+    def resizeAll(self):
+        h = self.ui.cajaTablero.height()
+        self.ui.cajaTablero.setFixedWidth(h)
+        fH = 50 * h // 950
+        for f in self.__fichas:
+            f.setFixedWidth(fH)
+            f.setFixedHeight(fH)
+
+    def relocateAll(self):
+        h = self.ui.cajaTablero.height()
+        hCasa = 250 * h // 950
+        hFicha = 50 * h // 950
+        for i in range(len(self.__casas)):
+            casaX = (0 if i == 0 or i == 1 else 700) * h // 950
+            casaY = (0 if i == 0 or i == 3 else 700) * h // 950
+            for j in range(len(self.__casas[i])):
+                p1 = hCasa // 2 - hFicha - hFicha // 2
+                p2 = hCasa // 2 + hFicha // 2
+                if self.__casas[i][j] != None:
+                    self.__casas[i][j].move(
+                        casaX + (p1 if j == 0 or j == 1 else p2),
+                        casaY + (p1 if j == 0 or j == 3 else p2),
+                    )
+        hCasilla = 150 * h // 950
+        for i in range(len(self.__caminos)):
+            if i < len(self.__posCaminos):
+                x, y, o = self.__posCaminos[i]
+                for j in range(len(self.__caminos[i])):
+                    if self.__caminos[i][j] != None:
+                        xR, yR = Utils.calcularPosicionCasilla(
+                            x, y, o, j, h, hCasilla, hFicha
+                        )
+                        self.__caminos[i][j].move(xR, yR)
+        for i in range(len(self.__metas)):
+            if i < len(self.__posMetas):
+                for j in range(len(self.__metas[i])):
+                    if j < len(self.__posMetas[i]):
+                        x, y, o = self.__posMetas[i][j]
+                        for k in range(len(self.__metas[i][j])):
+                            if self.__metas[i][j][k] != None:
+                                xR, yR = Utils.calcularPosicionCasilla(
+                                    x, y, o, k, h, hCasilla, hFicha
+                                )
+                                self.__metas[i][j][k].move(xR, yR)
+
     def keyPressEvent(self, e: QKeyEvent):
         if e.key() == Qt.Key.Key_F11:
             if self.isFullScreen():
@@ -192,51 +237,6 @@ class Ventana(QMainWindow):
                 if self.puedeMover(sender, 30):
                     jugadasValidas.append([3, 4])
         return jugadasValidas[0] if len(jugadasValidas) == 1 else None
-
-    def resizeAll(self):
-        h = self.ui.cajaTablero.height()
-        self.ui.cajaTablero.setFixedWidth(h)
-        fH = 50 * h // 950
-        for f in self.__fichas:
-            f.setFixedWidth(fH)
-            f.setFixedHeight(fH)
-
-    def relocateAll(self):
-        h = self.ui.cajaTablero.height()
-        hCasa = 250 * h // 950
-        hFicha = 50 * h // 950
-        for i in range(len(self.__casas)):
-            casaX = (0 if i == 0 or i == 1 else 700) * h // 950
-            casaY = (0 if i == 0 or i == 3 else 700) * h // 950
-            for j in range(len(self.__casas[i])):
-                p1 = hCasa // 2 - hFicha - hFicha // 2
-                p2 = hCasa // 2 + hFicha // 2
-                if self.__casas[i][j] != None:
-                    self.__casas[i][j].move(
-                        casaX + (p1 if j == 0 or j == 1 else p2),
-                        casaY + (p1 if j == 0 or j == 3 else p2),
-                    )
-        hCasilla = 150 * h // 950
-        for i in range(len(self.__caminos)):
-            if i < len(self.__posCaminos):
-                x, y, o = self.__posCaminos[i]
-                for j in range(len(self.__caminos[i])):
-                    if self.__caminos[i][j] != None:
-                        xR, yR = Utils.calcularPosicionCasilla(
-                            x, y, o, j, h, hCasilla, hFicha
-                        )
-                        self.__caminos[i][j].move(xR, yR)
-        for i in range(len(self.__metas)):
-            if i < len(self.__posMetas):
-                for j in range(len(self.__metas[i])):
-                    if j < len(self.__posMetas[i]):
-                        x, y, o = self.__posMetas[i][j]
-                        for k in range(len(self.__metas[i][j])):
-                            if self.__metas[i][j][k] != None:
-                                xR, yR = Utils.calcularPosicionCasilla(
-                                    x, y, o, k, h, hCasilla, hFicha
-                                )
-                                self.__metas[i][j][k].move(xR, yR)
 
     def tirarDados(self):
         enJuego = 4 - Utils.contarFichas(
