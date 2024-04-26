@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem
 from parchis_ui import Ui_VentanaJuego
 from workers.dados import DadosWorker, ReactivarWorker
 from workers.turno import TurnoWorker
+from utils.move import MoveUtils
 from utils.utils import Utils
 from utils.static import InitStatic
 
@@ -81,7 +82,7 @@ class Ventana(QMainWindow):
                 x, y, o = self.__posCaminos[i]
                 for j in range(len(self.__caminos[i])):
                     if self.__caminos[i][j] != None:
-                        xR, yR = Utils.calcularPosicionCasilla(
+                        xR, yR = MoveUtils.calcularPosicionCasilla(
                             x, y, o, j, h, hCasilla, hFicha
                         )
                         self.__caminos[i][j].move(xR, yR)
@@ -92,7 +93,7 @@ class Ventana(QMainWindow):
                         x, y, o = self.__posMetas[i][j]
                         for k in range(len(self.__metas[i][j])):
                             if self.__metas[i][j][k] != None:
-                                xR, yR = Utils.calcularPosicionCasilla(
+                                xR, yR = MoveUtils.calcularPosicionCasilla(
                                     x, y, o, k, h, hCasilla, hFicha
                                 )
                                 self.__metas[i][j][k].move(xR, yR)
@@ -161,54 +162,6 @@ class Ventana(QMainWindow):
                     return True
         return False
 
-    def moverFichaDirecto(self, ficha, mov):
-        total = 0
-        total += self.__dado1 if self.__dado1 > 0 and 1 in mov else 0
-        total += self.__dado2 if self.__dado2 > 0 and 2 in mov else 0
-        total += 10 if self.__disponibleBono1 and 3 in mov else 0
-        total += 20 if self.__disponibleBono2 and 4 in mov else 0
-        if total == 0:
-            return
-        posI, posJ = self.obtenerPosRuta(ficha)
-        if posI + total >= len(self.__rutas[self.__turno]):
-            return
-        for j in range(len(self.__rutas[self.__turno][posI + total])):
-            dest = self.__rutas[self.__turno][posI + total][j]
-            if dest == None and not self.hayPuenteEnMedio(posI, posI + total):
-                if not Utils.moverFicha(
-                    self.__rutas[self.__turno],
-                    posI,
-                    posJ,
-                    self.__rutas[self.__turno],
-                    posI + total,
-                    j,
-                ):
-                    continue
-                self.relocateAll()
-                if 1 in mov:
-                    self.__dado1 = 0
-                if 2 in mov:
-                    self.__dado2 = 0
-                if 3 in mov:
-                    self.__disponibleBono1 = False
-                if 4 in mov:
-                    self.__disponibleBono2 = False
-                for jC in range(len(self.__rutas[self.__turno][posI + total])):
-                    fM = self.__rutas[self.__turno][posI + total][jC]
-                    if (
-                        j != jC
-                        and fM != None
-                        and not posI + total in self.__excluir
-                        and not self.esMia(fM)
-                    ):
-                        if self.matarFicha(fM):
-                            self.__disponibleBono2 = True
-                            break
-                if posI + total == len(self.__rutas[self.__turno]) - 1:
-                    self.__disponibleBono1 = True
-                break
-                
-
     def estaEnCasa(self, ficha):
         for fC in self.__casas[self.__turno]:
             if fC != None and ficha != None and fC == ficha:
@@ -228,13 +181,13 @@ class Ventana(QMainWindow):
         if owner != self.__turno:
             return False
         self.matarEnSalida()
-        if Utils.moverFicha(
+        if MoveUtils.moverFicha(
             self.__casas, self.__turno, index, self.__rutas[self.__turno], 0, 0
         ):
             self.relocateAll()
             return True
         else:
-            if Utils.moverFicha(
+            if MoveUtils.moverFicha(
                 self.__casas, self.__turno, index, self.__rutas[self.__turno], 0, 1
             ):
                 self.relocateAll()
@@ -486,7 +439,7 @@ class Ventana(QMainWindow):
                         if self.__rutas[self.__turno][posI + total][
                             j
                         ] == None and not self.hayPuenteEnMedio(posI, posI + total):
-                            if Utils.moverFicha(
+                            if MoveUtils.moverFicha(
                                 self.__rutas[self.__turno],
                                 posI,
                                 posJ,
@@ -546,7 +499,7 @@ class Ventana(QMainWindow):
     def matarFicha(self, ficha):
         posI, posJ = self.obtenerPosRuta(ficha)
         owner, index = self.obtenerOwnerIndex(ficha)
-        if Utils.moverFicha(
+        if MoveUtils.moverFicha(
             self.__rutas[self.__turno], posI, posJ, self.__casas, owner, index
         ):
             self.relocateAll()
