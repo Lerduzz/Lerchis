@@ -111,6 +111,7 @@ class Ventana(QMainWindow):
 
     def fichaClicEvent(self):
         if not Utils.puedeUsarFicha(self, self.__jugando, self.__dadosT, self.sender()):
+            Utils.playSound("nomover")
             return
         self.intentaSalirDeCasa(self.sender())
         if self.estaEnCasa(self.sender()):
@@ -152,6 +153,7 @@ class Ventana(QMainWindow):
 
     def fichaClicDerEvent(self):
         if not Utils.puedeUsarFicha(self, self.__jugando, self.__dadosT, self.sender()):
+            Utils.playSound("nomover")
             return
         if self.intentaSalirDeCasa(self.sender()):
             return
