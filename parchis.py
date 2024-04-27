@@ -198,7 +198,7 @@ class Ventana(QMainWindow):
 
     def activarBono2(self):
         self.__disponibleBono2 = True
-        Utils.playSound("llegar")
+        Utils.playSound("matar")
 
     def intentaSalirDeCasa(self, ficha):
         if self.estaEnCasa(ficha):
