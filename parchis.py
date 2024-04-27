@@ -578,6 +578,7 @@ class Ventana(QMainWindow):
         self.onContadorTurnoProgress(value)
         self.__contandoTurno = False
         self.cambioDeTurno()
+        Utils.playSound("turno")
 
     def iniciarReactivadorDados(self):
         self.__reactivandoDados = True
