@@ -1,5 +1,4 @@
 import sys
-import winsound
 import qdarkstyle
 from PyQt5.QtCore import QThread, Qt
 from PyQt5.QtGui import QResizeEvent, QKeyEvent
