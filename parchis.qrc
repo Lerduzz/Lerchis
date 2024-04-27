@@ -125,10 +125,22 @@
     <file>dado36.png</file>
   </qresource>
   <qresource prefix="fichas">
-    <file>ficha0.png</file>
-    <file>ficha1.png</file>
-    <file>ficha2.png</file>
-    <file>ficha3.png</file>
+    <file>ficha01.png</file>
+    <file>ficha02.png</file>
+    <file>ficha03.png</file>
+    <file>ficha04.png</file>
+    <file>ficha11.png</file>
+    <file>ficha12.png</file>
+    <file>ficha13.png</file>
+    <file>ficha14.png</file>
+    <file>ficha21.png</file>
+    <file>ficha22.png</file>
+    <file>ficha23.png</file>
+    <file>ficha24.png</file>
+    <file>ficha31.png</file>
+    <file>ficha32.png</file>
+    <file>ficha33.png</file>
+    <file>ficha34.png</file>
   </qresource>
   <qresource prefix="ventana">
     <file>icono.png</file>
