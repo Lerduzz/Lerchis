@@ -423,6 +423,11 @@ class Ventana(QMainWindow):
     def puedeMover(self, ficha, pasos):
         if pasos <= 0:
             return False
+        if self.__dado1 == self.__dado2 and self.tienePuentePropio():
+            p1 = self.__rutas[self.__turno][0][0]
+            p2 = self.__rutas[self.__turno][0][1]
+            if ficha != p1 and ficha != p2:
+                return False
         posI = self.obtenerPosRuta(ficha)[0]
         if posI + pasos >= len(self.__rutas[self.__turno]):
             return False
@@ -432,6 +437,12 @@ class Ventana(QMainWindow):
             ] == None and not self.hayPuenteEnMedio(posI, posI + pasos):
                 return True
         return False
+
+    def tienePuentePropio(self):
+        for f in self.__rutas[self.__turno][0]:
+            if f == None or not self.esMia(f):
+                return False
+        return True
 
     def hayPuenteEnMedio(self, desde, hasta):
         for i in range(len(self.__bridges)):
