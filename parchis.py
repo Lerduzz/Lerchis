@@ -1,6 +1,6 @@
 import os
 import sys
-from pygame.mixer import init as MixerInit, Sound
+from pygame.mixer import init as MixerInit, Sound, music as Music
 import qdarkstyle
 from PyQt5.QtCore import QThread, Qt
 from PyQt5.QtGui import QResizeEvent, QKeyEvent
@@ -53,6 +53,8 @@ class Ventana(QMainWindow):
         self.__sndNoMover = Sound(os.path.join("sounds", "nomover.mp3"))
         self.__sndSalir = Sound(os.path.join("sounds", "salir.mp3"))
         self.__sndTurno = Sound(os.path.join("sounds", "turno.mp3"))
+        Music.load(os.path.join("sounds", "music1.mp3"))
+        Music.play(-1, 0, 2500)
 
     def restablecerTablero(self):
         self.__casas = InitStatic.casas(self.ui)
@@ -536,6 +538,10 @@ class Ventana(QMainWindow):
         self.ui.checkPlayer3.setEnabled(False)
         self.ui.btnTerminarPartida.setEnabled(True)
         self.iniciarContadorTurno(30)
+        Music.stop()
+        Music.unload()
+        Music.load(os.path.join("sounds", "music2.mp3"))
+        Music.play(-1, 0, 250)
 
     def terminarPartida(self):
         self.ui.btnTerminarPartida.setEnabled(False)
@@ -557,6 +563,10 @@ class Ventana(QMainWindow):
         self.ui.checkPlayer2.setEnabled(True)
         self.ui.checkPlayer3.setEnabled(True)
         self.ui.btnNuevaPartida.setEnabled(True)
+        Music.stop()
+        Music.unload()
+        Music.load(os.path.join("sounds", "music1.mp3"))
+        Music.play(-1, 0, 250)
 
     def iniciarContadorTurno(self, start):
         if not self.__contandoTurno:
