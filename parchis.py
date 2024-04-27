@@ -1,4 +1,5 @@
 import sys
+import winsound
 import qdarkstyle
 from PyQt5.QtCore import QThread, Qt
 from PyQt5.QtGui import QResizeEvent, QKeyEvent
@@ -194,9 +195,11 @@ class Ventana(QMainWindow):
 
     def activarBono1(self):
         self.__disponibleBono1 = True
+        Utils.playSound("llegar")
 
     def activarBono2(self):
         self.__disponibleBono2 = True
+        Utils.playSound("llegar")
 
     def intentaSalirDeCasa(self, ficha):
         if self.estaEnCasa(ficha):
@@ -230,17 +233,21 @@ class Ventana(QMainWindow):
         owner, index = self.obtenerOwnerIndex(ficha)
         if owner != self.__turno:
             return False
-        self.matarEnSalida()
+        mata = self.matarEnSalida()
         if MoveUtils.moverFicha(
             self.__casas, self.__turno, index, self.__rutas[self.__turno], 0, 0
         ):
             self.relocateAll()
+            if not mata:
+                Utils.playSound("salir")
             return True
         else:
             if MoveUtils.moverFicha(
                 self.__casas, self.__turno, index, self.__rutas[self.__turno], 0, 1
             ):
                 self.relocateAll()
+                if not mata:
+                    Utils.playSound("salir")
                 return True
         return False
 
@@ -251,9 +258,12 @@ class Ventana(QMainWindow):
             if s1 != None and not self.esMia(s1):
                 if self.matarFicha(s1):
                     self.activarBono2()
+                    return True
             if s2 != None and not self.esMia(s2):
                 if self.matarFicha(s2):
                     self.activarBono2()
+                    return True
+        return False
 
     def obtenerOwnerIndex(self, ficha):
         index = 0
@@ -302,6 +312,7 @@ class Ventana(QMainWindow):
         self.__dadosWorker.progress.connect(self.mostrarDados)
         self.__dadosWorker.finished.connect(self.onDadosGirados)
         self.__dadosThread.start()
+        Utils.playSound("dados")
 
     def mostrarDados(self, s1, s2):
         self.ui.dado1.setStyleSheet(
