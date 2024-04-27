@@ -490,6 +490,7 @@ class Ventana(QMainWindow):
         self.__disponibleBono1 = False
         self.__disponibleBono2 = False
         self.__reactivandoDados = False
+        Utils.playSound("nomover")
 
     def virarMasAdelantada(self):
         for i in range(len(self.__rutas[self.__turno]) - 2, -1, -1):
