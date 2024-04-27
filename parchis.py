@@ -1,4 +1,5 @@
 import sys
+from pygame import mixer
 import qdarkstyle
 from PyQt5.QtCore import QThread, Qt
 from PyQt5.QtGui import QResizeEvent, QKeyEvent
@@ -9,6 +10,9 @@ from workers.turno import TurnoWorker
 from utils.move import MoveUtils
 from utils.utils import Utils
 from utils.static import InitStatic
+
+
+mixer.init()
 
 
 class Ventana(QMainWindow):
