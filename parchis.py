@@ -315,10 +315,10 @@ class Ventana(QMainWindow):
 
     def mostrarDados(self, s1, s2):
         self.ui.dado1.setStyleSheet(
-            f"border-image: url(:/dados/dado{self.__turno}{s1}.png) 0 0 0 0 stretch stretch;"
+            f"border-image: url(:/rc/images/dados/dado{self.__turno}{s1}.png) 0 0 0 0 stretch stretch;"
         )
         self.ui.dado2.setStyleSheet(
-            f"border-image: url(:/dados/dado{self.__turno}{s2}.png) 0 0 0 0 stretch stretch;"
+            f"border-image: url(:/rc/images/dados/dado{self.__turno}{s2}.png) 0 0 0 0 stretch stretch;"
         )
 
     def onDadosGirados(self, s1, s2):
@@ -604,8 +604,9 @@ class Ventana(QMainWindow):
         self.ui.listHistorial.setCurrentRow(count - 1)
 
 
-app = QApplication([])
-app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api="pyqt5"))
-application = Ventana()
-application.show()
-sys.exit(app.exec())
+if __name__ == "__main__":
+    app = QApplication([])
+    app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api="pyqt5"))
+    application = Ventana()
+    application.show()
+    sys.exit(app.exec())
