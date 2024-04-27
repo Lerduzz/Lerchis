@@ -2,6 +2,7 @@ import os
 import sys
 from pygame.mixer import init as MixerInit, Sound, music as Music
 import qdarkstyle
+import random
 from PyQt5.QtCore import QThread, Qt
 from PyQt5.QtGui import QResizeEvent, QKeyEvent
 from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem
@@ -522,7 +523,22 @@ class Ventana(QMainWindow):
         self.restablecerTablero()
         self.__dado1 = 0
         self.__dado2 = 0
-        self.__turno = 0
+        estados = [
+            self.ui.checkPlayer0.isChecked(),
+            self.ui.checkPlayer1.isChecked(),
+            self.ui.checkPlayer2.isChecked(),
+            self.ui.checkPlayer3.isChecked(),
+        ]
+        active = []
+        if True in estados:
+            for i in range(len(estados)):
+                if estados[i]:
+                    active.append(i)
+        else:
+            active = [0, 1, 2, 3]
+        self.__turno = (
+            active[random.randint(0, len(active) - 1)] if len(active) > 1 else active[0]
+        )
         self.mostrarDados(0, 0)
         self.__cuentaDoble = 0
         self.__repetirTirada = False
