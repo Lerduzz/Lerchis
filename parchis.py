@@ -496,6 +496,7 @@ class Ventana(QMainWindow):
                 ficha = self.__rutas[self.__turno][i][j]
                 if ficha != None and self.esMia(ficha):
                     self.matarFicha(ficha)
+                    Utils.playSound("matar")
                     return True
         return False
 
