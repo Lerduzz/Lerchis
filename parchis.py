@@ -336,6 +336,7 @@ class Ventana(QMainWindow):
                 self.virarMasAdelantada()
                 if self.__contandoTurno:
                     self.__turnoWorker.faster()
+                    Utils.playSound("turno")
                 return
         else:
             self.__cuentaDoble = 0
@@ -530,6 +531,7 @@ class Ventana(QMainWindow):
         self.ui.dado2.setEnabled(False)
         if self.__contandoTurno:
             self.__turnoWorker.faster()
+            Utils.playSound("turno")
         else:
             self.onPartidaTerminada()
 
@@ -574,14 +576,14 @@ class Ventana(QMainWindow):
                 self.__repetirTirada = False
                 self.iniciarReactivadorDados()
             else:
-                if self.__contandoTurno:
+                if self.__contandoTurno and not self.__turnoWorker.isFast():
                     self.__turnoWorker.faster()
+                    Utils.playSound("turno")
 
     def onContadorTurnoFinished(self, value):
         self.onContadorTurnoProgress(value)
         self.__contandoTurno = False
         self.cambioDeTurno()
-        Utils.playSound("turno")
 
     def iniciarReactivadorDados(self):
         self.__reactivandoDados = True
