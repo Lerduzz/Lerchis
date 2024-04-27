@@ -21,7 +21,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="parchis.qrc">
-    <normaloff>:/ventana/icono.png</normaloff>:/ventana/icono.png</iconset>
+    <normaloff>:/rc/images/icono/icono.png</normaloff>:/rc/images/icono/icono.png</iconset>
   </property>
   <widget class="QWidget" name="cajaPrincipal">
    <layout class="QHBoxLayout" name="layoutPrincipal">
@@ -50,7 +50,7 @@
       </property>
       <property name="styleSheet">
        <string notr="true">#cajaTablero {
-	border-image: url(:/tablero/tablero.png) 0 0 0 0 stretch stretch;
+	border-image: url(:/rc/images/mesa/tablero.png) 0 0 0 0 stretch stretch;
 }</string>
       </property>
       <widget class="QToolButton" name="ficha00">
@@ -69,7 +69,7 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/fichas/ficha01.png) 0 0 0 0 stretch stretch;</string>
+        <string notr="true">border-image: url(:/rc/images/fichas/ficha01.png) 0 0 0 0 stretch stretch;</string>
        </property>
        <property name="text">
         <string/>
@@ -91,7 +91,7 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/fichas/ficha04.png) 0 0 0 0 stretch stretch;</string>
+        <string notr="true">border-image: url(:/rc/images/fichas/ficha04.png) 0 0 0 0 stretch stretch;</string>
        </property>
        <property name="text">
         <string/>
@@ -113,7 +113,7 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/fichas/ficha02.png) 0 0 0 0 stretch stretch;</string>
+        <string notr="true">border-image: url(:/rc/images/fichas/ficha02.png) 0 0 0 0 stretch stretch;</string>
        </property>
        <property name="text">
         <string/>
@@ -135,7 +135,7 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/fichas/ficha03.png) 0 0 0 0 stretch stretch;</string>
+        <string notr="true">border-image: url(:/rc/images/fichas/ficha03.png) 0 0 0 0 stretch stretch;</string>
        </property>
        <property name="text">
         <string/>
@@ -157,7 +157,7 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/fichas/ficha14.png) 0 0 0 0 stretch stretch;</string>
+        <string notr="true">border-image: url(:/rc/images/fichas/ficha14.png) 0 0 0 0 stretch stretch;</string>
        </property>
        <property name="text">
         <string/>
@@ -179,7 +179,7 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/fichas/ficha11.png) 0 0 0 0 stretch stretch;</string>
+        <string notr="true">border-image: url(:/rc/images/fichas/ficha11.png) 0 0 0 0 stretch stretch;</string>
        </property>
        <property name="text">
         <string/>
@@ -201,7 +201,7 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/fichas/ficha12.png) 0 0 0 0 stretch stretch;</string>
+        <string notr="true">border-image: url(:/rc/images/fichas/ficha12.png) 0 0 0 0 stretch stretch;</string>
        </property>
        <property name="text">
         <string/>
@@ -223,7 +223,7 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/fichas/ficha13.png) 0 0 0 0 stretch stretch;</string>
+        <string notr="true">border-image: url(:/rc/images/fichas/ficha13.png) 0 0 0 0 stretch stretch;</string>
        </property>
        <property name="text">
         <string/>
@@ -245,7 +245,7 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/fichas/ficha24.png) 0 0 0 0 stretch stretch;</string>
+        <string notr="true">border-image: url(:/rc/images/fichas/ficha24.png) 0 0 0 0 stretch stretch;</string>
        </property>
        <property name="text">
         <string/>
@@ -267,7 +267,7 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/fichas/ficha21.png) 0 0 0 0 stretch stretch;</string>
+        <string notr="true">border-image: url(:/rc/images/fichas/ficha21.png) 0 0 0 0 stretch stretch;</string>
        </property>
        <property name="text">
         <string/>
@@ -289,7 +289,7 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/fichas/ficha22.png) 0 0 0 0 stretch stretch;</string>
+        <string notr="true">border-image: url(:/rc/images/fichas/ficha22.png) 0 0 0 0 stretch stretch;</string>
        </property>
        <property name="text">
         <string/>
@@ -311,7 +311,7 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/fichas/ficha23.png) 0 0 0 0 stretch stretch;</string>
+        <string notr="true">border-image: url(:/rc/images/fichas/ficha23.png) 0 0 0 0 stretch stretch;</string>
        </property>
        <property name="text">
         <string/>
@@ -333,7 +333,7 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/fichas/ficha34.png) 0 0 0 0 stretch stretch;</string>
+        <string notr="true">border-image: url(:/rc/images/fichas/ficha34.png) 0 0 0 0 stretch stretch;</string>
        </property>
        <property name="text">
         <string/>
@@ -355,7 +355,7 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/fichas/ficha31.png) 0 0 0 0 stretch stretch;</string>
+        <string notr="true">border-image: url(:/rc/images/fichas/ficha31.png) 0 0 0 0 stretch stretch;</string>
        </property>
        <property name="text">
         <string/>
@@ -377,7 +377,7 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/fichas/ficha32.png) 0 0 0 0 stretch stretch;</string>
+        <string notr="true">border-image: url(:/rc/images/fichas/ficha32.png) 0 0 0 0 stretch stretch;</string>
        </property>
        <property name="text">
         <string/>
@@ -399,7 +399,7 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">border-image: url(:/fichas/ficha33.png) 0 0 0 0 stretch stretch;</string>
+        <string notr="true">border-image: url(:/rc/images/fichas/ficha33.png) 0 0 0 0 stretch stretch;</string>
        </property>
        <property name="text">
         <string/>
@@ -464,7 +464,7 @@
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">border-image: url(:/dados/dado00.png) 0 0 0 0 stretch stretch;</string>
+             <string notr="true">border-image: url(:/rc/images/dados/dado00.png) 0 0 0 0 stretch stretch;</string>
             </property>
             <property name="text">
              <string/>
@@ -489,7 +489,7 @@
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">border-image: url(:/dados/dado00.png) 0 0 0 0 stretch stretch;</string>
+             <string notr="true">border-image: url(:/rc/images/dados/dado00.png) 0 0 0 0 stretch stretch;</string>
             </property>
             <property name="text">
              <string/>
@@ -518,7 +518,7 @@
                </property>
                <property name="icon">
                 <iconset>
-                 <normaloff>:/fichas/ficha3.png</normaloff>:/fichas/ficha3.png</iconset>
+                 <normaloff>:/rc/images/fichas/ficha3.png</normaloff>:/rc/images/fichas/ficha3.png</iconset>
                </property>
                <property name="checked">
                 <bool>true</bool>
@@ -532,7 +532,7 @@
                </property>
                <property name="icon">
                 <iconset>
-                 <normaloff>:/fichas/ficha0.png</normaloff>:/fichas/ficha0.png</iconset>
+                 <normaloff>:/rc/images/fichas/ficha0.png</normaloff>:/rc/images/fichas/ficha0.png</iconset>
                </property>
                <property name="checked">
                 <bool>true</bool>
@@ -546,7 +546,7 @@
                </property>
                <property name="icon">
                 <iconset>
-                 <normaloff>:/fichas/ficha1.png</normaloff>:/fichas/ficha1.png</iconset>
+                 <normaloff>:/rc/images/fichas/ficha1.png</normaloff>:/rc/images/fichas/ficha1.png</iconset>
                </property>
                <property name="checked">
                 <bool>true</bool>
@@ -560,7 +560,7 @@
                </property>
                <property name="icon">
                 <iconset>
-                 <normaloff>:/fichas/ficha2.png</normaloff>:/fichas/ficha2.png</iconset>
+                 <normaloff>:/rc/images/fichas/ficha2.png</normaloff>:/rc/images/fichas/ficha2.png</iconset>
                </property>
                <property name="checked">
                 <bool>true</bool>
@@ -729,7 +729,7 @@
              </property>
              <property name="icon">
               <iconset resource="parchis.qrc">
-               <normaloff>:/ventana/icono.png</normaloff>:/ventana/icono.png</iconset>
+               <normaloff>:/rc/images/icono/icono.png</normaloff>:/rc/images/icono/icono.png</iconset>
              </property>
             </item>
            </widget>
