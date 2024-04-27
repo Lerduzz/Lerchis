@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QToolButton
+from utils.utils import Utils
 
 
 class MoveUtils:
@@ -54,6 +55,7 @@ class MoveUtils:
                     parent.bono1Usado()
                 if 4 in mov:
                     parent.bono2Usado()
+                Utils.playSound("mover")
                 for jC in range(len(ruta[posI + total])):
                     fM = ruta[posI + total][jC]
                     if (

@@ -1,3 +1,5 @@
+import sys
+import winsound
 from PyQt5.QtCore import QPoint
 from PyQt5.QtWidgets import (
     QProxyStyle,
@@ -225,3 +227,11 @@ class Utils:
     @staticmethod
     def puedeUsarFicha(parent, jugando: bool, tirados: bool, sender: QToolButton):
         return jugando and tirados and parent.esMia(sender)
+
+    @staticmethod
+    def playSound(sound: str):
+        if sys.platform == "win32":
+            winsound.PlaySound(
+                f"sounds/{sound}.wav",
+                winsound.SND_FILENAME | winsound.SND_ASYNC | winsound.SND_NODEFAULT,
+            )
