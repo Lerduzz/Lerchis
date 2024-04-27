@@ -661,7 +661,7 @@ class Ventana(QMainWindow):
                 self.__repetirTirada = False
                 self.iniciarReactivadorDados()
             else:
-                if self.__contandoTurno and not self.__turnoWorker.isFast():
+                if self.__contandoTurno:
                     self.__turnoWorker.faster()
                     try:
                         Sound.play(self.__sndTurno)
