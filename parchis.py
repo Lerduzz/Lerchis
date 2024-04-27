@@ -13,9 +13,6 @@ from utils.utils import Utils
 from utils.static import InitStatic
 
 
-MixerInit()
-
-
 class Ventana(QMainWindow):
     def __init__(self):
         super(Ventana, self).__init__()
@@ -46,6 +43,7 @@ class Ventana(QMainWindow):
         self.__disponibleBono2 = False
         self.__contandoTurno = False
         self.__reactivandoDados = False
+        MixerInit()
         self.__sndDados = Sound(os.path.join("sounds", "dados.mp3"))
         self.__sndLlegar = Sound(os.path.join("sounds", "llegar.mp3"))
         self.__sndMatar = Sound(os.path.join("sounds", "matar.mp3"))
