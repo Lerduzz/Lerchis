@@ -427,7 +427,7 @@ class Ventana(QMainWindow):
             p1 = self.__rutas[self.__turno][0][0]
             p2 = self.__rutas[self.__turno][0][1]
             if ficha != p1 and ficha != p2:
-                movs1 = Utils.cargarJugadasPosibles(
+                movs = Utils.cargarJugadasPosibles(
                     self,
                     p1,
                     self.__dado1,
@@ -435,15 +435,7 @@ class Ventana(QMainWindow):
                     self.__disponibleBono1,
                     self.__disponibleBono2,
                 )
-                movs2 = Utils.cargarJugadasPosibles(
-                    self,
-                    p2,
-                    self.__dado1,
-                    self.__dado2,
-                    self.__disponibleBono1,
-                    self.__disponibleBono2,
-                )
-                if len(movs1) > 0 or len(movs2) > 0:
+                if len(movs) > 0:
                     return False
         posI = self.obtenerPosRuta(ficha)[0]
         if posI + pasos >= len(self.__rutas[self.__turno]):
