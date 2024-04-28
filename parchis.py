@@ -253,7 +253,7 @@ class Ventana(QMainWindow):
         return False
 
     def estaEnCasa(self, ficha):
-        for fC in self.__casas[self.__turno]:
+        for fC in self.miCasa():
             if fC != None and ficha != None and fC == ficha:
                 return True
         return False
@@ -388,7 +388,7 @@ class Ventana(QMainWindow):
         return self.__casas[self.__turno]
 
     def miRuta(self):
-        return self.miRuta()
+        return self.__rutas[self.__turno]
 
     def miDado1(self):
         return self.__dado1
