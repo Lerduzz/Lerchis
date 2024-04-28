@@ -9,9 +9,10 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem
 from parchis_ui import Ui_VentanaJuego
 from workers.dados import DadosWorker, ReactivarWorker
 from workers.turno import TurnoWorker
-from utils.move import MoveUtils
 from utils.utils import Utils
 from utils.static import InitStatic
+from utils.move import MoveUtils
+from ia.pro import LerchisIA
 
 
 class Ventana(QMainWindow):
@@ -57,6 +58,25 @@ class Ventana(QMainWindow):
             Music.play(-1, 0, 2500)
         except:
             pass
+        self.__ia = LerchisIA()
+
+    def haJugado(self):
+        if not self.puedeJugar():
+            if self.__repetirTirada:
+                self.__repetirTirada = False
+                self.iniciarReactivadorDados()
+            else:
+                if self.__contandoTurno:
+                    self.__turnoWorker.faster()
+
+    def soyIA(self):
+        ias = [
+            self.ui.checkIA0.isChecked(),
+            self.ui.checkIA1.isChecked(),
+            self.ui.checkIA2.isChecked(),
+            self.ui.checkIA3.isChecked(),
+        ]
+        return ias[self.__turno]
 
     def restablecerTablero(self):
         self.__casas = InitStatic.casas(self.ui)
@@ -339,8 +359,10 @@ class Ventana(QMainWindow):
             if rectaFinal:
                 if self.sender() == self.ui.dado1:
                     dadoSolo = 1
-                if self.sender() == self.ui.dado2:
+                elif self.sender() == self.ui.dado2:
                     dadoSolo = 2
+                else:
+                    dadoSolo = 1
         self.ui.dado1.setEnabled(False)
         self.ui.dado2.setEnabled(False)
         self.__dadosThread = QThread()
@@ -387,6 +409,32 @@ class Ventana(QMainWindow):
         else:
             self.__cuentaDoble = 0
             self.__repetirTirada = False
+        if self.soyIA():
+            self.__ia.jugar(self)
+
+    def misFichas(self):
+        mias = []
+        for i in range(self.__turno * 4, self.__turno * 4 + 4):
+            mias.append(self.__fichas[i])
+        return mias
+
+    def miCasa(self):
+        return self.__casas[self.__turno]
+
+    def miRuta(self):
+        return self.__rutas[self.__turno]
+
+    def miDado1(self):
+        return self.__dado1
+
+    def miDado2(self):
+        return self.__dado2
+
+    def miBono1(self):
+        return 10 if self.__disponibleBono1 else 0
+
+    def miBono2(self):
+        return 20 if self.__disponibleBono2 else 0
 
     def puedeJugar(self):
         for i in range(self.__turno * 4, self.__turno * 4 + 4):
@@ -556,6 +604,8 @@ class Ventana(QMainWindow):
         self.__disponibleBono1 = False
         self.__disponibleBono2 = False
         self.__reactivandoDados = False
+        if self.soyIA():
+            self.tirarDados()
         try:
             Sound.play(self.__sndNoMover)
         except:
@@ -606,7 +656,12 @@ class Ventana(QMainWindow):
         self.ui.checkPlayer1.setEnabled(False)
         self.ui.checkPlayer2.setEnabled(False)
         self.ui.checkPlayer3.setEnabled(False)
+        self.ui.checkIA0.setEnabled(False)
+        self.ui.checkIA1.setEnabled(False)
+        self.ui.checkIA2.setEnabled(False)
+        self.ui.checkIA3.setEnabled(False)
         self.ui.btnTerminarPartida.setEnabled(True)
+        self.prepararDados()
         self.iniciarContadorTurno(30)
         try:
             Music.stop()
@@ -638,6 +693,10 @@ class Ventana(QMainWindow):
         self.ui.checkPlayer1.setEnabled(True)
         self.ui.checkPlayer2.setEnabled(True)
         self.ui.checkPlayer3.setEnabled(True)
+        self.ui.checkIA0.setEnabled(True)
+        self.ui.checkIA1.setEnabled(True)
+        self.ui.checkIA2.setEnabled(True)
+        self.ui.checkIA3.setEnabled(True)
         self.ui.btnNuevaPartida.setEnabled(True)
         try:
             Music.stop()
@@ -718,9 +777,8 @@ class Ventana(QMainWindow):
         self.ui.listHistorial.setCurrentRow(count - 1)
 
 
-if __name__ == "__main__":
-    app = QApplication([])
-    app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api="pyqt5"))
-    application = Ventana()
-    application.show()
-    sys.exit(app.exec())
+app = QApplication([])
+app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api="pyqt5"))
+application = Ventana()
+application.show()
+sys.exit(app.exec())

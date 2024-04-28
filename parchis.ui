@@ -725,7 +725,7 @@
             </property>
             <item>
              <property name="text">
-              <string>Creado por Lerduzz (https://youtube.com/@lerduzz). Versión: v0.8.3 Beta.</string>
+              <string>Creado por Lerduzz (https://youtube.com/@lerduzz). Versión: v0.8.5 Beta.</string>
              </property>
              <property name="icon">
               <iconset resource="parchis.qrc">
