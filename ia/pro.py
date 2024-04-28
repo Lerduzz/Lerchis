@@ -6,10 +6,47 @@ from utils.static import InitStatic
 
 class LerchisIA(QObject):
     def intentaMatarOtraFicha(self):
-        # Recorrer las fichas del usuario.
-        # Obtener posibles moviemientos para cada ficha.
-        # Comprobar para cada movimiento si se come en este.
-        # Efectuarlo y retornar | o seguir.
+        for f in self.__parent.misFichas():
+            movs = Utils.cargarJugadasPosibles(
+                self.__parent,
+                f,
+                self.__parent.miDado1(),
+                self.__parent.miDado2(),
+                self.__parent.miBono1(),
+                self.__parent.miBono2(),
+            )
+            if len(movs) == 0:
+                continue
+            for mov in movs:
+                total = 0
+                total += self.__parent.miDado1() if 1 in mov else 0
+                total += self.__parent.miDado2() if 2 in mov else 0
+                total += self.__parent.miBono1() if 3 in mov else 0
+                total += self.__parent.miBono2() if 4 in mov else 0
+                if total == 0:
+                    continue
+                excl = InitStatic.excluir()
+                ruta = self.__parent.miRuta()
+                posI = self.__parent.obtenerPosRuta(f)[0]
+                for jC in range(len(ruta[posI + total])):
+                    fM = ruta[posI + total][jC]
+                    if (
+                        fM != None
+                        and not posI + total in excl
+                        and not self.__parent.esMia(fM)
+                    ):
+                        MoveUtils.moverFichaDirecto(
+                            self.__parent,
+                            f,
+                            mov,
+                            self.__parent.miDado1(),
+                            self.__parent.miDado2(),
+                            self.__parent.miBono1(),
+                            self.__parent.miBono2(),
+                            self.__parent.miRuta(),
+                            excl,
+                        )
+                        return True
         return False
 
     def intentaEntrarEnMeta(self):
@@ -45,7 +82,9 @@ class LerchisIA(QObject):
             if len(movs) == 0:
                 continue
             movMax = 0
-            rowMax = MoveUtils.mayorDistancia(movs, self.__parent.miDado1(), self.__parent.miDado2())
+            rowMax = MoveUtils.mayorDistancia(
+                movs, self.__parent.miDado1(), self.__parent.miDado2()
+            )
             for mov in rowMax:
                 if mov == 1:
                     movMax += self.__parent.miDado1()
