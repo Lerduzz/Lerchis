@@ -45,20 +45,17 @@ class Ventana(QMainWindow):
         self.__disponibleBono2 = False
         self.__contandoTurno = False
         self.__reactivandoDados = False
-        MixerInit()
-        try:
-            self.__sndDados = Sound(os.path.join("sounds", "dados.wav"))
-            self.__sndLlegar = Sound(os.path.join("sounds", "llegar.wav"))
-            self.__sndMatar = Sound(os.path.join("sounds", "matar.wav"))
-            self.__sndMover = Sound(os.path.join("sounds", "mover.wav"))
-            self.__sndNoMover = Sound(os.path.join("sounds", "nomover.wav"))
-            self.__sndSalir = Sound(os.path.join("sounds", "salir.wav"))
-            self.__sndTurno = Sound(os.path.join("sounds", "turno.wav"))
-            Music.load(os.path.join("sounds", "music1.wav"))
-            Music.play(-1, 0, 2500)
-        except:
-            pass
         self.__ia = LerchisIA()
+        MixerInit()
+        self.__sndDados = Sound(os.path.join("sounds", "dados.wav"))
+        self.__sndLlegar = Sound(os.path.join("sounds", "llegar.wav"))
+        self.__sndMatar = Sound(os.path.join("sounds", "matar.wav"))
+        self.__sndMover = Sound(os.path.join("sounds", "mover.wav"))
+        self.__sndNoMover = Sound(os.path.join("sounds", "nomover.wav"))
+        self.__sndSalir = Sound(os.path.join("sounds", "salir.wav"))
+        self.__sndTurno = Sound(os.path.join("sounds", "turno.wav"))
+        Music.load(os.path.join("sounds", "music1.wav"))
+        Music.play(-1, 0, 2500)
 
     def haJugado(self):
         if not self.puedeJugar():
