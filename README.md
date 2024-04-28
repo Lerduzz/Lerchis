@@ -1,5 +1,8 @@
 # Lerchis
 Mi version del Parchis con mis reglas.
+- La IA debe trabajar en otro hilo para que no conjele la interfaz.
+- El movimiento de las fichas debe ser otro hilo para poder animarlo.
+- Cuando haya una sola ficha en un cuadro que se quede en medio.
 
 
 ## Comandos
