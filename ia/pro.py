@@ -5,7 +5,49 @@ from utils.static import InitStatic
 
 
 class LerchisIA(QObject):
+    # PRIORIDAD 0: Matar en la salida.
+    def intentaMatarEnSalida(self):
+        # SIN EXCEPCIONES!
+        if (
+            self.__parent.miDado1() != 5
+            and self.__parent.miDado2() != 5
+            and self.__parent.miDado1() + self.__parent.miDado2() != 5
+        ):
+            return False
+        casa = self.__parent.miCasa()
+        enCasa = Utils.contarFichas(casa)
+        if enCasa == 0:
+            return False
+        ruta = self.__parent.miRuta()
+        f1 = ruta[0][0]
+        f2 = ruta[0][1]
+        if f1 == None or f2 == None:
+            return False
+        if self.__parent.esMia(f1) and self.__parent.esMia(f2):
+            return False
+        for f in self.__parent.miCasa():
+            if f != None:
+                if self.__parent.intentaSalirDeCasa(f):
+                    return True
+        return False
+
+    # PRIORIDAD 1: Intentar matar las fichas de los demas.
     def intentaMatarOtraFicha(self):
+        # EXCEPCION: Cuando puedes sacar ficha y no tienes con que caminar el bonus.
+        if (
+            self.__parent.miDado1() == 5
+            or self.__parent.miDado2() == 5
+            or self.__parent.miDado1() + self.__parent.miDado2() == 5
+        ):
+            casa = self.__parent.miCasa()
+            ruta = self.__parent.miRuta()
+            enCasa = Utils.contarFichas(casa)
+            enMeta = Utils.contarFichas(ruta[len(ruta) - 1])
+            if enCasa == 4 or enCasa + enMeta == 4:
+                return False
+            if enCasa > 0:
+                if 4 - enCasa - enMeta < 2:
+                    return False
         for f in self.__parent.misFichas():
             if self.__parent.estaEnCasa(f):
                 continue
@@ -28,7 +70,6 @@ class LerchisIA(QObject):
                 if total == 0:
                     continue
                 excl = InitStatic.excluir()
-                ruta = self.__parent.miRuta()
                 posI = self.__parent.obtenerPosRuta(f)[0]
                 for jC in range(len(ruta[posI + total])):
                     fM = ruta[posI + total][jC]
@@ -51,7 +92,23 @@ class LerchisIA(QObject):
                         return True
         return False
 
+    # PRIORIDAD 2: Intentar entrar en la meta.
     def intentaEntrarEnMeta(self):
+        # EXCEPCION: Cuando puedes sacar ficha y no tienes con que caminar el bonus.
+        if (
+            self.__parent.miDado1() == 5
+            or self.__parent.miDado2() == 5
+            or self.__parent.miDado1() + self.__parent.miDado2() == 5
+        ):
+            casa = self.__parent.miCasa()
+            ruta = self.__parent.miRuta()
+            enCasa = Utils.contarFichas(casa)
+            enMeta = Utils.contarFichas(ruta[len(ruta) - 1])
+            if enCasa == 4 or enCasa + enMeta == 4:
+                return False
+            if enCasa > 0:
+                if 4 - enCasa - enMeta < 2:
+                    return False
         for f in self.__parent.misFichas():
             if self.__parent.estaEnCasa(f):
                 continue
@@ -90,12 +147,18 @@ class LerchisIA(QObject):
                     return True
         return False
 
+    # PRIORIDAD 3: Sacar fichas de la casa.
     def intentaSacarFicha(self):
+        # EXCEPCION: Cuando tienes puente en la salida.
         if (
             self.__parent.miDado1() != 5
             and self.__parent.miDado2() != 5
             and self.__parent.miDado1() + self.__parent.miDado2() != 5
         ):
+            return False
+        casa = self.__parent.miCasa()
+        enCasa = Utils.contarFichas(casa)
+        if enCasa == 0:
             return False
         for f in self.__parent.miCasa():
             if f != None:
