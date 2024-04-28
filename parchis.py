@@ -373,7 +373,6 @@ class Ventana(QMainWindow):
                 self.virarMasAdelantada()
                 if self.__contandoTurno:
                     self.__turnoWorker.faster()
-                    Sound.play(self.__sndTurno)
                 return
         else:
             self.__cuentaDoble = 0
@@ -575,7 +574,7 @@ class Ventana(QMainWindow):
         self.__reactivandoDados = False
         if self.soyIA():
             self.tirarDados()
-        Sound.play(self.__sndNoMover)
+        Sound.play(self.__sndTurno)
 
     def virarMasAdelantada(self):
         for i in range(len(self.__rutas[self.__turno]) - 9, -1, -1):
@@ -641,7 +640,6 @@ class Ventana(QMainWindow):
         self.ui.dado2.setEnabled(False)
         if self.__contandoTurno:
             self.__turnoWorker.faster()
-            Sound.play(self.__sndTurno)
         else:
             self.onPartidaTerminada()
 
@@ -696,7 +694,6 @@ class Ventana(QMainWindow):
             else:
                 if self.__contandoTurno:
                     self.__turnoWorker.faster()
-                    Sound.play(self.__sndTurno)
 
     def onContadorTurnoFinished(self, value):
         self.onContadorTurnoProgress(value)
