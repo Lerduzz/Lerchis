@@ -166,6 +166,72 @@ class LerchisIA(QObject):
                     return True
         return False
 
+    # PRIORIDAD 4: Abrir puente para sacar otra ficha.
+    def intentaAbrirPuenteParaSacar(self):
+        # SIN EXCEPCIONES!
+        if self.__parent.miDado1() != 5 and self.__parent.miDado2() != 5:
+            return False
+        sumMove = self.__parent.miDado1() + self.__parent.miDado2()
+        sumMove += self.__parent.miBono1() + self.__parent.miBono2()
+        if sumMove == 5:
+            return False
+        ruta = self.__parent.miRuta()
+        f1 = ruta[0][0]
+        f2 = ruta[0][1]
+        if f1 == None or f2 == None:
+            return False
+        if not self.__parent.esMia(f1) or not self.__parent.esMia(f2):
+            return False
+        movs = Utils.cargarJugadasPosibles(
+            self.__parent,
+            f2,
+            self.__parent.miDado1(),
+            self.__parent.miDado2(),
+            self.__parent.miBono1(),
+            self.__parent.miBono2(),
+        )
+        if len(movs) == 0:
+            return False
+        validMovs = []
+        for mov in movs:
+            # Verificar que movimientos abren el puente sin gastar el 5.
+            d1 = self.__parent.miDado1()
+            d2 = self.__parent.miDado2()
+            if 1 in mov and d1 == 5 and d2 != 5:
+                continue
+            if 2 in mov and d2 == 5 and d1 != 5:
+                continue
+            validMovs.append(mov)
+        if len(validMovs) == 0:
+            return False
+        minDist = -1
+        minMov = []
+        for mov in validMovs:
+            total = 0
+            total += self.__parent.miDado1() if 1 in mov else 0
+            total += self.__parent.miDado2() if 2 in mov else 0
+            total += self.__parent.miBono1() if 3 in mov else 0
+            total += self.__parent.miBono2() if 4 in mov else 0
+            if total == 0:
+                continue
+            if minDist == -1 or minDist > total:
+                minDist = total
+                minMov = mov
+        if minDist > 0 and len(minMov) > 0:
+            MoveUtils.moverFichaDirecto(
+                self.__parent,
+                f2,
+                minMov,
+                self.__parent.miDado1(),
+                self.__parent.miDado2(),
+                self.__parent.miBono1(),
+                self.__parent.miBono2(),
+                self.__parent.miRuta(),
+                InitStatic.excluir(),
+            )
+            return True
+        return False
+
     def intentaPonerseASalvo(self):
         return False
 
