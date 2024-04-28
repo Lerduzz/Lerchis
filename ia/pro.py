@@ -5,6 +5,10 @@ from utils.static import InitStatic
 
 
 class LerchisIA(QObject):
+    def __init__(self, parent: QObject) -> None:
+        super().__init__(parent)
+        self.__parent = parent
+
     # PRIORIDAD 0: Matar en la salida.
     def intentaMatarEnSalida(self):
         # SIN EXCEPCIONES!
@@ -365,9 +369,8 @@ class LerchisIA(QObject):
             return True
         return False
 
-    def jugar(self, parent):
-        self.__parent = parent
-        while parent.puedeJugar():
+    def jugar(self):
+        while self.__parent.puedeJugar():
             if self.intentaMatarEnSalida():
                 continue
             if self.intentaMatarOtraFicha():

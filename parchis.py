@@ -45,7 +45,6 @@ class Ventana(QMainWindow):
         self.__disponibleBono2 = False
         self.__contandoTurno = False
         self.__reactivandoDados = False
-        self.__ia = LerchisIA()
         MixerInit()
         self.__sndDados = Sound(os.path.join("sounds", "dados.wav"))
         self.__sndLlegar = Sound(os.path.join("sounds", "llegar.wav"))
@@ -376,7 +375,11 @@ class Ventana(QMainWindow):
             self.__cuentaDoble = 0
             self.__repetirTirada = False
         if self.soyIA():
-            self.__ia.jugar(self)
+            self.iniciarIA()
+
+    def iniciarIA(self):
+        self.__ia = LerchisIA(self)
+        self.__ia.jugar()
 
     def misFichas(self):
         mias = []
