@@ -337,7 +337,7 @@ class Ventana(QMainWindow):
                 elif self.sender() == self.ui.dado2:
                     dadoSolo = 2
                 else:
-                    dadoSolo = 1
+                    dadoSolo = random.randint(1, 2)
         self.ui.dado1.setEnabled(False)
         self.ui.dado2.setEnabled(False)
         self.__dadosThread = QThread()
