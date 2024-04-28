@@ -168,7 +168,7 @@ class Ventana(QMainWindow):
                 self.__dado2,
                 self.__disponibleBono1,
                 self.__disponibleBono2,
-                self.__rutas[self.__turno],
+                self.miRuta(),
                 self.__excluir,
             )
             return
@@ -180,7 +180,7 @@ class Ventana(QMainWindow):
             self.__dado2,
             self.__disponibleBono1,
             self.__disponibleBono2,
-            self.__rutas[self.__turno],
+            self.miRuta(),
             self.__excluir,
         )
 
@@ -211,7 +211,7 @@ class Ventana(QMainWindow):
             self.__dado2,
             self.__disponibleBono1,
             self.__disponibleBono2,
-            self.__rutas[self.__turno],
+            self.miRuta(),
             self.__excluir,
         )
 
@@ -253,15 +253,15 @@ class Ventana(QMainWindow):
         return False
 
     def estaEnCasa(self, ficha):
-        for fC in self.__casas[self.__turno]:
+        for fC in self.miCasa():
             if fC != None and ficha != None and fC == ficha:
                 return True
         return False
 
     def puedeSalir(self):
         if self.__dado1 == 5 or self.__dado2 == 5 or self.__dado1 + self.__dado2 == 5:
-            s1 = self.__rutas[self.__turno][0][0]
-            s2 = self.__rutas[self.__turno][0][1]
+            s1 = self.miRuta()[0][0]
+            s2 = self.miRuta()[0][1]
             if not (s1 != None and s2 != None and self.esMia(s1) and self.esMia(s2)):
                 return True
         return False
@@ -271,16 +271,14 @@ class Ventana(QMainWindow):
         if owner != self.__turno:
             return False
         mata = self.matarEnSalida()
-        if MoveUtils.moverFicha(
-            self.__casas, self.__turno, index, self.__rutas[self.__turno], 0, 0
-        ):
+        if MoveUtils.moverFicha(self.__casas, self.__turno, index, self.miRuta(), 0, 0):
             self.relocateAll()
             if not mata:
                 Sound.play(self.__sndSalir)
             return True
         else:
             if MoveUtils.moverFicha(
-                self.__casas, self.__turno, index, self.__rutas[self.__turno], 0, 1
+                self.__casas, self.__turno, index, self.miRuta(), 0, 1
             ):
                 self.relocateAll()
                 if not mata:
@@ -289,8 +287,8 @@ class Ventana(QMainWindow):
         return False
 
     def matarEnSalida(self):
-        s1 = self.__rutas[self.__turno][0][0]
-        s2 = self.__rutas[self.__turno][0][1]
+        s1 = self.miRuta()[0][0]
+        s2 = self.miRuta()[0][1]
         if s1 != None and s2 != None:
             if s1 != None and not self.esMia(s1):
                 if self.matarFicha(s1):
@@ -321,13 +319,13 @@ class Ventana(QMainWindow):
         return False
 
     def tirarDados(self):
-        metaIndex = len(self.__rutas[self.__turno]) - 1
-        enJuego = 4 - Utils.contarFichas(self.__rutas[self.__turno][metaIndex])
+        metaIndex = len(self.miRuta()) - 1
+        enJuego = 4 - Utils.contarFichas(self.miRuta()[metaIndex])
         dadoSolo = 0
         if enJuego == 1:
             restante = None
             for mFicha in self.misFichas():
-                if not mFicha in self.__rutas[self.__turno][metaIndex]:
+                if not mFicha in self.miRuta()[metaIndex]:
                     restante = mFicha
                     break
             posI = self.obtenerPosRuta(restante)[0]
@@ -373,7 +371,6 @@ class Ventana(QMainWindow):
                 self.virarMasAdelantada()
                 if self.__contandoTurno:
                     self.__turnoWorker.faster()
-                    Sound.play(self.__sndTurno)
                 return
         else:
             self.__cuentaDoble = 0
@@ -441,8 +438,8 @@ class Ventana(QMainWindow):
         if pasos <= 0:
             return False
         if self.__dado1 == self.__dado2 and self.tienePuentePropio():
-            p1 = self.__rutas[self.__turno][0][0]
-            p2 = self.__rutas[self.__turno][0][1]
+            p1 = self.miRuta()[0][0]
+            p2 = self.miRuta()[0][1]
             if ficha != p1 and ficha != p2:
                 movs = Utils.cargarJugadasPosibles(
                     self,
@@ -455,17 +452,17 @@ class Ventana(QMainWindow):
                 if len(movs) > 0:
                     return False
         posI = self.obtenerPosRuta(ficha)[0]
-        if posI + pasos >= len(self.__rutas[self.__turno]):
+        if posI + pasos >= len(self.miRuta()):
             return False
-        for j in range(len(self.__rutas[self.__turno][posI + pasos])):
-            if self.__rutas[self.__turno][posI + pasos][
-                j
-            ] == None and not self.hayPuenteEnMedio(posI, posI + pasos):
+        for j in range(len(self.miRuta()[posI + pasos])):
+            if self.miRuta()[posI + pasos][j] == None and not self.hayPuenteEnMedio(
+                posI, posI + pasos
+            ):
                 return True
         return False
 
     def tienePuentePropio(self):
-        for f in self.__rutas[self.__turno][0]:
+        for f in self.miRuta()[0]:
             if f == None or not self.esMia(f):
                 return False
         return True
@@ -480,7 +477,7 @@ class Ventana(QMainWindow):
             if hasta <= pos:
                 break
             hayPuente = True
-            for cCel in self.__rutas[self.__turno][pos]:
+            for cCel in self.miRuta()[pos]:
                 if cCel == None:
                     hayPuente = False
                     break
@@ -495,9 +492,9 @@ class Ventana(QMainWindow):
     def obtenerPosRuta(self, ficha):
         posI = 0
         posJ = 0
-        for i in range(len(self.__rutas[self.__turno])):
-            for j in range(len(self.__rutas[self.__turno][i])):
-                if self.__rutas[self.__turno][i][j] == ficha:
+        for i in range(len(self.miRuta())):
+            for j in range(len(self.miRuta()[i])):
+                if self.miRuta()[i][j] == ficha:
                     posI = i
                     posJ = j
                     break
@@ -506,9 +503,7 @@ class Ventana(QMainWindow):
     def matarFicha(self, ficha):
         posI, posJ = self.obtenerPosRuta(ficha)
         owner, index = self.obtenerOwnerIndex(ficha)
-        if MoveUtils.moverFicha(
-            self.__rutas[self.__turno], posI, posJ, self.__casas, owner, index
-        ):
+        if MoveUtils.moverFicha(self.miRuta(), posI, posJ, self.__casas, owner, index):
             self.relocateAll()
             return True
         return False
@@ -527,29 +522,21 @@ class Ventana(QMainWindow):
         ]
         terminar = False
         if True in estados:
-            enMeta = Utils.contarFichas(
-                self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1]
-            )
+            enMeta = Utils.contarFichas(self.miRuta()[len(self.miRuta()) - 1])
             numSaltos = 0
             while not estados[self.__turno] or enMeta == 4:
                 self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
-                enMeta = Utils.contarFichas(
-                    self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1]
-                )
+                enMeta = Utils.contarFichas(self.miRuta()[len(self.miRuta()) - 1])
                 numSaltos += 1
                 if numSaltos >= 4:
                     terminar = True
                     break
         else:
-            enMeta = Utils.contarFichas(
-                self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1]
-            )
+            enMeta = Utils.contarFichas(self.miRuta()[len(self.miRuta()) - 1])
             numSaltos = 0
             while enMeta == 4:
                 self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
-                enMeta = Utils.contarFichas(
-                    self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1]
-                )
+                enMeta = Utils.contarFichas(self.miRuta()[len(self.miRuta()) - 1])
                 numSaltos += 1
                 if numSaltos >= 4:
                     terminar = True
@@ -575,12 +562,12 @@ class Ventana(QMainWindow):
         self.__reactivandoDados = False
         if self.soyIA():
             self.tirarDados()
-        Sound.play(self.__sndNoMover)
+        Sound.play(self.__sndTurno)
 
     def virarMasAdelantada(self):
-        for i in range(len(self.__rutas[self.__turno]) - 9, -1, -1):
-            for j in range(len(self.__rutas[self.__turno][i])):
-                ficha = self.__rutas[self.__turno][i][j]
+        for i in range(len(self.miRuta()) - 9, -1, -1):
+            for j in range(len(self.miRuta()[i])):
+                ficha = self.miRuta()[i][j]
                 if ficha != None and self.esMia(ficha):
                     self.matarFicha(ficha)
                     Sound.play(self.__sndMatar)
@@ -641,7 +628,6 @@ class Ventana(QMainWindow):
         self.ui.dado2.setEnabled(False)
         if self.__contandoTurno:
             self.__turnoWorker.faster()
-            Sound.play(self.__sndTurno)
         else:
             self.onPartidaTerminada()
 
@@ -696,7 +682,6 @@ class Ventana(QMainWindow):
             else:
                 if self.__contandoTurno:
                     self.__turnoWorker.faster()
-                    Sound.play(self.__sndTurno)
 
     def onContadorTurnoFinished(self, value):
         self.onContadorTurnoProgress(value)
