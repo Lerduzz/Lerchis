@@ -74,6 +74,15 @@ class Ventana(QMainWindow):
                 if self.__contandoTurno:
                     self.__turnoWorker.faster()
 
+    def soyIA(self):
+        ias = [
+            self.ui.checkIA0.isChecked(),
+            self.ui.checkIA1.isChecked(),
+            self.ui.checkIA2.isChecked(),
+            self.ui.checkIA3.isChecked(),
+        ]
+        return ias[self.__turno]
+
     def restablecerTablero(self):
         self.__casas = InitStatic.casas(self.ui)
         self.__caminos = InitStatic.caminos()
@@ -222,11 +231,13 @@ class Ventana(QMainWindow):
 
     def dado1Usado(self):
         self.__dado1 = 0
-        self.__ia.usarDado1.emit()
+        if self.soyIA():
+            self.__ia.usarDado1.emit()
 
     def dado2Usado(self):
         self.__dado2 = 0
-        self.__ia.usarDado1.emit()
+        if self.soyIA():
+            self.__ia.usarDado1.emit()
 
     def bono1Usado(self):
         self.__disponibleBono1 = False
@@ -236,7 +247,8 @@ class Ventana(QMainWindow):
 
     def activarBono1(self):
         self.__disponibleBono1 = True
-        self.__ia.haLlegado.emit()
+        if self.soyIA():
+            self.__ia.haLlegado.emit()
         try:
             Sound.play(self.__sndLlegar)
         except:
@@ -244,7 +256,8 @@ class Ventana(QMainWindow):
 
     def activarBono2(self):
         self.__disponibleBono2 = True
-        self.__ia.haMatado.emit()
+        if self.soyIA():
+            self.__ia.haMatado.emit()
         try:
             Sound.play(self.__sndMatar)
         except:
@@ -409,25 +422,24 @@ class Ventana(QMainWindow):
         else:
             self.__cuentaDoble = 0
             self.__repetirTirada = False
-
-        # TEST IA
-        d1 = self.__dado1
-        d2 = self.__dado2
-        b1 = 10 if self.__disponibleBono1 else 0
-        b2 = 20 if self.__disponibleBono2 else 0
-        mias = []
-        for i in range(self.__turno * 4, self.__turno * 4 + 4):
-            mias.append(self.__fichas[i])
-        self.__ia.jugar(
-            self,
-            d1,
-            d2,
-            b1,
-            b2,
-            mias,
-            self.__casas[self.__turno],
-            self.__rutas[self.__turno],
-        )
+        if self.soyIA():
+            d1 = self.__dado1
+            d2 = self.__dado2
+            b1 = 10 if self.__disponibleBono1 else 0
+            b2 = 20 if self.__disponibleBono2 else 0
+            mias = []
+            for i in range(self.__turno * 4, self.__turno * 4 + 4):
+                mias.append(self.__fichas[i])
+            self.__ia.jugar(
+                self,
+                d1,
+                d2,
+                b1,
+                b2,
+                mias,
+                self.__casas[self.__turno],
+                self.__rutas[self.__turno],
+            )
 
     def puedeJugar(self):
         for i in range(self.__turno * 4, self.__turno * 4 + 4):
@@ -597,10 +609,8 @@ class Ventana(QMainWindow):
         self.__disponibleBono1 = False
         self.__disponibleBono2 = False
         self.__reactivandoDados = False
-
-        # TEST IA:
-        self.tirarDados()
-
+        if self.soyIA():
+            self.tirarDados()
         try:
             Sound.play(self.__sndNoMover)
         except:
