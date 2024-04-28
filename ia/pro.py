@@ -34,13 +34,13 @@ class LerchisIA(QObject):
     # PRIORIDAD 1: Intentar matar las fichas de los demas.
     def intentaMatarOtraFicha(self):
         # EXCEPCION: Cuando puedes sacar ficha y no tienes con que caminar el bonus.
+        ruta = self.__parent.miRuta()
         if (
             self.__parent.miDado1() == 5
             or self.__parent.miDado2() == 5
             or self.__parent.miDado1() + self.__parent.miDado2() == 5
         ):
             casa = self.__parent.miCasa()
-            ruta = self.__parent.miRuta()
             enCasa = Utils.contarFichas(casa)
             enMeta = Utils.contarFichas(ruta[len(ruta) - 1])
             if enCasa == 4 or enCasa + enMeta == 4:
