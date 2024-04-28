@@ -47,9 +47,7 @@ class Ventana(QMainWindow):
         self.__reactivandoDados = False
         self.__ia = LerchisIA()
         MixerInit()
-        # self.__sndDados = Sound("sounds\\dados.wav")
-        self.__sndDados = Sound("sounds/dados.wav")
-        # self.__sndDados = Sound(os.path.join("sounds", "dados.wav"))
+        self.__sndDados = Sound(os.path.join("sounds", "dados.wav"))
         self.__sndLlegar = Sound(os.path.join("sounds", "llegar.wav"))
         self.__sndMatar = Sound(os.path.join("sounds", "matar.wav"))
         self.__sndMover = Sound(os.path.join("sounds", "mover.wav"))
@@ -146,10 +144,7 @@ class Ventana(QMainWindow):
 
     def fichaClicEvent(self):
         if not Utils.puedeUsarFicha(self, self.__jugando, self.__dadosT, self.sender()):
-            try:
-                Sound.play(self.__sndNoMover)
-            except:
-                pass
+            Sound.play(self.__sndNoMover)
             return
         self.intentaSalirDeCasa(self.sender())
         if self.estaEnCasa(self.sender()):
@@ -191,10 +186,7 @@ class Ventana(QMainWindow):
 
     def fichaClicDerEvent(self):
         if not Utils.puedeUsarFicha(self, self.__jugando, self.__dadosT, self.sender()):
-            try:
-                Sound.play(self.__sndNoMover)
-            except:
-                pass
+            Sound.play(self.__sndNoMover)
             return
         if self.intentaSalirDeCasa(self.sender()):
             return
@@ -237,23 +229,14 @@ class Ventana(QMainWindow):
 
     def activarBono1(self):
         self.__disponibleBono1 = True
-        try:
-            Sound.play(self.__sndLlegar)
-        except:
-            pass
+        Sound.play(self.__sndLlegar)
 
     def activarBono2(self):
         self.__disponibleBono2 = True
-        try:
-            Sound.play(self.__sndMatar)
-        except:
-            pass
+        Sound.play(self.__sndMatar)
 
     def sonidoMover(self):
-        try:
-            Sound.play(self.__sndMover)
-        except:
-            pass
+        Sound.play(self.__sndMover)
 
     def intentaSalirDeCasa(self, ficha):
         if self.estaEnCasa(ficha):
@@ -293,10 +276,7 @@ class Ventana(QMainWindow):
         ):
             self.relocateAll()
             if not mata:
-                try:
-                    Sound.play(self.__sndSalir)
-                except:
-                    pass
+                Sound.play(self.__sndSalir)
             return True
         else:
             if MoveUtils.moverFicha(
@@ -304,10 +284,7 @@ class Ventana(QMainWindow):
             ):
                 self.relocateAll()
                 if not mata:
-                    try:
-                        Sound.play(self.__sndSalir)
-                    except:
-                        pass
+                    Sound.play(self.__sndSalir)
                 return True
         return False
 
@@ -374,10 +351,7 @@ class Ventana(QMainWindow):
         self.__dadosWorker.progress.connect(self.mostrarDados)
         self.__dadosWorker.finished.connect(self.onDadosGirados)
         self.__dadosThread.start()
-        try:
-            Sound.play(self.__sndDados)
-        except:
-            pass
+        Sound.play(self.__sndDados)
 
     def mostrarDados(self, s1, s2):
         self.ui.dado1.setStyleSheet(
@@ -400,10 +374,7 @@ class Ventana(QMainWindow):
                 self.virarMasAdelantada()
                 if self.__contandoTurno:
                     self.__turnoWorker.faster()
-                    try:
-                        Sound.play(self.__sndTurno)
-                    except:
-                        pass
+                    Sound.play(self.__sndTurno)
                 return
         else:
             self.__cuentaDoble = 0
@@ -605,10 +576,7 @@ class Ventana(QMainWindow):
         self.__reactivandoDados = False
         if self.soyIA():
             self.tirarDados()
-        try:
-            Sound.play(self.__sndNoMover)
-        except:
-            pass
+        Sound.play(self.__sndNoMover)
 
     def virarMasAdelantada(self):
         for i in range(len(self.__rutas[self.__turno]) - 2, -1, -1):
@@ -616,10 +584,7 @@ class Ventana(QMainWindow):
                 ficha = self.__rutas[self.__turno][i][j]
                 if ficha != None and self.esMia(ficha):
                     self.matarFicha(ficha)
-                    try:
-                        Sound.play(self.__sndMatar)
-                    except:
-                        pass
+                    Sound.play(self.__sndMatar)
                     return True
         return False
 
@@ -662,13 +627,10 @@ class Ventana(QMainWindow):
         self.ui.btnTerminarPartida.setEnabled(True)
         self.prepararDados()
         self.iniciarContadorTurno(30)
-        try:
-            Music.stop()
-            Music.unload()
-            Music.load(os.path.join("sounds", "music2.wav"))
-            Music.play(-1, 0, 250)
-        except:
-            pass
+        Music.stop()
+        Music.unload()
+        Music.load(os.path.join("sounds", "music2.wav"))
+        Music.play(-1, 0, 250)
 
     def terminarPartida(self):
         self.ui.btnTerminarPartida.setEnabled(False)
@@ -680,10 +642,7 @@ class Ventana(QMainWindow):
         self.ui.dado2.setEnabled(False)
         if self.__contandoTurno:
             self.__turnoWorker.faster()
-            try:
-                Sound.play(self.__sndTurno)
-            except:
-                pass
+            Sound.play(self.__sndTurno)
         else:
             self.onPartidaTerminada()
 
@@ -697,13 +656,10 @@ class Ventana(QMainWindow):
         self.ui.checkIA2.setEnabled(True)
         self.ui.checkIA3.setEnabled(True)
         self.ui.btnNuevaPartida.setEnabled(True)
-        try:
-            Music.stop()
-            Music.unload()
-            Music.load(os.path.join("sounds", "music1.wav"))
-            Music.play(-1, 0, 250)
-        except:
-            pass
+        Music.stop()
+        Music.unload()
+        Music.load(os.path.join("sounds", "music1.wav"))
+        Music.play(-1, 0, 250)
 
     def iniciarContadorTurno(self, start):
         if not self.__contandoTurno:
@@ -741,10 +697,7 @@ class Ventana(QMainWindow):
             else:
                 if self.__contandoTurno:
                     self.__turnoWorker.faster()
-                    try:
-                        Sound.play(self.__sndTurno)
-                    except:
-                        pass
+                    Sound.play(self.__sndTurno)
 
     def onContadorTurnoFinished(self, value):
         self.onContadorTurnoProgress(value)
