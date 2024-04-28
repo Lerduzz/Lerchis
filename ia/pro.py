@@ -7,6 +7,8 @@ from utils.static import InitStatic
 class LerchisIA(QObject):
     def intentaMatarOtraFicha(self):
         for f in self.__parent.misFichas():
+            if self.__parent.estaEnCasa(f):
+                continue
             movs = Utils.cargarJugadasPosibles(
                 self.__parent,
                 f,
