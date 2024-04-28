@@ -47,7 +47,9 @@ class Ventana(QMainWindow):
         self.__reactivandoDados = False
         self.__ia = LerchisIA()
         MixerInit()
-        self.__sndDados = Sound(os.path.join("sounds", "dados.wav"))
+        # self.__sndDados = Sound("sounds\\dados.wav")
+        self.__sndDados = Sound("sounds/dados.wav")
+        # self.__sndDados = Sound(os.path.join("sounds", "dados.wav"))
         self.__sndLlegar = Sound(os.path.join("sounds", "llegar.wav"))
         self.__sndMatar = Sound(os.path.join("sounds", "matar.wav"))
         self.__sndMover = Sound(os.path.join("sounds", "mover.wav"))
@@ -774,6 +776,7 @@ class Ventana(QMainWindow):
         self.ui.listHistorial.setCurrentRow(count - 1)
 
 
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 app = QApplication([])
 app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api="pyqt5"))
 application = Ventana()
