@@ -3,7 +3,7 @@ import sys
 from pygame.mixer import init as MixerInit, Sound, music as Music
 import qdarkstyle
 import random
-from PyQt5.QtCore import QThread, Qt
+from PyQt5.QtCore import QThread, Qt, pyqtSignal
 from PyQt5.QtGui import QResizeEvent, QKeyEvent
 from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem
 from parchis_ui import Ui_VentanaJuego
@@ -16,6 +16,8 @@ from ia.pro import LerchisIA
 
 
 class Ventana(QMainWindow):
+    messageArrived = pyqtSignal(str)
+
     def __init__(self):
         super(Ventana, self).__init__()
         self.ui = Ui_VentanaJuego()
@@ -24,6 +26,7 @@ class Ventana(QMainWindow):
         self.ui.dado2.clicked.connect(self.tirarDados)
         self.ui.btnNuevaPartida.clicked.connect(self.nuevaPartida)
         self.ui.btnTerminarPartida.clicked.connect(self.terminarPartida)
+        self.messageArrived.connect(self.insertarMensaje)
         self.__dado1 = 0
         self.__dado2 = 0
         self.__turno = 0
@@ -241,13 +244,17 @@ class Ventana(QMainWindow):
         if self.estaEnCasa(ficha):
             if self.puedeSalir():
                 if self.salirDeCasa(ficha):
+                    rmsg = "ambos dados"
                     if self.__dado1 == 5:
                         self.dado1Usado()
+                        rmsg = "el primer dado"
                     elif self.__dado2 == 5:
                         self.dado2Usado()
+                        rmsg = "el segundo dado"
                     else:
                         self.dado1Usado()
                         self.dado2Usado()
+                    self.messageArrived.emit(f"Saca una ficha de su casa con {rmsg}")
                     return True
         return False
 
@@ -292,10 +299,12 @@ class Ventana(QMainWindow):
             if s1 != None and not self.esMia(s1):
                 if self.matarFicha(s1):
                     self.activarBono2()
+                    self.messageArrived.emit(f"Ha matado una ficha de [{self.__names[self.obtenerOwnerIndex(s1)[0]]}] en la salida")
                     return True
             if s2 != None and not self.esMia(s2):
                 if self.matarFicha(s2):
                     self.activarBono2()
+                    self.messageArrived.emit(f"Ha matado una ficha de [{self.__names[self.obtenerOwnerIndex(s2)[0]]}] en la salida")
                     return True
         return False
 
@@ -361,6 +370,7 @@ class Ventana(QMainWindow):
         self.__dado1 = s1
         self.__dado2 = s2
         self.mostrarDados(s1, s2)
+        self.messageArrived.emit(f"Tira los dados y obtiene [{s1}:{s2}]")
         self.__dadosT = True
         if s1 == s2:
             if self.__cuentaDoble < 2:

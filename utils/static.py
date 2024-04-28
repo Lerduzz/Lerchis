@@ -299,10 +299,18 @@ class InitStatic:
     @staticmethod
     def icons() -> list:
         result = [QIcon(), QIcon(), QIcon(), QIcon()]
-        result[0].addPixmap(QPixmap(":/rc/images/dados/ficha0.png"), QIcon.Normal, QIcon.Off)
-        result[1].addPixmap(QPixmap(":/rc/images/dados/ficha1.png"), QIcon.Normal, QIcon.Off)
-        result[2].addPixmap(QPixmap(":/rc/images/dados/ficha2.png"), QIcon.Normal, QIcon.Off)
-        result[3].addPixmap(QPixmap(":/rc/images/dados/ficha3.png"), QIcon.Normal, QIcon.Off)
+        result[0].addPixmap(
+            QPixmap(":/rc/images/fichas/ficha01.png"), QIcon.Normal, QIcon.Off
+        )
+        result[1].addPixmap(
+            QPixmap(":/rc/images/fichas/ficha12.png"), QIcon.Normal, QIcon.Off
+        )
+        result[2].addPixmap(
+            QPixmap(":/rc/images/fichas/ficha23.png"), QIcon.Normal, QIcon.Off
+        )
+        result[3].addPixmap(
+            QPixmap(":/rc/images/fichas/ficha34.png"), QIcon.Normal, QIcon.Off
+        )
         return result
 
 
@@ -310,7 +318,9 @@ class AuxStatic:
     @staticmethod
     def iconoMenu(t: int, v: int, s="") -> QIcon:
         icon = QIcon()
-        icon.addPixmap(QPixmap(f":/rc/images/dados/dado{t}{s}{v}.png"), QIcon.Normal, QIcon.Off)
+        icon.addPixmap(
+            QPixmap(f":/rc/images/dados/dado{t}{s}{v}.png"), QIcon.Normal, QIcon.Off
+        )
         return icon
 
     @staticmethod

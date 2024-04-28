@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QToolButton
+from utils.static import InitStatic
 from utils.utils import Utils
 
 
@@ -56,6 +57,8 @@ class MoveUtils:
                 if 4 in mov:
                     parent.bono2Usado()
                 parent.sonidoMover()
+                rplr = "s" if total > 1 else ""
+                rmsg = f"Camina un total de {total} paso{rplr}"
                 for jC in range(len(ruta[posI + total])):
                     fM = ruta[posI + total][jC]
                     if (
@@ -66,9 +69,12 @@ class MoveUtils:
                     ):
                         if parent.matarFicha(fM):
                             parent.activarBono2()
+                            rmsg += f" y mata una ficha de [{InitStatic.names()[parent.obtenerOwnerIndex(fM)[0]]}]"
                             break
                 if posI + total == len(ruta) - 1:
                     parent.activarBono1()
+                    rmsg += " y llega a la meta"
+                parent.messageArrived.emit(rmsg)
                 break
 
     @staticmethod
