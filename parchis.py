@@ -1,13 +1,17 @@
+import os
 import sys
+from pygame.mixer import init as MixerInit, Sound, music as Music
 import qdarkstyle
-from PyQt5.QtCore import QPoint, QThread, Qt
+import random
+from PyQt5.QtCore import QThread, Qt
 from PyQt5.QtGui import QResizeEvent, QKeyEvent
-from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem, QMenu, QAction
+from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem
 from parchis_ui import Ui_VentanaJuego
 from workers.dados import DadosWorker, ReactivarWorker
 from workers.turno import TurnoWorker
-from utils.utils import EstiloIconos, Utils
+from utils.utils import Utils, EstiloIconos
 from utils.static import InitStatic, AuxStatic
+from utils.move import MoveUtils
 from ia.pro import LerchisIA
 
 
@@ -25,7 +29,9 @@ class Ventana(QMainWindow):
         self.__turno = 0
         self.__cuentaDoble = 0
         self.__repetirTirada = False
-        self.__fichas = InitStatic.fichas(self.ui, self.jugarFicha)
+        self.__fichas = InitStatic.fichas(
+            self.ui, self.fichaClicEvent, self.fichaClicDerEvent
+        )
         self.__posCaminos = InitStatic.posCaminos()
         self.__posMetas = InitStatic.posMetas()
         self.__excluir = InitStatic.excluir()
@@ -34,12 +40,24 @@ class Ventana(QMainWindow):
         self.__icons = InitStatic.icons()
         self.restablecerTablero()
         self.__jugando = False
-        self.__dadosTirados = False
-        self.__disponibleDado1 = False
-        self.__disponibleDado2 = False
-        self.__disponibleBonusMatar = False
-        self.__disponibleBonusLlegar = False
+        self.__dadosT = False
+        self.__disponibleBono1 = False
+        self.__disponibleBono2 = False
         self.__contandoTurno = False
+        self.__reactivandoDados = False
+        MixerInit()
+        try:
+            self.__sndDados = Sound(os.path.join("sounds", "dados.mp3"))
+            self.__sndLlegar = Sound(os.path.join("sounds", "llegar.mp3"))
+            self.__sndMatar = Sound(os.path.join("sounds", "matar.mp3"))
+            self.__sndMover = Sound(os.path.join("sounds", "mover.mp3"))
+            self.__sndNoMover = Sound(os.path.join("sounds", "nomover.mp3"))
+            self.__sndSalir = Sound(os.path.join("sounds", "salir.mp3"))
+            self.__sndTurno = Sound(os.path.join("sounds", "turno.mp3"))
+            Music.load(os.path.join("sounds", "music1.mp3"))
+            Music.play(-1, 0, 2500)
+        except:
+            pass
 
         self.__ia = LerchisIA()
         self.__ia.dado1Usado.connect(self.dado1Usado)
@@ -76,192 +94,10 @@ class Ventana(QMainWindow):
         self.__rutas = InitStatic.rutas(self.__caminos, self.__metas)
         self.relocateAll()
 
-    def resizeEvent(self, e: QResizeEvent) -> None:
+    def resizeEvent(self, e: QResizeEvent):
         super().resizeEvent(e)
         self.resizeAll()
         self.relocateAll()
-
-    def keyPressEvent(self, e: QKeyEvent):
-        if e.key() == Qt.Key.Key_F11:
-            if self.isFullScreen():
-                self.showNormal()
-            else:
-                self.showFullScreen()
-        elif e.key() == Qt.Key.Key_Escape:
-            if self.isFullScreen() or self.isMaximized():
-                self.showNormal()
-
-    def abrirMenu(self, sender):
-        menu = QMenu(self)
-        font = AuxStatic.fontMenu()
-        menu.setStyle(EstiloIconos(sender.width()))
-        count = 0
-        iconDado1 = AuxStatic.iconoMenu(self.__turno, self.__dado1)
-        actionDado1 = QAction(iconDado1, "Primer dado")
-        actionDado1.setFont(font)
-        iconDado2 = AuxStatic.iconoMenu(self.__turno, self.__dado2)
-        actionDado2 = QAction(iconDado2, "Segundo dado")
-        actionDado2.setFont(font)
-        iconBonus1 = AuxStatic.iconoMenu(self.__turno, 10, "s")
-        actionBonus1 = QAction(iconBonus1, "Bono por llegar")
-        actionBonus1.setFont(font)
-        iconBonus2 = AuxStatic.iconoMenu(self.__turno, 20, "s")
-        actionBonus2 = QAction(iconBonus2, "Bono por matar")
-        actionBonus2.setFont(font)
-        sumDados = self.__dado1 + self.__dado2
-        iconDado1Dado2 = AuxStatic.iconoMenu(self.__turno, sumDados, "s")
-        actionDado1Dado2 = QAction(iconDado1Dado2, "Todos los dados")
-        actionDado1Dado2.setFont(font)
-        iconDado1Bonus1 = AuxStatic.iconoMenu(self.__turno, self.__dado1 + 10, "s")
-        actionDado1Bonus1 = QAction(iconDado1Bonus1, "Primer dado + Bono por llegar")
-        actionDado1Bonus1.setFont(font)
-        iconDado1Bonus2 = AuxStatic.iconoMenu(self.__turno, self.__dado1 + 20, "s")
-        actionDado1Bonus2 = QAction(iconDado1Bonus2, "Primer dado + Bono por matar")
-        actionDado1Bonus2.setFont(font)
-        iconDado2Bonus1 = AuxStatic.iconoMenu(self.__turno, self.__dado2 + 10, "s")
-        actionDado2Bonus1 = QAction(iconDado2Bonus1, "Segundo dado + Bono por llegar")
-        actionDado2Bonus1.setFont(font)
-        iconDado2Bonus2 = AuxStatic.iconoMenu(self.__turno, self.__dado2 + 20, "s")
-        actionDado2Bonus2 = QAction(iconDado2Bonus2, "Segundo dado + Bono por matar")
-        actionDado2Bonus2.setFont(font)
-        iconBonus1Bonus2 = AuxStatic.iconoMenu(self.__turno, 30, "s")
-        actionBonus1Bonus2 = QAction(iconBonus1Bonus2, "Todos los bonos")
-        actionBonus1Bonus2.setFont(font)
-        if self.__disponibleDado1:
-            if self.estaEnCasa(sender):
-                if self.__dado1 == 5 and self.puedeSalir():
-                    menu.addAction(actionDado1)
-                    count += 1
-            else:
-                if self.puedeMover(sender, self.__dado1):
-                    menu.addAction(actionDado1)
-                    count += 1
-        if self.__disponibleDado2:
-            if self.estaEnCasa(sender):
-                if self.__dado2 == 5 and self.puedeSalir():
-                    menu.addAction(actionDado2)
-                    count += 1
-            else:
-                if self.puedeMover(sender, self.__dado2):
-                    menu.addAction(actionDado2)
-                    count += 1
-        if self.__disponibleBonusLlegar:
-            if not self.estaEnCasa(sender) and self.puedeMover(sender, 10):
-                menu.addAction(actionBonus1)
-                count += 1
-        if self.__disponibleBonusMatar:
-            if not self.estaEnCasa(sender) and self.puedeMover(sender, 20):
-                menu.addAction(actionBonus2)
-                count += 1
-        if self.__disponibleDado1 and self.__disponibleDado2:
-            if self.estaEnCasa(sender):
-                if sumDados == 5 and self.puedeSalir():
-                    menu.addAction(actionDado1Dado2)
-                    count += 1
-            else:
-                if self.puedeMover(sender, sumDados):
-                    menu.addAction(actionDado1Dado2)
-                    count += 1
-        if self.__disponibleDado1 and self.__disponibleBonusLlegar:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, self.__dado1 + 10):
-                    menu.addAction(actionDado1Bonus1)
-                    count += 1
-        if self.__disponibleDado1 and self.__disponibleBonusMatar:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, self.__dado1 + 20):
-                    menu.addAction(actionDado1Bonus2)
-                    count += 1
-        if self.__disponibleDado2 and self.__disponibleBonusLlegar:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, self.__dado2 + 10):
-                    menu.addAction(actionDado2Bonus1)
-                    count += 1
-        if self.__disponibleDado2 and self.__disponibleBonusMatar:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, self.__dado2 + 20):
-                    menu.addAction(actionDado2Bonus2)
-                    count += 1
-        if self.__disponibleBonusLlegar and self.__disponibleBonusMatar:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, 30):
-                    menu.addAction(actionBonus1Bonus2)
-                    count += 1
-        if count > 0:
-            pos = QPoint(sender.x() + sender.width(), sender.y())
-            actionR = menu.exec_(self.mapToGlobal(pos))
-            if actionR == actionDado1:
-                return [1]
-            elif actionR == actionDado2:
-                return [2]
-            elif actionR == actionBonus1:
-                return [3]
-            elif actionR == actionBonus2:
-                return [4]
-            elif actionR == actionDado1Dado2:
-                return [1, 2]
-            elif actionR == actionDado1Bonus1:
-                return [1, 3]
-            elif actionR == actionDado1Bonus2:
-                return [1, 4]
-            elif actionR == actionDado2Bonus1:
-                return [2, 3]
-            elif actionR == actionDado2Bonus2:
-                return [2, 4]
-            elif actionR == actionBonus1Bonus2:
-                return [3, 4]
-        return []
-
-    def cargarJugadasPosibles(self, sender):
-        jugadasValidas = []
-        if self.__disponibleDado1:
-            if self.estaEnCasa(sender):
-                if self.__dado1 == 5 and self.puedeSalir():
-                    jugadasValidas.append([1])
-            else:
-                if self.puedeMover(sender, self.__dado1):
-                    jugadasValidas.append([1])
-        if self.__disponibleDado2:
-            if self.estaEnCasa(sender):
-                if self.__dado2 == 5 and self.puedeSalir():
-                    jugadasValidas.append([2])
-            else:
-                if self.puedeMover(sender, self.__dado2):
-                    jugadasValidas.append([2])
-        if self.__disponibleBonusLlegar:
-            if not self.estaEnCasa(sender) and self.puedeMover(sender, 10):
-                jugadasValidas.append([3])
-        if self.__disponibleBonusMatar:
-            if not self.estaEnCasa(sender) and self.puedeMover(sender, 20):
-                jugadasValidas.append([4])
-        if self.__disponibleDado1 and self.__disponibleDado2:
-            if self.estaEnCasa(sender):
-                if self.__dado1 + self.__dado2 == 5 and self.puedeSalir():
-                    jugadasValidas.append([1, 2])
-            else:
-                if self.puedeMover(sender, self.__dado1 + self.__dado2):
-                    jugadasValidas.append([1, 2])
-        if self.__disponibleDado1 and self.__disponibleBonusLlegar:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, self.__dado1 + 10):
-                    jugadasValidas.append([1, 3])
-        if self.__disponibleDado1 and self.__disponibleBonusMatar:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, self.__dado1 + 20):
-                    jugadasValidas.append([1, 4])
-        if self.__disponibleDado2 and self.__disponibleBonusLlegar:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, self.__dado2 + 10):
-                    jugadasValidas.append([2, 3])
-        if self.__disponibleDado2 and self.__disponibleBonusMatar:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, self.__dado2 + 20):
-                    jugadasValidas.append([2, 4])
-        if self.__disponibleBonusLlegar and self.__disponibleBonusMatar:
-            if not self.estaEnCasa(sender):
-                if self.puedeMover(sender, 30):
-                    jugadasValidas.append([3, 4])
-        return jugadasValidas if len(jugadasValidas) > 0 else None
 
     def resizeAll(self):
         h = self.ui.cajaTablero.height()
@@ -292,7 +128,7 @@ class Ventana(QMainWindow):
                 x, y, o = self.__posCaminos[i]
                 for j in range(len(self.__caminos[i])):
                     if self.__caminos[i][j] != None:
-                        xR, yR = Utils.calcularPosicionCasilla(
+                        xR, yR = MoveUtils.calcularPosicionCasilla(
                             x, y, o, j, h, hCasilla, hFicha
                         )
                         self.__caminos[i][j].move(xR, yR)
@@ -303,10 +139,219 @@ class Ventana(QMainWindow):
                         x, y, o = self.__posMetas[i][j]
                         for k in range(len(self.__metas[i][j])):
                             if self.__metas[i][j][k] != None:
-                                xR, yR = Utils.calcularPosicionCasilla(
+                                xR, yR = MoveUtils.calcularPosicionCasilla(
                                     x, y, o, k, h, hCasilla, hFicha
                                 )
                                 self.__metas[i][j][k].move(xR, yR)
+
+    def keyPressEvent(self, e: QKeyEvent):
+        if e.key() == Qt.Key.Key_F11:
+            if self.isFullScreen():
+                self.showNormal()
+            else:
+                self.showFullScreen()
+        elif e.key() == Qt.Key.Key_Escape:
+            if self.isFullScreen() or self.isMaximized():
+                self.showNormal()
+
+    def fichaClicEvent(self):
+        if not Utils.puedeUsarFicha(self, self.__jugando, self.__dadosT, self.sender()):
+            try:
+                Sound.play(self.__sndNoMover)
+            except:
+                pass
+            return
+        self.intentaSalirDeCasa(self.sender())
+        if self.estaEnCasa(self.sender()):
+            return
+        movs = Utils.cargarJugadasPosibles(
+            self,
+            self.sender(),
+            self.__dado1,
+            self.__dado2,
+            self.__disponibleBono1,
+            self.__disponibleBono2,
+        )
+        if len(movs) == 0:
+            return
+        if len(movs) == 1:
+            MoveUtils.moverFichaDirecto(
+                self,
+                self.sender(),
+                movs[0],
+                self.__dado1,
+                self.__dado2,
+                self.__disponibleBono1,
+                self.__disponibleBono2,
+                self.__rutas[self.__turno],
+                self.__excluir,
+            )
+            return
+        MoveUtils.moverFichaDirecto(
+            self,
+            self.sender(),
+            MoveUtils.mayorDistancia(movs, self.__dado1, self.__dado2),
+            self.__dado1,
+            self.__dado2,
+            self.__disponibleBono1,
+            self.__disponibleBono2,
+            self.__rutas[self.__turno],
+            self.__excluir,
+        )
+
+    def fichaClicDerEvent(self):
+        if not Utils.puedeUsarFicha(self, self.__jugando, self.__dadosT, self.sender()):
+            try:
+                Sound.play(self.__sndNoMover)
+            except:
+                pass
+            return
+        if self.intentaSalirDeCasa(self.sender()):
+            return
+        mov = Utils.crearMenuContextual(
+            self,
+            self.sender(),
+            self.__turno,
+            self.__dado1,
+            self.__dado2,
+            self.__dado1 > 0,
+            self.__dado2 > 0,
+            self.__disponibleBono1,
+            self.__disponibleBono2,
+        )
+        if len(mov) == 0:
+            return
+        MoveUtils.moverFichaDirecto(
+            self,
+            self.sender(),
+            mov,
+            self.__dado1,
+            self.__dado2,
+            self.__disponibleBono1,
+            self.__disponibleBono2,
+            self.__rutas[self.__turno],
+            self.__excluir,
+        )
+
+    def dado1Usado(self):
+        self.__dado1 = 0
+
+    def dado2Usado(self):
+        self.__dado2 = 0
+
+    def bono1Usado(self):
+        self.__disponibleBono1 = False
+
+    def bono2Usado(self):
+        self.__disponibleBono2 = False
+
+    def activarBono1(self):
+        self.__disponibleBono1 = True
+        try:
+            Sound.play(self.__sndLlegar)
+        except:
+            pass
+
+    def activarBono2(self):
+        self.__disponibleBono2 = True
+        try:
+            Sound.play(self.__sndMatar)
+        except:
+            pass
+
+    def sonidoMover(self):
+        try:
+            Sound.play(self.__sndMover)
+        except:
+            pass
+
+    def intentaSalirDeCasa(self, ficha):
+        if self.estaEnCasa(ficha):
+            if self.puedeSalir():
+                if self.salirDeCasa(ficha):
+                    if self.__dado1 == 5:
+                        self.dado1Usado()
+                    elif self.__dado2 == 5:
+                        self.dado2Usado()
+                    else:
+                        self.dado1Usado()
+                        self.dado2Usado()
+                    return True
+        return False
+
+    def estaEnCasa(self, ficha):
+        for fC in self.__casas[self.__turno]:
+            if fC != None and ficha != None and fC == ficha:
+                return True
+        return False
+
+    def puedeSalir(self):
+        if self.__dado1 == 5 or self.__dado2 == 5 or self.__dado1 + self.__dado2 == 5:
+            s1 = self.__rutas[self.__turno][0][0]
+            s2 = self.__rutas[self.__turno][0][1]
+            if not (s1 != None and s2 != None and self.esMia(s1) and self.esMia(s2)):
+                return True
+        return False
+
+    def salirDeCasa(self, ficha):
+        owner, index = self.obtenerOwnerIndex(ficha)
+        if owner != self.__turno:
+            return False
+        mata = self.matarEnSalida()
+        if MoveUtils.moverFicha(
+            self.__casas, self.__turno, index, self.__rutas[self.__turno], 0, 0
+        ):
+            self.relocateAll()
+            if not mata:
+                try:
+                    Sound.play(self.__sndSalir)
+                except:
+                    pass
+            return True
+        else:
+            if MoveUtils.moverFicha(
+                self.__casas, self.__turno, index, self.__rutas[self.__turno], 0, 1
+            ):
+                self.relocateAll()
+                if not mata:
+                    try:
+                        Sound.play(self.__sndSalir)
+                    except:
+                        pass
+                return True
+        return False
+
+    def matarEnSalida(self):
+        s1 = self.__rutas[self.__turno][0][0]
+        s2 = self.__rutas[self.__turno][0][1]
+        if s1 != None and s2 != None:
+            if s1 != None and not self.esMia(s1):
+                if self.matarFicha(s1):
+                    self.activarBono2()
+                    return True
+            if s2 != None and not self.esMia(s2):
+                if self.matarFicha(s2):
+                    self.activarBono2()
+                    return True
+        return False
+
+    def obtenerOwnerIndex(self, ficha):
+        index = 0
+        for i in range(len(self.__fichas)):
+            if self.__fichas[i] == ficha:
+                index = i
+                break
+        owner = 0
+        while index >= 4:
+            index -= 4
+            owner += 1
+        return (owner, index)
+
+    def esMia(self, ficha):
+        for i in range(self.__turno * 4, self.__turno * 4 + 4):
+            if ficha == self.__fichas[i]:
+                return True
+        return False
 
     def tirarDados(self):
         enJuego = 4 - Utils.contarFichas(
@@ -339,23 +384,24 @@ class Ventana(QMainWindow):
         self.__dadosWorker.progress.connect(self.mostrarDados)
         self.__dadosWorker.finished.connect(self.onDadosGirados)
         self.__dadosThread.start()
+        try:
+            Sound.play(self.__sndDados)
+        except:
+            pass
 
     def mostrarDados(self, s1, s2):
         self.ui.dado1.setStyleSheet(
-            f"border-image: url(:/dados/dado{self.__turno}{s1}.png) 0 0 0 0 stretch stretch;"
+            f"border-image: url(:/rc/images/dados/dado{self.__turno}{s1}.png) 0 0 0 0 stretch stretch;"
         )
         self.ui.dado2.setStyleSheet(
-            f"border-image: url(:/dados/dado{self.__turno}{s2}.png) 0 0 0 0 stretch stretch;"
+            f"border-image: url(:/rc/images/dados/dado{self.__turno}{s2}.png) 0 0 0 0 stretch stretch;"
         )
 
     def onDadosGirados(self, s1, s2):
-        self.insertarMensaje(f"Tira los dados y saca [{s1}]:[{s2}]")
         self.__dado1 = s1
         self.__dado2 = s2
         self.mostrarDados(s1, s2)
-        self.__dadosTirados = True
-        self.__disponibleDado1 = self.__dado1 > 0
-        self.__disponibleDado2 = self.__dado2 > 0
+        self.__dadosT = True
         if s1 == s2:
             if self.__cuentaDoble < 2:
                 self.__cuentaDoble += 1
@@ -364,41 +410,14 @@ class Ventana(QMainWindow):
                 self.virarMasAdelantada()
                 if self.__contandoTurno:
                     self.__turnoWorker.faster()
+                    try:
+                        Sound.play(self.__sndTurno)
+                    except:
+                        pass
                 return
         else:
             self.__cuentaDoble = 0
             self.__repetirTirada = False
-        if not self.puedeJugar():
-            if self.__repetirTirada:
-                self.iniciarReactivadorDados()
-                self.insertarMensaje(
-                    "Sin movimientos disponibles, vuelve a tirar los dados"
-                )
-            else:
-                if self.__contandoTurno:
-                    self.__turnoWorker.faster()
-                self.insertarMensaje("Sin movimientos disponibles, terminando turno")
-        else:
-            # TEST IA:
-            d1 = self.__dado1 if self.__disponibleDado1 else 0
-            d2 = self.__dado2 if self.__disponibleDado2 else 0
-            b1 = 10 if self.__disponibleBonusLlegar else 0
-            b2 = 20 if self.__disponibleBonusMatar else 0
-            mias = []
-            for i in range(self.__turno * 4, self.__turno * 4 + 4):
-                mias.append(self.__fichas[i])
-            self.__ia.jugar(
-                d1,
-                d2,
-                b1,
-                b2,
-                mias,
-                self.__casas[self.__turno],
-                self.puedeJugar,
-                self.salirDeCasa,
-                self.cargarJugadasPosibles,
-                self.moverFichaAutomatico,
-            )
 
     def puedeJugar(self):
         for i in range(self.__turno * 4, self.__turno * 4 + 4):
@@ -406,21 +425,17 @@ class Ventana(QMainWindow):
             if self.estaEnCasa(ficha):
                 if self.puedeSalir():
                     if (
-                        (self.__disponibleDado1 and self.__dado1 == 5)
-                        or (self.__disponibleDado2 and self.__dado2 == 5)
-                        or (
-                            self.__disponibleDado1
-                            and self.__disponibleDado2
-                            and self.__dado1 + self.__dado2 == 5
-                        )
+                        self.__dado1 == 5
+                        or self.__dado2 == 5
+                        or self.__dado1 + self.__dado2 == 5
                     ):
                         return True
             else:
                 mData = [
-                    (self.__disponibleDado1, self.__dado1),
-                    (self.__disponibleDado2, self.__dado2),
-                    (self.__disponibleBonusLlegar, 10),
-                    (self.__disponibleBonusMatar, 20),
+                    (self.__dado1 > 0, self.__dado1),
+                    (self.__dado2 > 0, self.__dado2),
+                    (self.__disponibleBono1, 10),
+                    (self.__disponibleBono2, 20),
                 ]
                 for i in range(len(mData)):
                     c, v = mData[i]
@@ -439,7 +454,21 @@ class Ventana(QMainWindow):
     def puedeMover(self, ficha, pasos):
         if pasos <= 0:
             return False
-        posI, posJ = self.obtenerPosRuta(ficha)
+        if self.__dado1 == self.__dado2 and self.tienePuentePropio():
+            p1 = self.__rutas[self.__turno][0][0]
+            p2 = self.__rutas[self.__turno][0][1]
+            if ficha != p1 and ficha != p2:
+                movs = Utils.cargarJugadasPosibles(
+                    self,
+                    p1,
+                    self.__dado1,
+                    self.__dado2,
+                    self.__disponibleBono1,
+                    self.__disponibleBono2,
+                )
+                if len(movs) > 0:
+                    return False
+        posI = self.obtenerPosRuta(ficha)[0]
         if posI + pasos >= len(self.__rutas[self.__turno]):
             return False
         for j in range(len(self.__rutas[self.__turno][posI + pasos])):
@@ -449,14 +478,11 @@ class Ventana(QMainWindow):
                 return True
         return False
 
-    def puedeSalir(self):
-        s1 = self.__rutas[self.__turno][0][0]
-        s2 = self.__rutas[self.__turno][0][1]
-        return (
-            False
-            if s1 != None and s2 != None and self.esMia(s1) and self.esMia(s2)
-            else True
-        )
+    def tienePuentePropio(self):
+        for f in self.__rutas[self.__turno][0]:
+            if f == None or not self.esMia(f):
+                return False
+        return True
 
     def hayPuenteEnMedio(self, desde, hasta):
         for i in range(len(self.__bridges)):
@@ -491,193 +517,10 @@ class Ventana(QMainWindow):
                     break
         return (posI, posJ)
 
-    def obtenerOwnerIndex(self, ficha):
-        index = 0
-        for i in range(len(self.__fichas)):
-            if self.__fichas[i] == ficha:
-                index = i
-                break
-        owner = 0
-        while index >= 4:
-            index -= 4
-            owner += 1
-        return (owner, index)
-
-    def estaEnCasa(self, ficha):
-        for fC in self.__casas[self.__turno]:
-            if fC != None and ficha != None and fC == ficha:
-                return True
-        return False
-
-    def esMia(self, ficha):
-        for i in range(self.__turno * 4, self.__turno * 4 + 4):
-            if ficha == self.__fichas[i]:
-                return True
-        return False
-
-    def jugarFicha(self):
-        if (
-            not self.__jugando
-            or not self.__dadosTirados
-            or not self.esMia(self.sender())
-        ):
-            return
-        menuResp = self.cargarJugadasPosibles(self.sender())
-        if menuResp != None:
-            menuResp = menuResp[0] if len(menuResp) == 1 else None
-        if menuResp == None:
-            menuResp = self.abrirMenu(self.sender())
-            if (
-                not self.__jugando
-                or not self.__dadosTirados
-                or not self.esMia(self.sender())
-                or len(menuResp) == 0
-            ):
-                return
-        self.moverFichaAutomatico(self.sender(), menuResp)
-        if not self.puedeJugar():
-            if self.__repetirTirada:
-                self.__repetirTirada = False
-                self.iniciarReactivadorDados()
-            else:
-                if self.__contandoTurno:
-                    self.__turnoWorker.faster()
-
-    def moverFichaAutomatico(self, ficha, menuResp):
-        print(f'moverFichaAutomatico, {ficha}, {menuResp}.')
-        if self.estaEnCasa(ficha):
-            if self.puedeSalir():
-                if self.__disponibleDado1 and 1 in menuResp and self.__dado1 == 5:
-                    if self.salirDeCasa(ficha):
-                        self.__disponibleDado1 = False
-                        self.insertarMensaje("Saca una ficha con el primer dado")
-                elif self.__disponibleDado2 and 2 in menuResp and self.__dado2 == 5:
-                    if self.salirDeCasa(ficha):
-                        self.__disponibleDado2 = False
-                        self.insertarMensaje("Saca una ficha con el segundo dado")
-                elif (
-                    self.__disponibleDado1
-                    and self.__disponibleDado2
-                    and 1 in menuResp
-                    and 2 in menuResp
-                    and self.__dado1 + self.__dado2 == 5
-                ):
-                    if self.salirDeCasa(ficha):
-                        self.__disponibleDado1 = False
-                        self.__disponibleDado2 = False
-                        self.insertarMensaje("Saca una ficha con ambos dados")
-        else:
-            total = 0
-            usadoDado1 = False
-            usadoDado2 = False
-            usadoBonus1 = False
-            usadoBonus2 = False
-            if self.__disponibleDado1 and 1 in menuResp:
-                total += self.__dado1
-                usadoDado1 = True
-            if self.__disponibleDado2 and 2 in menuResp:
-                total += self.__dado2
-                usadoDado2 = True
-            if self.__disponibleBonusLlegar and 3 in menuResp:
-                total += 10
-                usadoBonus1 = True
-            if self.__disponibleBonusMatar and 4 in menuResp:
-                total += 20
-                usadoBonus2 = True
-            if total > 0:
-                posI, posJ = self.obtenerPosRuta(ficha)
-                if posI + total < len(self.__rutas[self.__turno]):
-                    for j in range(len(self.__rutas[self.__turno][posI + total])):
-                        if self.__rutas[self.__turno][posI + total][
-                            j
-                        ] == None and not self.hayPuenteEnMedio(posI, posI + total):
-                            if Utils.moverFicha(
-                                self.__rutas[self.__turno],
-                                posI,
-                                posJ,
-                                self.__rutas[self.__turno],
-                                posI + total,
-                                j,
-                            ):
-                                self.relocateAll()
-                                mFicha = None
-                                llego = False
-                                if usadoDado1:
-                                    self.__disponibleDado1 = False
-                                if usadoDado2:
-                                    self.__disponibleDado2 = False
-                                if usadoBonus1:
-                                    self.__disponibleBonusLlegar = False
-                                if usadoBonus2:
-                                    self.__disponibleBonusMatar = False
-                                for jC in range(
-                                    len(self.__rutas[self.__turno][posI + total])
-                                ):
-                                    fM = self.__rutas[self.__turno][posI + total][jC]
-                                    if (
-                                        j != jC
-                                        and fM != None
-                                        and not posI + total in self.__excluir
-                                        and not self.esMia(fM)
-                                    ):
-                                        if self.matarFicha(fM):
-                                            self.__disponibleBonusMatar = True
-                                            self.__ia.haMatado.emit()
-                                            mFicha = fM
-                                if posI + total == len(self.__rutas[self.__turno]) - 1:
-                                    self.__disponibleBonusLlegar = True
-                                    self.__ia.haLlegado.emit()
-                                    llego = True
-                                pL = "s" if total > 1 else ""
-                                if mFicha != None:
-                                    oFicha, iFicha = self.obtenerOwnerIndex(mFicha)
-                                    self.insertarMensaje(
-                                        f"Mata una ficha del jugador [{self.__names[oFicha]}] con {total} paso{pL}"
-                                    )
-                                elif llego:
-                                    self.insertarMensaje(
-                                        f"Entra en la casilla de meta con {total} paso{pL}"
-                                    )
-                                else:
-                                    self.insertarMensaje(
-                                        f"Camina un total de {total} paso{pL}"
-                                    )
-
-    def salirDeCasa(self, ficha):
-        pos = 0
-        for i in range(4):
-            if ficha == self.__casas[self.__turno][i]:
-                pos = i
-                break
-        s1 = self.__rutas[self.__turno][0][0]
-        s2 = self.__rutas[self.__turno][0][1]
-        if s1 != None and s2 != None:
-            if s1 != None and not self.esMia(s1):
-                if self.matarFicha(s1):
-                    self.__disponibleBonusMatar = True
-            if s2 != None and not self.esMia(s2):
-                if self.matarFicha(s2):
-                    self.__disponibleBonusMatar = True
-        s1 = self.__rutas[self.__turno][0][0]
-        s2 = self.__rutas[self.__turno][0][1]
-        if s1 == None:
-            if Utils.moverFicha(
-                self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 0
-            ):
-                self.relocateAll()
-                return True
-        elif s2 == None:
-            if Utils.moverFicha(
-                self.__casas, self.__turno, pos, self.__rutas[self.__turno], 0, 1
-            ):
-                self.relocateAll()
-                return True
-        return False
-
     def matarFicha(self, ficha):
         posI, posJ = self.obtenerPosRuta(ficha)
         owner, index = self.obtenerOwnerIndex(ficha)
-        if Utils.moverFicha(
+        if MoveUtils.moverFicha(
             self.__rutas[self.__turno], posI, posJ, self.__casas, owner, index
         ):
             self.relocateAll()
@@ -688,7 +531,6 @@ class Ventana(QMainWindow):
         if not self.__jugando:
             self.onPartidaTerminada()
             return
-        self.insertarMensaje(">>>========>> TURNO TERMINADO")
         self.__cuentaDoble = 0
         self.__turno = 0 if self.__turno >= 3 else self.__turno + 1
         estados = [
@@ -739,13 +581,16 @@ class Ventana(QMainWindow):
         self.mostrarDados(0, 0)
         self.ui.dado1.setEnabled(True)
         self.ui.dado2.setEnabled(True)
-        self.__dadosTirados = False
-        self.__disponibleDado1 = False
-        self.__disponibleDado2 = False
-        self.__disponibleBonusLlegar = False
-        self.__disponibleBonusMatar = False
-        # TEST IA:
-        self.tirarDados()
+        self.__dadosT = False
+        self.__dado1 = 0
+        self.__dado2 = 0
+        self.__disponibleBono1 = False
+        self.__disponibleBono2 = False
+        self.__reactivandoDados = False
+        try:
+            Sound.play(self.__sndNoMover)
+        except:
+            pass
 
     def virarMasAdelantada(self):
         for i in range(len(self.__rutas[self.__turno]) - 2, -1, -1):
@@ -753,6 +598,10 @@ class Ventana(QMainWindow):
                 ficha = self.__rutas[self.__turno][i][j]
                 if ficha != None and self.esMia(ficha):
                     self.matarFicha(ficha)
+                    try:
+                        Sound.play(self.__sndMatar)
+                    except:
+                        pass
                     return True
         return False
 
@@ -761,10 +610,29 @@ class Ventana(QMainWindow):
         self.restablecerTablero()
         self.__dado1 = 0
         self.__dado2 = 0
-        self.__turno = 0
+        estados = [
+            self.ui.checkPlayer0.isChecked(),
+            self.ui.checkPlayer1.isChecked(),
+            self.ui.checkPlayer2.isChecked(),
+            self.ui.checkPlayer3.isChecked(),
+        ]
+        active = []
+        if True in estados:
+            for i in range(len(estados)):
+                if estados[i]:
+                    active.append(i)
+        else:
+            active = [0, 1, 2, 3]
+        self.__turno = (
+            active[random.randint(0, len(active) - 1)] if len(active) > 1 else active[0]
+        )
+        self.mostrarDados(0, 0)
         self.__cuentaDoble = 0
         self.__repetirTirada = False
         self.__jugando = True
+        self.__dadosT = False
+        self.ui.dado1.setEnabled(True)
+        self.ui.dado2.setEnabled(True)
         self.ui.checkPlayer0.setEnabled(False)
         self.ui.checkPlayer1.setEnabled(False)
         self.ui.checkPlayer2.setEnabled(False)
@@ -772,17 +640,28 @@ class Ventana(QMainWindow):
         self.ui.btnTerminarPartida.setEnabled(True)
         self.prepararDados()
         self.iniciarContadorTurno(30)
+        try:
+            Music.stop()
+            Music.unload()
+            Music.load(os.path.join("sounds", "music2.mp3"))
+            Music.play(-1, 0, 250)
+        except:
+            pass
 
     def terminarPartida(self):
         self.ui.btnTerminarPartida.setEnabled(False)
         self.__cuentaDoble = 0
         self.__repetirTirada = False
         self.__jugando = False
-        self.__dadosTirados = False
+        self.__dadosT = False
         self.ui.dado1.setEnabled(False)
         self.ui.dado2.setEnabled(False)
         if self.__contandoTurno:
             self.__turnoWorker.faster()
+            try:
+                Sound.play(self.__sndTurno)
+            except:
+                pass
         else:
             self.onPartidaTerminada()
 
@@ -792,6 +671,13 @@ class Ventana(QMainWindow):
         self.ui.checkPlayer2.setEnabled(True)
         self.ui.checkPlayer3.setEnabled(True)
         self.ui.btnNuevaPartida.setEnabled(True)
+        try:
+            Music.stop()
+            Music.unload()
+            Music.load(os.path.join("sounds", "music1.mp3"))
+            Music.play(-1, 0, 250)
+        except:
+            pass
 
     def iniciarContadorTurno(self, start):
         if not self.__contandoTurno:
@@ -817,6 +703,22 @@ class Ventana(QMainWindow):
         if value >= 0 and value <= self.ui.progressTiempo.maximum():
             self.ui.progressTiempo.setValue(value)
             self.ui.lblTiempo.setText(str(self.ui.progressTiempo.maximum() - value))
+        if (
+            self.__dadosT
+            and not self.__turnoWorker.isFast()
+            and not self.__reactivandoDados
+            and not self.puedeJugar()
+        ):
+            if self.__repetirTirada:
+                self.__repetirTirada = False
+                self.iniciarReactivadorDados()
+            else:
+                if self.__contandoTurno:
+                    self.__turnoWorker.faster()
+                    try:
+                        Sound.play(self.__sndTurno)
+                    except:
+                        pass
 
     def onContadorTurnoFinished(self, value):
         self.onContadorTurnoProgress(value)
@@ -824,6 +726,7 @@ class Ventana(QMainWindow):
         self.cambioDeTurno()
 
     def iniciarReactivadorDados(self):
+        self.__reactivandoDados = True
         self.__reactivarThread = QThread()
         self.__reactivarWorker = ReactivarWorker()
         self.__reactivarWorker.moveToThread(self.__reactivarThread)
@@ -847,8 +750,9 @@ class Ventana(QMainWindow):
         self.ui.listHistorial.setCurrentRow(count - 1)
 
 
-app = QApplication([])
-app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api="pyqt5"))
-application = Ventana()
-application.show()
-sys.exit(app.exec())
+if __name__ == "__main__":
+    app = QApplication([])
+    app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api="pyqt5"))
+    application = Ventana()
+    application.show()
+    sys.exit(app.exec())

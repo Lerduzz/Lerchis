@@ -1,9 +1,11 @@
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon, QPixmap, QFont
+from parchis_ui import Ui_VentanaJuego
 
 
 class InitStatic:
     @staticmethod
-    def fichas(ui, cFunc):
+    def fichas(ui: Ui_VentanaJuego, clicFunc, clicDerFunc) -> list:
         fichas = [
             ui.ficha00,
             ui.ficha01,
@@ -23,11 +25,13 @@ class InitStatic:
             ui.ficha33,
         ]
         for f in fichas:
-            f.clicked.connect(cFunc)
+            f.clicked.connect(clicFunc)
+            f.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+            f.customContextMenuRequested.connect(clicDerFunc)
         return fichas
 
     @staticmethod
-    def casas(ui):
+    def casas(ui: Ui_VentanaJuego) -> list:
         return [
             [ui.ficha00, ui.ficha01, ui.ficha02, ui.ficha03],
             [ui.ficha10, ui.ficha11, ui.ficha12, ui.ficha13],
@@ -36,7 +40,7 @@ class InitStatic:
         ]
 
     @staticmethod
-    def caminos():
+    def caminos() -> list:
         return [
             [None, None],
             [None, None],
@@ -97,7 +101,7 @@ class InitStatic:
         ]
 
     @staticmethod
-    def posCaminos():
+    def posCaminos() -> list:
         return [
             (250, 0, 0),
             (250, 50, 0),
@@ -158,7 +162,7 @@ class InitStatic:
         ]
 
     @staticmethod
-    def metas():
+    def metas() -> list:
         return [
             [
                 [None, None],
@@ -199,7 +203,7 @@ class InitStatic:
         ]
 
     @staticmethod
-    def posMetas():
+    def posMetas() -> list:
         return [
             [
                 (400, 50, 0),
@@ -240,7 +244,7 @@ class InitStatic:
         ]
 
     @staticmethod
-    def rutas(caminos, metas):
+    def rutas(caminos: list, metas: list) -> list:
         result = [[], [], [], []]
         for i in range(3, 56):
             result[0].append(caminos[i])
@@ -261,7 +265,7 @@ class InitStatic:
         return result
 
     @staticmethod
-    def excluir():
+    def excluir() -> list:
         return [
             0,
             6,
@@ -285,32 +289,32 @@ class InitStatic:
         ]
 
     @staticmethod
-    def bridges():
+    def bridges() -> list:
         return [0, 14, 28, 42]
 
     @staticmethod
-    def names():
+    def names() -> list:
         return ["ROJO", "VERDE", "AZUL", "NARANJA"]
 
     @staticmethod
-    def icons():
+    def icons() -> list:
         result = [QIcon(), QIcon(), QIcon(), QIcon()]
-        result[0].addPixmap(QPixmap(":/fichas/ficha0.png"), QIcon.Normal, QIcon.Off)
-        result[1].addPixmap(QPixmap(":/fichas/ficha1.png"), QIcon.Normal, QIcon.Off)
-        result[2].addPixmap(QPixmap(":/fichas/ficha2.png"), QIcon.Normal, QIcon.Off)
-        result[3].addPixmap(QPixmap(":/fichas/ficha3.png"), QIcon.Normal, QIcon.Off)
+        result[0].addPixmap(QPixmap(":/rc/images/dados/ficha0.png"), QIcon.Normal, QIcon.Off)
+        result[1].addPixmap(QPixmap(":/rc/images/dados/ficha1.png"), QIcon.Normal, QIcon.Off)
+        result[2].addPixmap(QPixmap(":/rc/images/dados/ficha2.png"), QIcon.Normal, QIcon.Off)
+        result[3].addPixmap(QPixmap(":/rc/images/dados/ficha3.png"), QIcon.Normal, QIcon.Off)
         return result
 
 
 class AuxStatic:
     @staticmethod
-    def iconoMenu(t, v, s=""):
+    def iconoMenu(t: int, v: int, s="") -> QIcon:
         icon = QIcon()
-        icon.addPixmap(QPixmap(f":/dados/dado{t}{s}{v}.png"), QIcon.Normal, QIcon.Off)
+        icon.addPixmap(QPixmap(f":/rc/images/dados/dado{t}{s}{v}.png"), QIcon.Normal, QIcon.Off)
         return icon
-    
+
     @staticmethod
-    def fontMenu():
+    def fontMenu() -> list:
         font = QFont()
         font.setPointSize(14)
         font.setBold(True)
