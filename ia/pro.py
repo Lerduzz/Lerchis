@@ -288,13 +288,18 @@ class LerchisIA(QObject):
     def jugar(self, parent):
         self.__parent = parent
         while parent.puedeJugar():
+            if self.intentaMatarEnSalida():
+                continue
             if self.intentaMatarOtraFicha():
                 continue
             if self.intentaEntrarEnMeta():
                 continue
             if self.intentaSacarFicha():
                 continue
-            if self.intentaPonerseASalvo():
+            if self.intentaAbrirPuenteParaSacar():
+                self.intentaSacarFicha()
+                continue
+            if self.intentaPonerseASalvo(): # TODO: No implementado todavia.
                 continue
             if self.moverLoMasLejosPosible():
                 continue
