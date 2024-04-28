@@ -330,7 +330,7 @@ class Ventana(QMainWindow):
                 if not mFicha in self.__rutas[self.__turno][metaIndex]:
                     restante = mFicha
                     break
-            posI = self.__parent.obtenerPosRuta(restante)[0]
+            posI = self.obtenerPosRuta(restante)[0]
             if posI >= metaIndex - 7:
                 if self.sender() == self.ui.dado1:
                     dadoSolo = 1
