@@ -59,11 +59,6 @@ class Ventana(QMainWindow):
         except:
             pass
         self.__ia = LerchisIA()
-        self.__ia.dado1Usado.connect(self.dado1Usado)
-        self.__ia.dado2Usado.connect(self.dado2Usado)
-        self.__ia.bono1Usado.connect(self.bono1Usado)
-        self.__ia.bono2Usado.connect(self.bono2Usado)
-        self.__ia.terminado.connect(self.haJugado)
 
     def haJugado(self):
         if not self.puedeJugar():
@@ -231,13 +226,9 @@ class Ventana(QMainWindow):
 
     def dado1Usado(self):
         self.__dado1 = 0
-        if self.soyIA():
-            self.__ia.usarDado1.emit()
 
     def dado2Usado(self):
         self.__dado2 = 0
-        if self.soyIA():
-            self.__ia.usarDado1.emit()
 
     def bono1Usado(self):
         self.__disponibleBono1 = False
@@ -247,8 +238,6 @@ class Ventana(QMainWindow):
 
     def activarBono1(self):
         self.__disponibleBono1 = True
-        if self.soyIA():
-            self.__ia.haLlegado.emit()
         try:
             Sound.play(self.__sndLlegar)
         except:
@@ -256,8 +245,6 @@ class Ventana(QMainWindow):
 
     def activarBono2(self):
         self.__disponibleBono2 = True
-        if self.soyIA():
-            self.__ia.haMatado.emit()
         try:
             Sound.play(self.__sndMatar)
         except:
@@ -423,23 +410,31 @@ class Ventana(QMainWindow):
             self.__cuentaDoble = 0
             self.__repetirTirada = False
         if self.soyIA():
-            d1 = self.__dado1
-            d2 = self.__dado2
-            b1 = 10 if self.__disponibleBono1 else 0
-            b2 = 20 if self.__disponibleBono2 else 0
-            mias = []
-            for i in range(self.__turno * 4, self.__turno * 4 + 4):
-                mias.append(self.__fichas[i])
-            self.__ia.jugar(
-                self,
-                d1,
-                d2,
-                b1,
-                b2,
-                mias,
-                self.__casas[self.__turno],
-                self.__rutas[self.__turno],
-            )
+            self.__ia.jugar(self)
+
+    def misFichas(self):
+        mias = []
+        for i in range(self.__turno * 4, self.__turno * 4 + 4):
+            mias.append(self.__fichas[i])
+        return mias
+
+    def miCasa(self):
+        return self.__casas[self.__turno]
+
+    def miRuta(self):
+        return self.__rutas[self.__turno]
+
+    def miDado1(self):
+        return self.__dado1
+
+    def miDado2(self):
+        return self.__dado2
+
+    def miBono1(self):
+        return 10 if self.__disponibleBono1 else 0
+
+    def miBono2(self):
+        return 20 if self.__disponibleBono2 else 0
 
     def puedeJugar(self):
         for i in range(self.__turno * 4, self.__turno * 4 + 4):
