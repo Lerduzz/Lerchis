@@ -394,4 +394,7 @@ class LerchisIA(QObject):
             if self.moverLoMasLejosPosible():
                 continue
             break
-        self.finished.emit()
+        try:
+            self.finished.emit()
+        except:
+            pass

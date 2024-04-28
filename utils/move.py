@@ -74,7 +74,10 @@ class MoveUtils:
                 if posI + total == len(ruta) - 1:
                     parent.activarBono1()
                     rmsg += " y llega a la meta"
-                parent.messageArrived.emit(rmsg)
+                try:
+                    parent.messageArrived.emit(rmsg)
+                except:
+                    pass
                 break
 
     @staticmethod

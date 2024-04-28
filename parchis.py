@@ -254,7 +254,12 @@ class Ventana(QMainWindow):
                     else:
                         self.dado1Usado()
                         self.dado2Usado()
-                    self.messageArrived.emit(f"Saca una ficha de su casa con {rmsg}")
+                    try:
+                        self.messageArrived.emit(
+                            f"Saca una ficha de su casa con {rmsg}"
+                        )
+                    except:
+                        pass
                     return True
         return False
 
@@ -299,12 +304,22 @@ class Ventana(QMainWindow):
             if s1 != None and not self.esMia(s1):
                 if self.matarFicha(s1):
                     self.activarBono2()
-                    self.messageArrived.emit(f"Ha matado una ficha de [{self.__names[self.obtenerOwnerIndex(s1)[0]]}] en la salida")
+                    try:
+                        self.messageArrived.emit(
+                            f"Ha matado una ficha de [{self.__names[self.obtenerOwnerIndex(s1)[0]]}] en la salida"
+                        )
+                    except:
+                        pass
                     return True
             if s2 != None and not self.esMia(s2):
                 if self.matarFicha(s2):
                     self.activarBono2()
-                    self.messageArrived.emit(f"Ha matado una ficha de [{self.__names[self.obtenerOwnerIndex(s2)[0]]}] en la salida")
+                    try:
+                        self.messageArrived.emit(
+                            f"Ha matado una ficha de [{self.__names[self.obtenerOwnerIndex(s2)[0]]}] en la salida"
+                        )
+                    except:
+                        pass
                     return True
         return False
 
@@ -370,7 +385,10 @@ class Ventana(QMainWindow):
         self.__dado1 = s1
         self.__dado2 = s2
         self.mostrarDados(s1, s2)
-        self.messageArrived.emit(f"Tira los dados y obtiene [{s1}:{s2}]")
+        try:
+            self.messageArrived.emit(f"Tira los dados y obtiene [{s1}:{s2}]")
+        except:
+            pass
         self.__dadosT = True
         if s1 == s2:
             if self.__cuentaDoble < 2:
