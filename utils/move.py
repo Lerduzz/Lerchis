@@ -25,8 +25,8 @@ class MoveUtils:
         excl: list,
     ):
         total = 0
-        total += d1 if d1 > 0 and 1 in mov else 0
-        total += d2 if d2 > 0 and 2 in mov else 0
+        total += d1 if 1 in mov else 0
+        total += d2 if 2 in mov else 0
         total += 10 if b1 and 3 in mov else 0
         total += 20 if b2 and 4 in mov else 0
         if total == 0:
