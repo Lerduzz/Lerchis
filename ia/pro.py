@@ -232,7 +232,46 @@ class LerchisIA(QObject):
             return True
         return False
 
+    # PRIORIDAD 5: Poner a salvo sus fichas.
     def intentaPonerseASalvo(self):
+        # SIN EXCEPCIONES!
+        ruta = self.__parent.miRuta()
+        for f in self.__parent.misFichas():
+            if self.__parent.estaEnCasa(f):
+                continue
+            movs = Utils.cargarJugadasPosibles(
+                self.__parent,
+                f,
+                self.__parent.miDado1(),
+                self.__parent.miDado2(),
+                self.__parent.miBono1(),
+                self.__parent.miBono2(),
+            )
+            if len(movs) == 0:
+                continue
+            for mov in movs:
+                total = 0
+                total += self.__parent.miDado1() if 1 in mov else 0
+                total += self.__parent.miDado2() if 2 in mov else 0
+                total += self.__parent.miBono1() if 3 in mov else 0
+                total += self.__parent.miBono2() if 4 in mov else 0
+                if total == 0:
+                    continue
+                excl = InitStatic.excluir()
+                posI = self.__parent.obtenerPosRuta(f)[0]
+                if posI + total in excl:
+                    MoveUtils.moverFichaDirecto(
+                        self.__parent,
+                        f,
+                        mov,
+                        self.__parent.miDado1(),
+                        self.__parent.miDado2(),
+                        self.__parent.miBono1(),
+                        self.__parent.miBono2(),
+                        self.__parent.miRuta(),
+                        excl,
+                    )
+                    return True
         return False
 
     def moverLoMasLejosPosible(self):
@@ -299,7 +338,7 @@ class LerchisIA(QObject):
             if self.intentaAbrirPuenteParaSacar():
                 self.intentaSacarFicha()
                 continue
-            if self.intentaPonerseASalvo(): # TODO: No implementado todavia.
+            if self.intentaPonerseASalvo():
                 continue
             if self.moverLoMasLejosPosible():
                 continue
