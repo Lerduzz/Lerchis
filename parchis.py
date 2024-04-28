@@ -578,7 +578,7 @@ class Ventana(QMainWindow):
         Sound.play(self.__sndNoMover)
 
     def virarMasAdelantada(self):
-        for i in range(len(self.__rutas[self.__turno]) - 2, -1, -1):
+        for i in range(len(self.__rutas[self.__turno]) - 9, -1, -1):
             for j in range(len(self.__rutas[self.__turno][i])):
                 ficha = self.__rutas[self.__turno][i][j]
                 if ficha != None and self.esMia(ficha):
