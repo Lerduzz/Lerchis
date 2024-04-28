@@ -9,4 +9,4 @@ pyuic5 parchis.ui -o parchis_ui.py
 pyrcc5 parchis.qrc -o parchis_rc.py
 
 ### Generar EXE
-pyinstaller --onefile --windowed --name Lerchis.exe --icon images/icono/icono.ico parchis.py
+pyinstaller --onefile --windowed --name Lerchis.exe --icon images/icono/icono.ico --add-data "sounds:sounds" parchis.py
