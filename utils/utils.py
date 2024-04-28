@@ -224,4 +224,4 @@ class Utils:
 
     @staticmethod
     def puedeUsarFicha(parent, jugando: bool, tirados: bool, sender: QToolButton):
-        return jugando and tirados and parent.esMia(sender)
+        return jugando and tirados and parent.esMia(sender) and not parent.soyIA()
