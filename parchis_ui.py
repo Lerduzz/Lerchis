@@ -298,7 +298,7 @@ class Ui_VentanaJuego(object):
         __sortingEnabled = self.listHistorial.isSortingEnabled()
         self.listHistorial.setSortingEnabled(False)
         item = self.listHistorial.item(0)
-        item.setText(_translate("VentanaJuego", "Creado por Lerduzz (https://youtube.com/@lerduzz). Versión: v0.7.8 Beta."))
+        item.setText(_translate("VentanaJuego", "Creado por Lerduzz (https://youtube.com/@lerduzz). Versión: v0.8.3 Beta."))
         self.listHistorial.setSortingEnabled(__sortingEnabled)
         self.actionNuevaPartida.setText(_translate("VentanaJuego", "Nueva partida"))
         self.actionDosJugadores.setText(_translate("VentanaJuego", "Dos jugadores"))
