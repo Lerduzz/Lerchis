@@ -52,6 +52,42 @@ class LerchisIA(QObject):
         return False
 
     def intentaEntrarEnMeta(self):
+        for f in self.__parent.misFichas():
+            if self.__parent.estaEnCasa(f):
+                continue
+            movs = Utils.cargarJugadasPosibles(
+                self.__parent,
+                f,
+                self.__parent.miDado1(),
+                self.__parent.miDado2(),
+                self.__parent.miBono1(),
+                self.__parent.miBono2(),
+            )
+            if len(movs) == 0:
+                continue
+            for mov in movs:
+                total = 0
+                total += self.__parent.miDado1() if 1 in mov else 0
+                total += self.__parent.miDado2() if 2 in mov else 0
+                total += self.__parent.miBono1() if 3 in mov else 0
+                total += self.__parent.miBono2() if 4 in mov else 0
+                if total == 0:
+                    continue
+                ruta = self.__parent.miRuta()
+                posI = self.__parent.obtenerPosRuta(f)[0]
+                if posI + total == len(ruta) - 1:
+                    MoveUtils.moverFichaDirecto(
+                        self.__parent,
+                        f,
+                        mov,
+                        self.__parent.miDado1(),
+                        self.__parent.miDado2(),
+                        self.__parent.miBono1(),
+                        self.__parent.miBono2(),
+                        self.__parent.miRuta(),
+                        InitStatic.excluir(),
+                    )
+                    return True
         return False
 
     def intentaSacarFicha(self):
