@@ -378,8 +378,14 @@ class Ventana(QMainWindow):
             self.iniciarIA()
 
     def iniciarIA(self):
+        self.__iaThread = QThread()
         self.__ia = LerchisIA(self)
-        self.__ia.jugar()
+        self.__ia.moveToThread(self.__iaThread)
+        self.__iaThread.started.connect(self.__ia.jugar)
+        self.__ia.finished.connect(self.__iaThread.quit)
+        self.__ia.finished.connect(self.__ia.deleteLater)
+        self.__iaThread.finished.connect(self.__iaThread.deleteLater)
+        self.__iaThread.start()
 
     def misFichas(self):
         mias = []

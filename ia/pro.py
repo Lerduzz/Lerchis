@@ -1,12 +1,15 @@
-from PyQt5.QtCore import QObject
+import time
+from PyQt5.QtCore import QObject, pyqtSignal
 from utils.utils import Utils
 from utils.move import MoveUtils
 from utils.static import InitStatic
 
 
 class LerchisIA(QObject):
-    def __init__(self, parent: QObject) -> None:
-        super().__init__(parent)
+    finished = pyqtSignal()
+
+    def __init__(self, parent):
+        super().__init__()
         self.__parent = parent
 
     # PRIORIDAD 0: Matar en la salida.
@@ -371,6 +374,7 @@ class LerchisIA(QObject):
 
     def jugar(self):
         while self.__parent.puedeJugar():
+            time.sleep(0.95)
             if self.intentaMatarEnSalida():
                 continue
             if self.intentaMatarOtraFicha():
@@ -380,6 +384,7 @@ class LerchisIA(QObject):
             if self.intentaSacarFicha():
                 continue
             if self.intentaAbrirPuenteParaSacar():
+                time.sleep(0.75)
                 self.intentaSacarFicha()
                 continue
             if self.intentaPonerseASalvo():
@@ -389,3 +394,4 @@ class LerchisIA(QObject):
             if self.moverLoMasLejosPosible():
                 continue
             break
+        self.finished.emit()
