@@ -47,14 +47,14 @@ class Ventana(QMainWindow):
         self.__reactivandoDados = False
         MixerInit()
         try:
-            self.__sndDados = Sound(os.path.join("sounds", "dados.mp3"))
-            self.__sndLlegar = Sound(os.path.join("sounds", "llegar.mp3"))
-            self.__sndMatar = Sound(os.path.join("sounds", "matar.mp3"))
-            self.__sndMover = Sound(os.path.join("sounds", "mover.mp3"))
-            self.__sndNoMover = Sound(os.path.join("sounds", "nomover.mp3"))
-            self.__sndSalir = Sound(os.path.join("sounds", "salir.mp3"))
-            self.__sndTurno = Sound(os.path.join("sounds", "turno.mp3"))
-            Music.load(os.path.join("sounds", "music1.mp3"))
+            self.__sndDados = Sound(os.path.join("sounds", "dados.wav"))
+            self.__sndLlegar = Sound(os.path.join("sounds", "llegar.wav"))
+            self.__sndMatar = Sound(os.path.join("sounds", "matar.wav"))
+            self.__sndMover = Sound(os.path.join("sounds", "mover.wav"))
+            self.__sndNoMover = Sound(os.path.join("sounds", "nomover.wav"))
+            self.__sndSalir = Sound(os.path.join("sounds", "salir.wav"))
+            self.__sndTurno = Sound(os.path.join("sounds", "turno.wav"))
+            Music.load(os.path.join("sounds", "music1.wav"))
             Music.play(-1, 0, 2500)
         except:
             pass
@@ -666,7 +666,7 @@ class Ventana(QMainWindow):
         try:
             Music.stop()
             Music.unload()
-            Music.load(os.path.join("sounds", "music2.mp3"))
+            Music.load(os.path.join("sounds", "music2.wav"))
             Music.play(-1, 0, 250)
         except:
             pass
@@ -701,7 +701,7 @@ class Ventana(QMainWindow):
         try:
             Music.stop()
             Music.unload()
-            Music.load(os.path.join("sounds", "music1.mp3"))
+            Music.load(os.path.join("sounds", "music1.wav"))
             Music.play(-1, 0, 250)
         except:
             pass
