@@ -58,25 +58,12 @@ class Ventana(QMainWindow):
             Music.play(-1, 0, 2500)
         except:
             pass
-
         self.__ia = LerchisIA()
         self.__ia.dado1Usado.connect(self.dado1Usado)
         self.__ia.dado2Usado.connect(self.dado2Usado)
         self.__ia.bono1Usado.connect(self.bono1Usado)
         self.__ia.bono2Usado.connect(self.bono2Usado)
         self.__ia.terminado.connect(self.haJugado)
-
-    def dado1Usado(self):
-        self.__disponibleDado1 = False
-
-    def dado2Usado(self):
-        self.__disponibleDado2 = False
-
-    def bono1Usado(self):
-        self.__disponibleBonusLlegar = False
-
-    def bono2Usado(self):
-        self.__disponibleBonusMatar = False
 
     def haJugado(self):
         if not self.puedeJugar():
@@ -750,9 +737,8 @@ class Ventana(QMainWindow):
         self.ui.listHistorial.setCurrentRow(count - 1)
 
 
-if __name__ == "__main__":
-    app = QApplication([])
-    app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api="pyqt5"))
-    application = Ventana()
-    application.show()
-    sys.exit(app.exec())
+app = QApplication([])
+app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api="pyqt5"))
+application = Ventana()
+application.show()
+sys.exit(app.exec())
