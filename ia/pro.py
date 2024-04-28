@@ -9,7 +9,7 @@ class LerchisIA(QObject):
     dado2Usado = pyqtSignal()
     bono1Usado = pyqtSignal()
     bono2Usado = pyqtSignal()
-    terminado = pyqtSignal()    
+    terminado = pyqtSignal()
     usarDado1 = pyqtSignal()
     usarDado2 = pyqtSignal()
     haLlegado = pyqtSignal()
@@ -20,7 +20,7 @@ class LerchisIA(QObject):
         self.usarDado1.connect(self.updateDado1)
         self.usarDado2.connect(self.updateDado2)
         self.haLlegado.connect(self.updateBonus1)
-        self.haMatado.connect(self.updateBonus2)        
+        self.haMatado.connect(self.updateBonus2)
 
     def updateDado1(self):
         self.__d1 = 0

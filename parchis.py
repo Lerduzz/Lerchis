@@ -419,7 +419,14 @@ class Ventana(QMainWindow):
         for i in range(self.__turno * 4, self.__turno * 4 + 4):
             mias.append(self.__fichas[i])
         self.__ia.jugar(
-            self, d1, d2, b1, b2, mias, self.__casas[self.__turno], self.__rutas[self.__turno]
+            self,
+            d1,
+            d2,
+            b1,
+            b2,
+            mias,
+            self.__casas[self.__turno],
+            self.__rutas[self.__turno],
         )
 
     def puedeJugar(self):
@@ -644,6 +651,10 @@ class Ventana(QMainWindow):
         self.ui.checkPlayer1.setEnabled(False)
         self.ui.checkPlayer2.setEnabled(False)
         self.ui.checkPlayer3.setEnabled(False)
+        self.ui.checkIA0.setEnabled(False)
+        self.ui.checkIA1.setEnabled(False)
+        self.ui.checkIA2.setEnabled(False)
+        self.ui.checkIA3.setEnabled(False)
         self.ui.btnTerminarPartida.setEnabled(True)
         self.prepararDados()
         self.iniciarContadorTurno(30)
@@ -677,6 +688,10 @@ class Ventana(QMainWindow):
         self.ui.checkPlayer1.setEnabled(True)
         self.ui.checkPlayer2.setEnabled(True)
         self.ui.checkPlayer3.setEnabled(True)
+        self.ui.checkIA0.setEnabled(True)
+        self.ui.checkIA1.setEnabled(True)
+        self.ui.checkIA2.setEnabled(True)
+        self.ui.checkIA3.setEnabled(True)
         self.ui.btnNuevaPartida.setEnabled(True)
         try:
             Music.stop()
