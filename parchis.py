@@ -222,9 +222,11 @@ class Ventana(QMainWindow):
 
     def dado1Usado(self):
         self.__dado1 = 0
+        self.__ia.usarDado1.emit()
 
     def dado2Usado(self):
         self.__dado2 = 0
+        self.__ia.usarDado1.emit()
 
     def bono1Usado(self):
         self.__disponibleBono1 = False

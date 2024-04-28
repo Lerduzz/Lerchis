@@ -9,23 +9,30 @@ class LerchisIA(QObject):
     dado2Usado = pyqtSignal()
     bono1Usado = pyqtSignal()
     bono2Usado = pyqtSignal()
-    terminado = pyqtSignal()
+    terminado = pyqtSignal()    
+    usarDado1 = pyqtSignal()
+    usarDado2 = pyqtSignal()
     haLlegado = pyqtSignal()
     haMatado = pyqtSignal()
 
     def __init__(self):
         super().__init__()
+        self.usarDado1.connect(self.updateDado1)
+        self.usarDado2.connect(self.updateDado2)
         self.haLlegado.connect(self.updateBonus1)
-        self.haMatado.connect(self.updateBonus2)
+        self.haMatado.connect(self.updateBonus2)        
+
+    def updateDado1(self):
+        self.__d1 = 0
+
+    def updateDado2(self):
+        self.__d2 = 0
 
     def updateBonus1(self):
         self.__b1 = 10
 
     def updateBonus2(self):
         self.__b2 = 20
-
-    def hayMovimientosDisponibles(self):
-        return True
 
     def intentaMatarOtraFicha(self, fichas):
         # Recorrer las fichas del usuario.
@@ -42,18 +49,7 @@ class LerchisIA(QObject):
             return False
         for f in casa:
             if f != None:
-                if self.__parent.salirDeCasa(f):
-                    if self.__d1 == 5:
-                        self.dado1Usado.emit()
-                        self.__d1 = 0
-                    elif self.__d2 == 5:
-                        self.dado2Usado.emit()
-                        self.__d2 = 0
-                    else:
-                        self.dado1Usado.emit()
-                        self.__d1 = 0
-                        self.dado2Usado.emit()
-                        self.__d2 = 0
+                if self.__parent.intentaSalirDeCasa(f):
                     return True
         return False
 
@@ -108,10 +104,8 @@ class LerchisIA(QObject):
             for x in mfMovs:
                 if x == 1:
                     self.dado1Usado.emit()
-                    self.__d1 = 0
                 elif x == 2:
                     self.dado2Usado.emit()
-                    self.__d2 = 0
                 elif x == 3:
                     self.bono1Usado.emit()
                     self.__b1 = 0
