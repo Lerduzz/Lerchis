@@ -1,4 +1,7 @@
 from PyQt5.QtCore import QObject, pyqtSignal
+from utils.utils import Utils
+from utils.move import MoveUtils
+from utils.static import InitStatic
 
 
 class LerchisIA(QObject):
@@ -17,7 +20,7 @@ class LerchisIA(QObject):
 
     def updateBonus1(self):
         self.__b1 = 10
-    
+
     def updateBonus2(self):
         self.__b2 = 20
 
@@ -39,7 +42,7 @@ class LerchisIA(QObject):
             return False
         for f in casa:
             if f != None:
-                if self.salirDeCasa(f):
+                if self.__parent.salirDeCasa(f):
                     if self.__d1 == 5:
                         self.dado1Usado.emit()
                         self.__d1 = 0
@@ -60,28 +63,27 @@ class LerchisIA(QObject):
     def moverLoMasLejosPosible(self, fichas):
         movFichas = []
         for f in fichas:
-            movs = self.cargarJugadasPosibles(f)
-            if movs == None:
+            movs = Utils.cargarJugadasPosibles(
+                self.__parent,
+                f,
+                self.__d1,
+                self.__d2,
+                self.__b1,
+                self.__b2,
+            )
+            if len(movs) == 0:
                 continue
             movMax = 0
-            rowMax = []
-            for row in movs:
-                movCurrent = 0
-                for mov in row:
-                    if mov == 1:
-                        movCurrent += self.__d1
-                    elif mov == 2:
-                        movCurrent += self.__d2
-                    elif mov == 3:
-                        movCurrent += self.__b1
-                    elif mov == 4:
-                        movCurrent += self.__b2
-                # TODO: IF PUEDE_MOVER
-                if movCurrent > movMax:
-                    movMax = movCurrent
-                    rowMax = row
-            if movMax == 0:
-                continue
+            rowMax = MoveUtils.mayorDistancia(movs, self.__d1, self.__d2)
+            for mov in rowMax:
+                if mov == 1:
+                    movMax += self.__d1
+                elif mov == 2:
+                    movMax += self.__d2
+                elif mov == 3:
+                    movMax += self.__b1
+                elif mov == 4:
+                    movMax += self.__b2
             movFichas.append((movMax, rowMax, f))
         mfMax = 0
         mfMovs = []
@@ -92,7 +94,17 @@ class LerchisIA(QObject):
                 mfMovs = ml
                 mfFicha = f
         if mfMax > 0 and mfFicha != None:
-            self.moverFichaAutomatico(mfFicha, mfMovs)
+            MoveUtils.moverFichaDirecto(
+                self.__parent,
+                mfFicha,
+                mfMovs,
+                self.__d1,
+                self.__d2,
+                self.__b1,
+                self.__b2,
+                self.__ruta,
+                InitStatic.excluir(),
+            )
             for x in mfMovs:
                 if x == 1:
                     self.dado1Usado.emit()
@@ -109,28 +121,14 @@ class LerchisIA(QObject):
             return True
         return False
 
-    def jugar(
-        self,
-        d1,
-        d2,
-        b1,
-        b2,
-        fichas: list,
-        casa: list,
-        puedeJugar,
-        salirDeCasa,
-        cargarJugadasPosibles,
-        moverFichaAutomatico,
-    ):
+    def jugar(self, parent, d1, d2, b1, b2, fichas: list, casa: list, ruta: list):
+        self.__parent = parent
         self.__d1 = d1
         self.__d2 = d2
         self.__b1 = b1
         self.__b2 = b2
-        self.puedeJugar = puedeJugar
-        self.salirDeCasa = salirDeCasa
-        self.cargarJugadasPosibles = cargarJugadasPosibles
-        self.moverFichaAutomatico = moverFichaAutomatico
-        while puedeJugar():
+        self.__ruta = ruta
+        while parent.puedeJugar():
             if self.intentaMatarOtraFicha(fichas):
                 continue
             if self.intentaEntrarEnMeta():

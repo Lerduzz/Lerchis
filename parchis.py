@@ -9,8 +9,8 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QListWidgetItem
 from parchis_ui import Ui_VentanaJuego
 from workers.dados import DadosWorker, ReactivarWorker
 from workers.turno import TurnoWorker
-from utils.utils import Utils, EstiloIconos
-from utils.static import InitStatic, AuxStatic
+from utils.utils import Utils
+from utils.static import InitStatic
 from utils.move import MoveUtils
 from ia.pro import LerchisIA
 
@@ -234,6 +234,7 @@ class Ventana(QMainWindow):
 
     def activarBono1(self):
         self.__disponibleBono1 = True
+        self.__ia.haLlegado.emit()
         try:
             Sound.play(self.__sndLlegar)
         except:
@@ -241,6 +242,7 @@ class Ventana(QMainWindow):
 
     def activarBono2(self):
         self.__disponibleBono2 = True
+        self.__ia.haMatado.emit()
         try:
             Sound.play(self.__sndMatar)
         except:
@@ -405,6 +407,18 @@ class Ventana(QMainWindow):
         else:
             self.__cuentaDoble = 0
             self.__repetirTirada = False
+
+        # TEST IA
+        d1 = self.__dado1
+        d2 = self.__dado2
+        b1 = 10 if self.__disponibleBono1 else 0
+        b2 = 20 if self.__disponibleBono2 else 0
+        mias = []
+        for i in range(self.__turno * 4, self.__turno * 4 + 4):
+            mias.append(self.__fichas[i])
+        self.__ia.jugar(
+            self, d1, d2, b1, b2, mias, self.__casas[self.__turno], self.__rutas[self.__turno]
+        )
 
     def puedeJugar(self):
         for i in range(self.__turno * 4, self.__turno * 4 + 4):
@@ -574,6 +588,10 @@ class Ventana(QMainWindow):
         self.__disponibleBono1 = False
         self.__disponibleBono2 = False
         self.__reactivandoDados = False
+
+        # TEST IA:
+        self.tirarDados()
+
         try:
             Sound.play(self.__sndNoMover)
         except:
