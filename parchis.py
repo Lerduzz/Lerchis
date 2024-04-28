@@ -321,18 +321,17 @@ class Ventana(QMainWindow):
         return False
 
     def tirarDados(self):
-        enJuego = 4 - Utils.contarFichas(
-            self.__rutas[self.__turno][len(self.__rutas[self.__turno]) - 1]
-        )
+        metaIndex = len(self.__rutas[self.__turno]) - 1
+        enJuego = 4 - Utils.contarFichas(self.__rutas[self.__turno][metaIndex])
         dadoSolo = 0
         if enJuego == 1:
-            rectaFinal = False
-            metaIndex = len(self.__rutas[self.__turno]) - 1
-            for i in range(metaIndex - 6, metaIndex):
-                for f in self.__rutas[self.__turno][i]:
-                    if f != None and self.esMia(f):
-                        rectaFinal = True
-            if rectaFinal:
+            restante = None
+            for mFicha in self.misFichas():
+                if not mFicha in self.__rutas[self.__turno][metaIndex]:
+                    restante = mFicha
+                    break
+            posI = self.__parent.obtenerPosRuta(restante)[0]
+            if posI >= metaIndex - 7:
                 if self.sender() == self.ui.dado1:
                     dadoSolo = 1
                 elif self.sender() == self.ui.dado2:
