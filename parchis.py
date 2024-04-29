@@ -375,6 +375,8 @@ class Ventana(QMainWindow):
             self.__cuentaDoble = 0
             self.__repetirTirada = False
         if self.soyIA():
+            self.__iaTemp = self.__ia
+            self.__iaTempThread = self.__iaThread
             self.iniciarIA()
 
     def iniciarIA(self):
