@@ -6,7 +6,7 @@ class DadosWorker(QObject):
     finished = pyqtSignal(int, int)
     progress = pyqtSignal(int, int)
 
-    def __init__(self, s1, s2, solo = 0):
+    def __init__(self, s1, s2, solo=0):
         super().__init__()
         self.__s1 = s1 if solo == 0 or solo == 1 else 0
         self.__s2 = s2 if solo == 0 or solo == 2 else 0
@@ -27,30 +27,48 @@ class DadosWorker(QObject):
                 if alt <= 3:
                     if flag >= skip:
                         d1C += 1 if d1C < m1 and self.__s1 == self.__r1 else 0
-                        self.__s1 += 1 if d1C < m1 and (self.__solo == 0 or self.__solo == 1) else 0
+                        self.__s1 += (
+                            1
+                            if d1C < m1 and (self.__solo == 0 or self.__solo == 1)
+                            else 0
+                        )
                         self.__s1 = 1 if self.__s1 > 6 else self.__s1
                         flag = 0
                     else:
                         flag += 1
                 else:
                     d1C += 1 if d1C < m1 and self.__s1 == self.__r1 else 0
-                    self.__s1 += 1 if d1C < m1 and (self.__solo == 0 or self.__solo == 1) else 0
+                    self.__s1 += (
+                        1 if d1C < m1 and (self.__solo == 0 or self.__solo == 1) else 0
+                    )
                     self.__s1 = 1 if self.__s1 > 6 else self.__s1
                 if alt >= 4:
                     if flag >= skip:
                         d2C += 1 if d2C < m2 and self.__s2 == self.__r2 else 0
-                        self.__s2 += 1 if d2C < m2 and (self.__solo == 0 or self.__solo == 2) else 0
+                        self.__s2 += (
+                            1
+                            if d2C < m2 and (self.__solo == 0 or self.__solo == 2)
+                            else 0
+                        )
                         self.__s2 = 1 if self.__s2 > 6 else self.__s2
                         flag = 0
                     else:
                         flag += 1
                 else:
                     d2C += 1 if d2C < m2 and self.__s2 == self.__r2 else 0
-                    self.__s2 += 1 if d2C < m2 and (self.__solo == 0 or self.__solo == 2) else 0
+                    self.__s2 += (
+                        1 if d2C < m2 and (self.__solo == 0 or self.__solo == 2) else 0
+                    )
                     self.__s2 = 1 if self.__s2 > 6 else self.__s2
-                self.progress.emit(self.__s1, self.__s2)
+                try:
+                    self.progress.emit(self.__s1, self.__s2)
+                except:
+                    pass
                 time.sleep(0.01)
-            self.finished.emit(self.__r1, self.__r2)
+            try:
+                self.finished.emit(self.__r1, self.__r2)
+            except:
+                pass
         except RuntimeError:
             pass
 
@@ -67,6 +85,9 @@ class ReactivarWorker(QObject):
             while count < 5:
                 time.sleep(0.25)
                 count += 1
-            self.finished.emit()
+            try:
+                self.finished.emit()
+            except:
+                pass
         except RuntimeError:
             pass

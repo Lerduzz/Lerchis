@@ -15,12 +15,21 @@ class TurnoWorker(QObject):
 
     def run(self):
         try:
-            self.started.emit(self.__max // 10)
+            try:
+                self.started.emit(self.__max // 10)
+            except:
+                pass
             while self.__value < self.__max:
-                self.progress.emit(self.__value // 10)
+                try:
+                    self.progress.emit(self.__value // 10)
+                except:
+                    pass
                 self.__value += 1
                 time.sleep(self.__interval)
-            self.finished.emit(self.__value // 10)
+            try:
+                self.finished.emit(self.__value // 10)
+            except:
+                pass
         except RuntimeError:
             pass
 
