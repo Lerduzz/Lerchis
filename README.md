@@ -33,8 +33,14 @@ pyinstaller Lerchis.exe.spec
 - Los turnos son de un máximo de 30 segundos.
 - Debes jugar todos tus movimientos posibles rapidamente o perderás el turno.
 - En cada casilla solo puede haber dos fichas.
-  * Excepto en la casa y la meta en dónde puedeb haber 4 fichas del mismo color.
+  * Excepto en la casa y la meta en dónde pueden haber 4 fichas del mismo color.
 - Los jugadores no pueden hacer nada hasta que tiran los dados.
+
+### Parejas
+- Cuando te sacas dos numeros iguales en los dados puedes repetir turno.
+- A la tercera vez consecutiva que saques pareja, regresa a casa tu ficha mas adelantada.
+  * Las que se encuentren en la recta final o en la meta no regresan.
+  * En ese momento termina tu turno.
 
 ### Sacar
 - Para sacar una ficha de la casa es necesario tener un 5.
