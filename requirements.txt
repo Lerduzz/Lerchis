@@ -25,3 +25,5 @@ pywin32-ctypes==0.2.2
 zipp==3.18.2
 pywin32==300
 PySide2
+PyQt6
+PySide6
