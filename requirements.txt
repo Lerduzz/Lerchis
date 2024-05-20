@@ -1,0 +1,23 @@
+# Python==3.8.7
+PyQt5_sip==12.8.1
+PyQt5==5.15.2
+qt5_applications==5.15.2.2.1
+Click==7.0
+qt5_tools==5.15.2.1.0.1
+pyqt5_plugins==5.15.2.2.0.1
+python_dotenv==0.15.0
+pyqt5_tools==5.15.2.3
+setuptools==51.1.2
+wheel==0.36.2
+altgraph==0.17
+pyinstaller_hooks_contrib==2020.11
+pywin32_ctypes==0.2.0
+future==0.18.2
+pefile==2019.4.18
+pyinstaller==4.2
+tinyaes==1.0.1
+qdarkstyle==2.8.1
+helpdev==0.7.1
+QtPy==1.9.0
+pywin32==300
+pygame==2.5.2
