@@ -58,6 +58,8 @@ class Ventana(QMainWindow):
         self.__sndTurno = Sound(os.path.join("sounds", "turno.wav"))
         Music.load(os.path.join("sounds", "music1.wav"))
         Music.play(-1, 0, 2500)
+        self.__ia = None
+        self.__iaThread = None
 
     def haJugado(self):
         if not self.puedeJugar():
